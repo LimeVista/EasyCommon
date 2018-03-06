@@ -32,3 +32,10 @@ dependencies {
     testImplementation deps.test.junit
     androidTestImplementation deps.test.android
 }
+
+
+//将源代码打包进aar
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.sourceFiles
+}
