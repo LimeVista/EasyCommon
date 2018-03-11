@@ -8,7 +8,6 @@ import io.reactivex.disposables.CompositeDisposable;
  * Base Presenter
  * Created by LimeVista(Lime) on 2018/2/28.
  */
-
 @SuppressWarnings("WeakerAccess")
 public abstract class BasePresenter<VIEW, MODEL> {
 
@@ -26,6 +25,10 @@ public abstract class BasePresenter<VIEW, MODEL> {
     }
 
     public void onStart() {
+
+    }
+
+    public void onStop(){
 
     }
 
