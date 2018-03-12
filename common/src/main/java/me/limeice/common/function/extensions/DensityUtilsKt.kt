@@ -1,7 +1,7 @@
 @file: JvmName("DensityUtilsKt")
 @file:Suppress("unused")
 
-package me.limeice.common.function
+package me.limeice.common.function.extensions
 
 /**
  * DensityUtil用于处理像素点与dp单位sp单位之间的相互转换
