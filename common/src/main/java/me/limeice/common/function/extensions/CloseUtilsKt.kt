@@ -1,11 +1,11 @@
 @file: JvmName("CloseUtilsKt")
+
 package me.limeice.common.function.extensions
 
 import java.io.Closeable
 import java.io.IOException
 
 /**
- *
  * <pre>
  *      author: LimeVista(Lime)
  *      time  : 2018/03/12

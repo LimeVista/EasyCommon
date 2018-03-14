@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
  * @version 1.0
  */
 @SuppressWarnings("unused")
-public class DensityUtils {
+public final class DensityUtils {
 
     /**
      * 根据手机的分辨率从 dp 值 转成为 px(像素)值
