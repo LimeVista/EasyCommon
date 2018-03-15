@@ -11,7 +11,11 @@ import me.limeice.common.function.exception.SerializableException;
 
 
 /**
- * 深度克隆
+ * 深度复制
+ *
+ * @author Lime(LimeVista)
+ *         Created at 2016.08.18
+ * @version 1.0
  */
 @SuppressWarnings("unused")
 public class DeepClone {
