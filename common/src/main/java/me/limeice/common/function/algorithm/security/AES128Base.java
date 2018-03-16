@@ -116,11 +116,10 @@ public class AES128Base {
      * 设置IV向量
      *
      * @param iv 向量
-     * @throws Exception 向量长度异常
      */
-    public void setIV(byte[] iv) throws Exception {
+    public void setIV(byte[] iv) {
         if (iv.length != 16)
-            throw new Exception("iv length is 128 bit！");
+            throw new RuntimeException("iv length is 128 bit！");
         else {
             IV = null;
             IV = Arrays.copyOf(iv, 16);
@@ -140,7 +139,7 @@ public class AES128Base {
             InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException {
         SecretKeySpec key = new SecretKeySpec(keyBytes, ALGORITHM);
         Cipher cipher = Cipher.getInstance(algorithm);
-        if (isCBC)
+        if (!isCBC)
             cipher.init(Cipher.ENCRYPT_MODE, key);
         else
             cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(IV));
@@ -160,7 +159,7 @@ public class AES128Base {
             InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException {
         SecretKeySpec key = new SecretKeySpec(keyBytes, ALGORITHM);
         Cipher cipher = Cipher.getInstance(algorithm);
-        if (isCBC)
+        if (!isCBC)
             cipher.init(Cipher.DECRYPT_MODE, key);
         else
             cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(IV));
@@ -169,7 +168,7 @@ public class AES128Base {
 
     private String getAlgorithm(int aesType) {
         int mode = aesType >> 4;
-        isCBC = (mode == CBC);
+        isCBC = (mode == CBC >> 4);
         return String.format("AES/%s/%s", MODES[mode], PADDING[aesType % 16]);
     }
 }

@@ -2,6 +2,7 @@ package me.limeice.common.function.algorithm.security;
 
 
 import android.support.annotation.NonNull;
+import android.util.Base64;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -22,9 +23,9 @@ import javax.crypto.NoSuchPaddingException;
  * <pre>{@code
  *      AES128 aes=new AES128(AES128.ECB|AES128.PKCS5Padding);
  *      //加密
- *      String s= aes.encryptEasy("src_Lime", "password");
+ *      String s= aes.encryptBase64("src_Lime", "password");
  *      //解密
- *      String str = aes.decryptEasy(s, "password");
+ *      String str = aes.decryptBase64(s, "password");
  * }</pre>
  *
  * @author Lime
@@ -55,19 +56,6 @@ public final class AES128 extends AES128Base {
         }
     }
 
-    /**
-     * 使用AES-128算法对数据进行加密
-     *
-     * @param msg  加密数据，如果NoPadding，加密数据长度必须为16的倍数！
-     * @param sKey 解密密钥，经过一次MD5
-     * @return 得到密文
-     */
-    @NonNull
-    public byte[] encryptEasy(@NonNull byte[] msg, @NonNull String sKey) throws NoSuchPaddingException,
-            InvalidAlgorithmParameterException, NoSuchAlgorithmException,
-            IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        return encrypt(msg, Hash.md5ToBytes(sKey));
-    }
 
     /**
      * 使用AES-128算法对数据进行加密
@@ -77,11 +65,11 @@ public final class AES128 extends AES128Base {
      * @return 得到密文
      */
     @NonNull
-    public String encryptEasy(@NonNull String msg, @NonNull byte[] keyBytes) throws NoSuchPaddingException,
+    public String encryptBase64(@NonNull String msg, @NonNull byte[] keyBytes) throws NoSuchPaddingException,
             InvalidAlgorithmParameterException, NoSuchAlgorithmException,
             IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         try {
-            return new String(encrypt(msg.getBytes(BYTE_TYPE), keyBytes), BYTE_TYPE);
+            return Base64.encodeToString(encrypt(msg.getBytes(BYTE_TYPE), keyBytes), Base64.DEFAULT);
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
             throw new RuntimeException("UTF-8 code does not support" + ex.getMessage());
@@ -96,15 +84,10 @@ public final class AES128 extends AES128Base {
      * @return 得到密文
      */
     @NonNull
-    public String encryptEasy(@NonNull String msg, @NonNull String sKey) throws NoSuchPaddingException,
+    public String encryptBase64(@NonNull String msg, @NonNull String sKey) throws NoSuchPaddingException,
             InvalidAlgorithmParameterException, NoSuchAlgorithmException,
             IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        try {
-            return new String(encrypt(msg.getBytes(BYTE_TYPE), Hash.md5ToBytes(sKey)), BYTE_TYPE);
-        } catch (UnsupportedEncodingException ex) {
-            ex.printStackTrace();
-            throw new RuntimeException("UTF-8 code does not support" + ex.getMessage());
-        }
+        return encryptBase64(msg, Hash.md5ToBytes(sKey));
     }
 
     /**
@@ -126,20 +109,6 @@ public final class AES128 extends AES128Base {
         }
     }
 
-    /**
-     * 使用AES-128算法对数据进行解密
-     *
-     * @param msg  需要解密的数据，数据长度必须为16的倍数！
-     * @param sKey 解密密钥，经过一次MD5
-     * @return 得到明文
-     */
-    @NonNull
-    public byte[] decryptEasy(@NonNull byte[] msg, @NonNull String sKey) throws NoSuchPaddingException,
-            InvalidAlgorithmParameterException, NoSuchAlgorithmException,
-            IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        return decrypt(msg, Hash.md5ToBytes(sKey));
-    }
-
 
     /**
      * 使用AES-128算法对数据进行解密
@@ -149,11 +118,11 @@ public final class AES128 extends AES128Base {
      * @return 得到明文
      */
     @NonNull
-    public String decryptEasy(@NonNull String msg, @NonNull byte[] keyBytes) throws NoSuchPaddingException,
+    public String decryptBase64(@NonNull String msg, @NonNull byte[] keyBytes) throws NoSuchPaddingException,
             InvalidAlgorithmParameterException, NoSuchAlgorithmException,
             IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         try {
-            return new String(decrypt(msg.getBytes(BYTE_TYPE), keyBytes), BYTE_TYPE);
+            return new String(decrypt(Base64.decode(msg, Base64.DEFAULT), keyBytes), BYTE_TYPE);
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
             throw new RuntimeException("UTF-8 code does not support" + ex.getMessage());
@@ -168,14 +137,9 @@ public final class AES128 extends AES128Base {
      * @return 得到明文
      */
     @NonNull
-    public String decryptEasy(@NonNull String msg, @NonNull String sKey) throws NoSuchPaddingException,
+    public String decryptBase64(@NonNull String msg, @NonNull String sKey) throws NoSuchPaddingException,
             InvalidAlgorithmParameterException, NoSuchAlgorithmException,
             IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        try {
-            return new String(decrypt(msg.getBytes(BYTE_TYPE), Hash.md5ToBytes(sKey)), BYTE_TYPE);
-        } catch (UnsupportedEncodingException ex) {
-            ex.printStackTrace();
-            throw new RuntimeException("UTF-8 code does not support" + ex.getMessage());
-        }
+        return decryptBase64(msg, Hash.md5ToBytes(sKey));
     }
 }

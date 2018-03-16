@@ -29,7 +29,7 @@ dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     api deps.kotlin.stdlib
     api deps.support.appcompat
-    provided deps.rxJava
+    api deps.rxJava
     testImplementation deps.test.junit
     androidTestImplementation deps.test.android
 }
