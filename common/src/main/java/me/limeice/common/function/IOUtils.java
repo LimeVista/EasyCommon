@@ -1,6 +1,7 @@
 package me.limeice.common.function;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -9,11 +10,14 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
- * 字节流处理工具
+ * IO处理工具
  * <pre>
  *     author: LimeVista(Lime)
  *     time  : 2018/03/15
@@ -202,5 +206,85 @@ public final class IOUtils {
             if (!file.createNewFile())
                 throw new IOException("Failure to create a file!File Path->" + file.getAbsolutePath());
         }
+    }
+
+    /**
+     * 压缩文件
+     *
+     * @param input  输入流（源文件）
+     * @param output 输出流（压缩文件）
+     * @throws IOException IOE
+     */
+    public static void zip(@NonNull InputStream input, @NonNull OutputStream output) throws IOException {
+        GZIPOutputStream gzip = null;
+        try {
+            gzip = new GZIPOutputStream(output);
+            byte[] buf = new byte[BUFFER_SIZE];
+            int len;
+            while ((len = input.read(buf)) != -1) {
+                gzip.write(buf, 0, len);
+                gzip.flush();
+            }
+        } finally {
+            CloseUtils.closeIOQuietly(input, gzip);
+        }
+    }
+
+    /**
+     * 解压文件
+     *
+     * @param input  输入流(压缩文件)
+     * @param output 输出流（源文件）
+     * @throws IOException IOE
+     */
+    public static void unzip(@NonNull InputStream input, @NonNull OutputStream output) throws IOException {
+        GZIPInputStream gzip = null;
+        try {
+            gzip = new GZIPInputStream(input);
+            byte[] buf = new byte[BUFFER_SIZE];
+            int len;
+            while ((len = gzip.read(buf)) != -1) {
+                output.write(buf, 0, len);
+            }
+            output.flush();
+        } finally {
+            CloseUtils.closeIOQuietly(gzip, output);
+        }
+    }
+
+    /**
+     * 文件复制
+     *
+     * @param input  输入文件（被复制文件）
+     * @param output 输出文件（复制文件）
+     * @return 是否复制成功
+     */
+    public static boolean copyFile(@Nullable File input, @Nullable File output) {
+        if (input == null || output == null)
+            return false;
+        FileChannel fileIn = null;
+        FileChannel fileOut = null;
+        try {
+            fileIn = new FileInputStream(input).getChannel();
+            fileOut = new FileOutputStream(output).getChannel();
+            fileIn.transferTo(0, fileIn.size(), fileOut);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            CloseUtils.closeIOQuietly(fileIn, fileOut);
+        }
+    }
+
+    /**
+     * 移动文件
+     *
+     * @param input  输入文件
+     * @param output 输出文件
+     * @return 是否移动成功{@code true}成功否则失败
+     */
+    public static boolean moveFile(@Nullable File input, @Nullable File output) {
+        return !(input == null || output == null) && input.exists() && input.renameTo(output);
     }
 }
