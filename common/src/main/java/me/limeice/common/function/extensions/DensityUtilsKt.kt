@@ -263,4 +263,3 @@ fun BasePresenter<*, *>.getScreenWidth(): Int {
 fun BasePresenter<*, *>.getScreenHeight(): Int {
     return mContext.resources.displayMetrics.heightPixels
 }
-

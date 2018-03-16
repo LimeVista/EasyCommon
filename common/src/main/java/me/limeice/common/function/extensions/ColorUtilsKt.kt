@@ -5,6 +5,7 @@ package me.limeice.common.function.extensions
 
 import android.content.Context
 import android.support.annotation.AttrRes
+import android.support.annotation.ColorRes
 import me.limeice.common.function.ColorUtils
 
 /**
@@ -30,6 +31,9 @@ inline fun Int.a() = this ushr 24
 
 /* {@link ColorUtils#getAttrColor(Context, Int)}*/
 inline fun Context.getAttrColor(@AttrRes attr: Int) = ColorUtils.getAttrColor(this, attr)
+
+/* {@link ColorUtils#getColorDrawable(Context, Int)} */
+inline fun Context.getColorDrawable(@ColorRes id: Int) = ColorUtils.getColorDrawable(this, id)
 
 /**
  * 从ColorInt提取颜色值，色值0~255

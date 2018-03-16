@@ -35,4 +35,3 @@ inline fun Drawable.tintDrawable(colorStateList: ColorStateList) =
  */
 inline fun Drawable.tintDrawable(@ColorInt color: Int) =
         DrawableUtils.tintDrawable(this, color)
-

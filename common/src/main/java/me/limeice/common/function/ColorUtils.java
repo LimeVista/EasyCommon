@@ -17,7 +17,6 @@ import android.util.TypedValue;
  *         Update at 2018.3.15
  * @version 2.0
  */
-@SuppressWarnings("unused")
 public final class ColorUtils {
 
     private ColorUtils() {
