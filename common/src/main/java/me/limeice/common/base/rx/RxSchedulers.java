@@ -35,4 +35,27 @@ public class RxSchedulers {
         return in -> in.subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+
+    /**
+     * 主线程切换到IO线程
+     *
+     * @param <T> 泛型约束
+     * @return RxJava流
+     */
+    public static <T> ObservableTransformer<T, T> main_io() {
+        return in -> in.subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io());
+    }
+
+    /**
+     * 主线程切换到计算线程
+     *
+     * @param <T> 泛型约束
+     * @return RxJava流
+     */
+    public static <T> ObservableTransformer<T, T> main_computation() {
+        return in -> in.subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.computation());
+    }
 }

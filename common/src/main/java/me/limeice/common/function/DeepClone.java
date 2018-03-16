@@ -62,6 +62,7 @@ public class DeepClone {
             outFile = new FileOutputStream(file);
             out = new ObjectOutputStream(outFile);
             out.writeObject(obj);
+            out.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
@@ -85,8 +86,7 @@ public class DeepClone {
         try {
             input = new FileInputStream(file);
             inputObj = new ObjectInputStream(input);
-            Object obj = inputObj.readObject();
-            return (T) obj;
+            return (T) inputObj.readObject();
         } catch (IOException | ClassNotFoundException | ClassCastException e) {
             throw new RuntimeException(e);
         } finally {
