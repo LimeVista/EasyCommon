@@ -66,7 +66,6 @@ public class AES128Test {
         assertEquals(sMsg, sMsg3);
     }
 
-
     @Test
     public void decrypt() throws Exception {
         byte[] bs = aesEcb.decrypt(BytesUtils.hexStringToBytes(SMSG_ECB), KEY_BYTES);
@@ -86,7 +85,7 @@ public class AES128Test {
         log("msg1->" + msg1 + ";msg2->" + msg2);
         String msg3 = aesEcb.decryptBase64("X69FC9eSW/nesHOiCCT2Nfs/FVTm8PDvyOC8OcX3rRU=", SKEY);
         String msg4 = aesCbc.decryptBase64("BVE1n+4kG8o9Ilni+R8HEWd4mC5iZKXbenzEfeHZwnM=", SKEY);
-        log("msg3->" + msg3 + ";msg1->" + msg3);
+        log("msg3->" + msg3 + ";msg4->" + msg4);
         assertEquals(msg1, MSG);
         assertEquals(msg2, MSG);
         assertEquals(msg3, MSG);
