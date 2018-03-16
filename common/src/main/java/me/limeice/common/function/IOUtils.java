@@ -197,7 +197,7 @@ public final class IOUtils {
      * @param file 文件
      * @throws IOException IOException
      */
-    private static void checkFileIfNotExistCreate(File file) throws IOException {
+    public static void checkFileIfNotExistCreate(File file) throws IOException {
         if (!file.exists()) {
             if (!file.createNewFile())
                 throw new IOException("Failure to create a file!File Path->" + file.getAbsolutePath());
