@@ -34,13 +34,6 @@ dependencies {
     androidTestImplementation deps.test.android
 }
 
-//sourceSets {
-//    main {
-//        java {
-//            srcDir 'src/main/java'
-//        }
-//    }
-//}
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
