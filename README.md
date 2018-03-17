@@ -57,8 +57,7 @@ android {
      * @param bytes byte array, eg:[0x1A,0x2C,0x3B] => 输入 [0x1A,0x2C,0x3B]
      * @return hex string, eg: 1A2C3B => 得到 1A2C3B
      */
-    @NonNull
-    public static String toHexString(@NonNull byte[] bytes) 
+    @NonNull public static String toHexString(@NonNull byte[] bytes) 
 
     /**
      * Convert byte to hex value => 将字节转换为16进制表示
@@ -66,8 +65,7 @@ android {
      * @param b byte, eg: 8 => 输入 8 
      * @return hex value, eg: 0x08 => 得到 0x08
      */
-    @NonNull
-    public static String convert(byte b) 
+    @NonNull public static String convert(byte b) 
 
     /**
      * Convert byte array to hex values => 将字节数组转换为16进制字符串表示
@@ -75,8 +73,7 @@ android {
      * @param bytes byte array, eg: [8,1] => 输入 [8,1]
      * @return hex value, eg: [0x08, 0x01] => 得到(包含中括号) [0x08, 0x01]
      */
-    @NonNull
-    public static String convert(@NonNull final byte[] bytes) 
+    @NonNull public static String convert(@NonNull final byte[] bytes) 
 
     /**
      * Convert hex string to byte array=> 将16进制字符串转换为字节数组
@@ -84,8 +81,7 @@ android {
      * @param hexString hex string eg: 1A2C3B => 输入 1A2C3B
      * @return byte array eg: [0x1A,0x2C,0x3B] =>得到 [0x1A,0x2C,0x3B]
      */
-    @Nullable
-    public static byte[] hexStringToBytes(@Nullable String hexString)
+    @Nullable public static byte[] hexStringToBytes(@Nullable String hexString)
 ```
 * CloseUtils: Close Stream Utils(关闭流处理工具) => [CloseUtils.java](https://github.com/LimeVista/EasyCommon/blob/master/common/src/main/java/me/limeice/common/function/CloseUtils.java).
 ```java
@@ -128,8 +124,7 @@ android {
      * @param id      res中颜色的id值
      * @return ColorDrawable画布
      */
-    @NonNull
-    public static ColorDrawable getColorDrawable(@NonNull Context context, @ColorRes int id) 
+    @NonNull public static ColorDrawable getColorDrawable(@NonNull Context context, @ColorRes int id) 
 
     /**
      * 从ColorInt提取颜色值，色值0~255
@@ -137,8 +132,7 @@ android {
      * @param color 颜色值
      * @return 数组长度为4, <code> array[0] = A; array[1] = R; array[2] = G; array[3] = B </code>
      */
-    @NonNull
-    public static byte[] getARGB(@ColorInt int color)
+    @NonNull public static byte[] getARGB(@ColorInt int color)
 
     /**
      * 从ColorInt提取颜色值，色值0~255
@@ -146,8 +140,7 @@ android {
      * @param color 颜色值
      * @return 数组长度为3, array[0] = R; array[1] = G; array[2] = B </code>
      */
-    @NonNull
-    public static byte[] getRGB(@ColorInt int color) 
+    @NonNull public static byte[] getRGB(@ColorInt int color) 
 ```
 * IOUtils: Input Output Utils(输入输出及文件处理工具) => [IOUtils.java](https://github.com/LimeVista/EasyCommon/blob/master/common/src/main/java/me/limeice/common/function/IOUtils.java).
 ```java
@@ -158,8 +151,7 @@ android {
      * @return Byte数组形式的html文件
      * @throws IOException 各种异常，包括IOException
      */
-    @NonNull
-    public static byte[] read(@NonNull InputStream inStream) 
+    @NonNull public static byte[] read(@NonNull InputStream inStream) 
 
     /**
      * 从输入流中读取数据，并转换为Byte数组
@@ -168,8 +160,7 @@ android {
      * @return Byte数组形式的html文件
      * @throws IOException IOException
      */
-    @NonNull
-    public static byte[] read(@NonNull File file)
+    @NonNull public static byte[] read(@NonNull File file)
 
     /**
      * 从输入流中读取数据，并转换为Byte数组
@@ -178,8 +169,7 @@ android {
      * @return Byte数组形式的html文件
      * @throws IOException IOException
      */
-    @NonNull
-    public static byte[] read(@NonNull String filePath) 
+    @NonNull public static byte[] read(@NonNull String filePath) 
 
     /**
      * 写入数据
@@ -382,8 +372,7 @@ android {
      * @param <T>  Object Class => 类泛型
      * @return Object           => 实例化对象
      */
-    @Nullable
-    public static <T extends Serializable> T deserialize(@NonNull File file) 
+    @Nullable public static <T extends Serializable> T deserialize(@NonNull File file) 
 ```
 * AES128: Advanced Encryption Standard Utils(AES加密解密工具) => [AES128.java](https://github.com/LimeVista/EasyCommon/blob/master/common/src/main/java/me/limeice/common/function/algorithm/security/AES128.java).
 ```java
@@ -438,8 +427,7 @@ android {
      * @param keyBytes 解密密钥，必须位16位密码
      * @return 得到密文
      */
-    @NonNull
-    public byte[] encrypt(@NonNull String msg, @NonNull byte[] keyBytes)
+    @NonNull public byte[] encrypt(@NonNull String msg, @NonNull byte[] keyBytes)
 
     /**
      * 使用AES-128算法对数据进行加密
@@ -448,8 +436,7 @@ android {
      * @param keyBytes 解密密钥，必须位16位密码
      * @return 得到密文
      */
-    @NonNull
-    public String encryptBase64(@NonNull String msg, @NonNull byte[] keyBytes)
+    @NonNull public String encryptBase64(@NonNull String msg, @NonNull byte[] keyBytes)
 
     /**
      * 使用AES-128算法对数据进行加密
@@ -458,8 +445,7 @@ android {
      * @param sKey 解密密钥，经过一次MD5
      * @return 得到密文
      */
-    @NonNull
-    public String encryptBase64(@NonNull String msg, @NonNull String sKey) 
+    @NonNull public String encryptBase64(@NonNull String msg, @NonNull String sKey) 
 
     /**
      * 使用AES-128算法对数据进行解密
@@ -468,8 +454,7 @@ android {
      * @param keyBytes 解密密钥，必须位16位密码
      * @return 得到明文
      */
-    @NonNull
-    public byte[] decrypt(@NonNull String msg, @NonNull byte[] keyBytes)
+    @NonNull public byte[] decrypt(@NonNull String msg, @NonNull byte[] keyBytes)
 
     /**
      * 使用AES-128算法对数据进行解密
@@ -478,8 +463,7 @@ android {
      * @param keyBytes 解密密钥，必须位16位密码
      * @return 得到明文
      */
-    @NonNull
-    public String decryptBase64(@NonNull String msg, @NonNull byte[] keyBytes)
+    @NonNull public String decryptBase64(@NonNull String msg, @NonNull byte[] keyBytes)
 
     /**
      * 使用AES-128算法对数据进行解密
@@ -488,8 +472,7 @@ android {
      * @param sKey 解密密钥，经过一次MD5
      * @return 得到明文
      */
-    @NonNull
-    public String decryptBase64(@NonNull String msg, @NonNull String sKey) 
+    @NonNull public String decryptBase64(@NonNull String msg, @NonNull String sKey) 
 ```
 
 * Hash: Hash Utils(哈希算法) => [Hash.java](https://github.com/LimeVista/EasyCommon/blob/master/common/src/main/java/me/limeice/common/function/algorithm/security/Hash.java).
@@ -557,4 +540,213 @@ android {
      * @return 加密数组
      */
     @NonNull public static byte[] encode(@NonNull String algorithm, @NonNull String msg)
+```
+* Kotlin Extensions
+```kotlin
+    inline fun Int.r()              // Red(红)
+
+    inline fun Int.g()              // Green(绿)
+
+    inline fun Int.b()              // Blue(蓝)
+
+    inline fun Int.a()              // Alpha(透明通道)
+
+    inline fun Int.getARGB()        // 从ColorInt提取颜色值，色值0~255
+
+    inline fun Int.getRGB()         // 从ColorInt提取颜色值，色值0~255
+
+    inline fun Context.getAttrColor(@AttrRes attr: Int)     // ColorUtils#getAttrColor(Context, Int)
+
+    inline fun Context.getColorDrawable(@ColorRes id: Int)  //  ColorUtils#getColorDrawable(Context, Int)
+
+    inline fun ByteArray.toHexString()      /* Convert byte array to hex string. eg:[0x1A,0x2C,0x3B] -> 1A2C3B */
+
+    inline fun ByteArray.convert()          /* Convert byte array to hex values. eg: [8,1] -> [0x08, 0x01] */
+
+    inline fun Byte.convert()               /* Convert byte to hex value. eg: 8 -> 0x08 */
+
+    inline fun String?.hexStringToBytes()   /* Convert hex string to byte array. eg: 1A2C3B-> [0x1A,0x2C,0x3B] */
+
+    /**
+    * 根据手机的分辨率从 dp 值 转成为 px(像素)值
+    *
+    * @param dpValue dp值
+    * @return px(像素)值
+    */
+    fun Activity.dip2px(dpValue: Float)
+
+    /**
+    * 根据手机的分辨率从 px(像素)值 转成为 dp 值
+    *
+    * @param pxValue px(像素)值
+    * @return dp值
+    */
+    fun Activity.px2dip(pxValue: Float)
+
+    /**
+    * 根据手机分辨率，将 px 值转换为 sp 值，保证文字大小不变
+    *
+    * @param pxValue px(像素)值
+    * @return sp值
+    */
+    fun Activity.px2sp(pxValue: Float)
+
+    /**
+    * 根据手机分辨率，将 sp 值转换为 px 值，保证文字大小不变
+    *
+    * @param spValue sp值
+    * @return px(像素)值
+    */
+    fun Activity.sp2px(spValue: Float)
+
+    /**
+    * 获取屏幕宽度
+    *
+    * @return (px像素)屏幕宽度
+    */
+    fun Activity.getScreenWidth()
+
+    /**
+    * 获取屏幕高度
+    *
+    * @return (px像素)屏幕高度
+    */
+    fun Activity.getScreenHeight()
+
+    /**
+    * 根据手机的分辨率从 dp 值 转成为 px(像素)值
+    *
+    * @param dpValue dp值
+    * @return px(像素)值
+    */
+    fun Context.dip2px(dpValue: Float)
+
+    /**
+    * 根据手机的分辨率从 px(像素)值 转成为 dp 值
+    *
+    * @param pxValue px(像素)值
+    * @return dp值
+    */
+    fun Context.px2dip(pxValue: Float)
+
+    /**
+    * 根据手机分辨率，将 px 值转换为 sp 值，保证文字大小不变
+    *
+    * @param pxValue px(像素)值
+    * @return sp值
+    */
+    fun Context.px2sp(pxValue: Float)
+
+    /**
+    * 根据手机分辨率，将 sp 值转换为 px 值，保证文字大小不变
+    * @param spValue sp值
+    * @return px(像素)值
+    */
+    fun Context.sp2px(spValue: Float)
+
+    /**
+    * 获取屏幕宽度
+    *
+    * @return (px像素)屏幕宽度
+    */
+    fun Context.getScreenWidth()
+
+    /**
+    * 获取屏幕高度
+    *
+    * @return (px像素)屏幕高度
+    */
+    fun Context.getScreenHeight()
+
+    /**
+    * 根据手机的分辨率从 dp 值 转成为 px(像素)值
+    *
+    * @param dpValue dp值
+    * @return px(像素)值
+    */
+    fun View.dip2px(dpValue: Float)
+
+    /**
+    * 根据手机的分辨率从 px(像素)值 转成为 dp 值
+    *
+    * @param pxValue px(像素)值
+    * @return dp值
+    */
+    fun View.px2dip(pxValue: Float)
+
+    /**
+    * 根据手机分辨率，将 px 值转换为 sp 值，保证文字大小不变
+    *
+    * @param pxValue px(像素)值
+    * @return sp值
+    */
+    fun View.px2sp(pxValue: Float)
+
+    /**
+    * 根据手机分辨率，将 sp 值转换为 px 值，保证文字大小不变
+    *
+    * @param spValue sp值
+    * @return px(像素)值
+    */
+    fun View.sp2px(spValue: Float)
+
+    /**
+    * 获取屏幕宽度
+    *
+    * @return (px像素)屏幕宽度
+    */
+    fun View.getScreenWidth()
+
+    /**
+    * 获取屏幕高度
+    *
+    * @return (px像素)屏幕高度
+    */
+    fun View.getScreenHeight()
+
+    /**
+    * 根据手机的分辨率从 dp 值 转成为 px(像素)值
+    *
+    * @param dpValue dp值
+    * @return px(像素)值
+    */
+    fun BasePresenter<*, *>.dip2px(dpValue: Float)
+
+    /**
+    * 根据手机的分辨率从 px(像素)值 转成为 dp 值
+    *
+    * @param pxValue px(像素)值
+    * @return dp值
+    */
+    fun BasePresenter<*, *>.px2dip(pxValue: Float)
+
+    /**
+    * 根据手机分辨率，将 px 值转换为 sp 值，保证文字大小不变，利用（DisplayMetrics类中属性scaledDensity）
+    *
+    * @param pxValue px(像素)值
+    * @return sp值
+    */
+    fun BasePresenter<*, *>.px2sp(pxValue: Float)
+
+    /**
+    * 根据手机分辨率，将 sp 值转换为 px 值，保证文字大小不变，利用（DisplayMetrics类中属性scaledDensity）
+    *
+    * @param spValue sp值
+    * @return px(像素)值
+    */
+    fun BasePresenter<*, *>.sp2px(spValue: Float)
+
+    /**
+    * 获取屏幕宽度
+    *
+    * @return (px像素)屏幕宽度
+    */
+    fun BasePresenter<*, *>.getScreenWidth()
+
+    /**
+    * 获取屏幕高度
+    *
+    * @return (px像素)屏幕高度
+    */
+    fun BasePresenter<*, *>.getScreenHeight()
 ```
