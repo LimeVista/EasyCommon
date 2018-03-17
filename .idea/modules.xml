@@ -3,13 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/EasyCommon.iml" filepath="$PROJECT_DIR$/EasyCommon.iml" />
-      <module fileurl="file://H:\Android\EasyCommon\EasyCommon.iml" filepath="H:\Android\EasyCommon\EasyCommon.iml" />
       <module fileurl="file://C:\Users\LimeV\Desktop\EasyCommon\EasyCommon.iml" filepath="C:\Users\LimeV\Desktop\EasyCommon\EasyCommon.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
-      <module fileurl="file://H:\Android\EasyCommon\common\common.iml" filepath="H:\Android\EasyCommon\common\common.iml" />
       <module fileurl="file://C:\Users\LimeV\Desktop\EasyCommon\common\common.iml" filepath="C:\Users\LimeV\Desktop\EasyCommon\common\common.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
-      <module fileurl="file://H:\Android\EasyCommon\sample\sample.iml" filepath="H:\Android\EasyCommon\sample\sample.iml" />
       <module fileurl="file://C:\Users\LimeV\Desktop\EasyCommon\sample\sample.iml" filepath="C:\Users\LimeV\Desktop\EasyCommon\sample\sample.iml" />
     </modules>
   </component>
