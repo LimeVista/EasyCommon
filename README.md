@@ -179,10 +179,7 @@ android {
      * @throws IOException IOException
      */
     @NonNull
-    public static byte[] read(@NonNull String filePath) throws IOException {
-        return read(new File(filePath));
-    }
-
+    public static byte[] read(@NonNull String filePath) 
 
     /**
      * 写入数据
@@ -387,4 +384,177 @@ android {
      */
     @Nullable
     public static <T extends Serializable> T deserialize(@NonNull File file) 
+```
+* AES128: Advanced Encryption Standard Utils(AES加密解密工具) => [AES128.java](https://github.com/LimeVista/EasyCommon/blob/master/common/src/main/java/me/limeice/common/function/algorithm/security/AES128.java).
+```java
+
+    public static final int NONE = 0x00;                // NONE MODE
+
+    public static final int CBC = 0x10;                 // CBC MODE
+
+    public static final int CFB = 0x20;                 // CFB MODE
+
+    public static final int ECB = 0x30;                 // ECB MODE
+
+    public static final int OFB = 0x40;                 // OFB MODE
+
+    public static final int NoPadding = 0x00;           // NONE Padding
+
+    public static final int ISO10126Padding = 0x01;     // ISO10126 Padding
+
+    public static final int PKCS5Padding = 0x02;        // PKCS5Padding
+
+    public static final int SSL3Padding = 0x03;         // SSL3Padding
+
+    // 初始化类(包含MODE + Padding)
+    AES128 aes=new AES128(AES128.ECB|AES128.PKCS5Padding);
+    // 加密实例，得到 X69FC9eSW/nesHOiCCT2Nfs/FVTm8PDvyOC8OcX3rRU=
+    String sMsg = aes.encryptBase64("0123456789ABCDEF", "Lime"); 
+    // 解密实例,得到 0123456789ABCDEF
+    String msg = aes.decryptBase64("X69FC9eSW/nesHOiCCT2Nfs/FVTm8PDvyOC8OcX3rRU=", "Lime");
+
+   /**
+     * 使用AES-128算法对数据进行加密
+     *
+     * @param msg      加密数据，如果NoPadding，加密数据长度必须为16的倍数！
+     * @param keyBytes 解密密钥，必须位16位密码
+     * @return 得到密文
+     */
+    public byte[] encrypt(@NonNull byte[] msg, @NonNull byte[] keyBytes)
+
+    /**
+     * 使用AES-128算法对数据进行解密
+     *
+     * @param msg      需要解密的数据，数据长度必须为16的倍数！
+     * @param keyBytes 解密密钥，必须位16位密码
+     * @return 得到明文
+     */
+    public byte[] decrypt(@NonNull byte[] msg, @NonNull byte[] keyBytes)
+
+    /**
+     * 使用AES-128算法对数据进行加密
+     *
+     * @param msg      加密数据，如果NoPadding，加密数据长度必须为16的倍数！
+     * @param keyBytes 解密密钥，必须位16位密码
+     * @return 得到密文
+     */
+    @NonNull
+    public byte[] encrypt(@NonNull String msg, @NonNull byte[] keyBytes)
+
+    /**
+     * 使用AES-128算法对数据进行加密
+     *
+     * @param msg      加密数据，如果NoPadding，加密数据长度必须为16的倍数！
+     * @param keyBytes 解密密钥，必须位16位密码
+     * @return 得到密文
+     */
+    @NonNull
+    public String encryptBase64(@NonNull String msg, @NonNull byte[] keyBytes)
+
+    /**
+     * 使用AES-128算法对数据进行加密
+     *
+     * @param msg  加密数据，如果NoPadding，加密数据长度必须为16的倍数！
+     * @param sKey 解密密钥，经过一次MD5
+     * @return 得到密文
+     */
+    @NonNull
+    public String encryptBase64(@NonNull String msg, @NonNull String sKey) 
+
+    /**
+     * 使用AES-128算法对数据进行解密
+     *
+     * @param msg      需要解密的数据，数据长度必须为16的倍数！
+     * @param keyBytes 解密密钥，必须位16位密码
+     * @return 得到明文
+     */
+    @NonNull
+    public byte[] decrypt(@NonNull String msg, @NonNull byte[] keyBytes)
+
+    /**
+     * 使用AES-128算法对数据进行解密
+     *
+     * @param msg      需要解密的数据，数据长度必须为16的倍数！
+     * @param keyBytes 解密密钥，必须位16位密码
+     * @return 得到明文
+     */
+    @NonNull
+    public String decryptBase64(@NonNull String msg, @NonNull byte[] keyBytes)
+
+    /**
+     * 使用AES-128算法对数据进行解密
+     *
+     * @param msg  需要解密的数据，数据长度必须为16的倍数！
+     * @param sKey 解密密钥，经过一次MD5
+     * @return 得到明文
+     */
+    @NonNull
+    public String decryptBase64(@NonNull String msg, @NonNull String sKey) 
+```
+
+* Hash: Hash Utils(哈希算法) => [Hash.java](https://github.com/LimeVista/EasyCommon/blob/master/common/src/main/java/me/limeice/common/function/algorithm/security/Hash.java).
+```java
+    /**
+     * MD5加密算法
+     *
+     * @param msg 被加密源
+     * @return 获得加密文本
+     */
+    @NonNull public static String md5(@NonNull String msg) 
+
+    /**
+     * MD5加密算法
+     *
+     * @param msg 被加密源
+     * @return 获得加密数据
+     */
+    @NonNull public static byte[] md5ToBytes(@NonNull String msg)
+
+    /**
+     * SHA-1加密算法
+     *
+     * @param msg 被加密源
+     * @return 获得加密文本
+     */
+    @NonNull public static String sha1(@NonNull String msg) 
+    
+    /**
+     * SHA-256加密算法
+     *
+     * @param msg 被加密源
+     * @return 获得加密文本
+     */
+    @NonNull public static String sha256(@NonNull String msg) 
+
+    /**
+     * SHA-384加密算法
+     *
+     * @param msg 被加密源
+     * @return 获得加密文本
+     */
+    @NonNull public static String sha384(@NonNull String msg)
+
+    /**
+     * SHA-512加密算法
+     *
+     * @param msg 被加密源
+     * @return 获得加密文本
+     */
+    @NonNull public static String sha512(@NonNull String msg) 
+    /**
+     * CRC32加密算法
+     *
+     * @param msg [String]被加密源
+     * @return 加密值
+     */
+    @NonNull public static long crc32(@NonNull String msg) 
+
+    /**
+     * 执行信息摘要算法加密
+     *
+     * @param algorithm [String]加密算法类型
+     * @param msg       [String]需要加密的内容
+     * @return 加密数组
+     */
+    @NonNull public static byte[] encode(@NonNull String algorithm, @NonNull String msg)
 ```
