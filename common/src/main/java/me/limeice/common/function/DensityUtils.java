@@ -2,8 +2,10 @@ package me.limeice.common.function;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
@@ -28,7 +30,7 @@ public final class DensityUtils {
      * @param dpValue dp值
      * @return px(像素)值
      */
-    public static int dip2px(Context context, float dpValue) {
+    public static int dip2px(@NonNull Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
@@ -40,7 +42,7 @@ public final class DensityUtils {
      * @param pxValue px(像素)值
      * @return dp值
      */
-    public static int px2dip(Context context, float pxValue) {
+    public static int px2dip(@NonNull Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
@@ -51,7 +53,7 @@ public final class DensityUtils {
      * @param pxValue px(像素)值
      * @return sp值
      */
-    public static int px2sp(Context context, float pxValue) {
+    public static int px2sp(@NonNull Context context, float pxValue) {
         final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (pxValue / fontScale + 0.5f);
     }
@@ -62,7 +64,7 @@ public final class DensityUtils {
      * @param spValue sp值
      * @return px(像素)值
      */
-    public static int sp2px(Context context, float spValue) {
+    public static int sp2px(@NonNull Context context, float spValue) {
         final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
@@ -73,7 +75,7 @@ public final class DensityUtils {
      * @param context 被转换值的所在Context容器
      * @return (px像素)屏幕宽度
      */
-    public static int getScreenWidth(Context context) {
+    public static int getScreenWidth(@NonNull Context context) {
         return context.getResources().getDisplayMetrics().widthPixels;
     }
 
@@ -83,7 +85,7 @@ public final class DensityUtils {
      * @param context 被转换值的所在Context容器
      * @return (px像素)屏幕高度
      */
-    public static int getScreenHeight(Context context) {
+    public static int getScreenHeight(@NonNull Context context) {
         return context.getResources().getDisplayMetrics().heightPixels;
     }
 
@@ -93,7 +95,7 @@ public final class DensityUtils {
      * @param context 被转换值的所在Context容器
      * @return 状态栏高度
      */
-    public static int getStatusBarHeight(Context context) {
+    public static int getStatusBarHeight(@NonNull Context context) {
         int statusBarHeight = 0;
         try {
             @SuppressLint("PrivateApi") Class<?> c = Class.forName("com.android.internal.R$dimen");
@@ -110,7 +112,7 @@ public final class DensityUtils {
     /**
      * 获取虚拟功能键高度
      */
-    public static int getVirtualBarHeight(Context context) {
+    public static int getVirtualBarHeight(@NonNull Context context) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         if (windowManager == null)
             return 0;
@@ -138,7 +140,7 @@ public final class DensityUtils {
      * @param context 上下文容器
      * @return 屏幕高度
      */
-    public static int getScreenRealHeight(Context context) {
+    public static int getScreenRealHeight(@NonNull Context context) {
         int h = 0;
         WindowManager mgr = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         if (mgr == null)
@@ -159,5 +161,17 @@ public final class DensityUtils {
             }
         }
         return h;
+    }
+
+    /**
+     * 判断当前设备是手机还是平板，代码来自 Google I/O App for Android
+     *
+     * @param context 上下文容器
+     * @return 平板返回 True，手机返回 False
+     */
+    public static boolean isPad(@NonNull Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 }
