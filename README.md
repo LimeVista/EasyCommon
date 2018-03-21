@@ -15,7 +15,7 @@ allprojects {
 
 * Step 2. Add the dependency
 ```groovy
- compile 'com.github.LimeVista:EasyCommon:0.1.2'
+ compile 'com.github.LimeVista:EasyCommon:0.1.3'
 ```
 
 * Step 3.CompileOptions
@@ -342,6 +342,29 @@ android {
      * @return 屏幕高度
      */
     public static int getScreenRealHeight(Context context) 
+
+    /**
+     * 判断当前设备是手机还是平板，代码来自 Google I/O App for Android
+     *
+     * @param context 上下文容器
+     * @return 平板返回 True，手机返回 False
+     */
+    public static boolean isPad(@NonNull Context context) 
+
+    /**
+     * 判断屏幕最小宽度是否大于600dp
+     *
+     * @param context 上下文容器
+     * @return {@code true} 大于或等于，{@code false}小于
+     */
+    public static boolean isSW600dp(@NonNull Context context) 
+    /**
+     * 判断屏幕最小宽度是否大于720dp
+     *
+     * @param context 上下文容器
+     * @return {@code true} 大于或等于，{@code false}小于
+     */
+    public static boolean isSW720dp(@NonNull Context context)
 ```
 * DeepClone: Deep Clone Utils(深度复制工具) => [DeepClone.java](https://github.com/LimeVista/EasyCommon/blob/master/common/src/main/java/me/limeice/common/function/DeepClone.java).
 ```java
@@ -749,4 +772,10 @@ android {
     * @return (px像素)屏幕高度
     */
     fun BasePresenter<*, *>.getScreenHeight()
+
+    /* 判断Android设备是否为平板 */
+    inline fun <reified T : Context> T.isPad()
+
+    /* 判断Android设备是否为平板 */
+    inline fun <reified T : View> T.isPad()
 ```
