@@ -174,4 +174,24 @@ public final class DensityUtils {
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
+
+    /**
+     * 判断屏幕最小宽度是否大于600dp
+     *
+     * @param context 上下文容器
+     * @return {@code true} 大于或等于，{@code false}小于
+     */
+    public static boolean isSW600dp(@NonNull Context context) {
+        return context.getResources().getConfiguration().smallestScreenWidthDp >= 600;
+    }
+
+    /**
+     * 判断屏幕最小宽度是否大于720dp
+     *
+     * @param context 上下文容器
+     * @return {@code true} 大于或等于，{@code false}小于
+     */
+    public static boolean isSW720dp(@NonNull Context context) {
+        return context.getResources().getConfiguration().smallestScreenWidthDp >= 720;
+    }
 }
