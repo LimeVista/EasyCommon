@@ -15,6 +15,7 @@ import android.app.Activity
 import android.content.Context
 import android.view.View
 import me.limeice.common.base.BasePresenter
+import me.limeice.common.function.DensityUtils
 
 /**
  * 根据手机的分辨率从 dp 值 转成为 px(像素)值
@@ -263,3 +264,9 @@ fun BasePresenter<*, *>.getScreenWidth(): Int {
 fun BasePresenter<*, *>.getScreenHeight(): Int {
     return mContext.resources.displayMetrics.heightPixels
 }
+
+/* 判断Android设备是否为平板 */
+inline fun <reified T : Context> T.isPad() = DensityUtils.isPad(this)
+
+/* 判断Android设备是否为平板 */
+inline fun <reified T : View> T.isPad() = DensityUtils.isPad(context)
