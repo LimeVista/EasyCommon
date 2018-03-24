@@ -1,5 +1,7 @@
 package me.limeice.common.function.algorithm.graphics;
 
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.support.annotation.NonNull;
 
 /**
@@ -49,6 +51,25 @@ public final class PointInPolygon {
         for (int i = 0, j = len - 1; i < len; j = i++) {
             if ((((psY[i] <= y) && (y < psY[j])) || ((psY[j] <= y) && (y < psY[i])))
                     && (x < (psX[j] - psX[i]) * (y - psY[i]) / (psY[j] - psY[i]) + psX[i]))
+                c = !c;
+        }
+        return c;
+    }
+
+    /**
+     * 判定该点是否在一个封闭的区间内
+     *
+     * @param ps 多边形顶点
+     * @param x  坐标x轴
+     * @param y  坐标y轴
+     * @return 是否在区间内
+     */
+    public static boolean pnpoly(@NonNull final PointF[] ps, float x, float y) {
+        boolean c = false;
+        final int len = ps.length;
+        for (int i = 0, j = len - 1; i < len; j = i++) {
+            if ((((ps[i].y <= y) && (y < ps[j].y)) || ((ps[j].y <= y) && (y < ps[i].y)))
+                    && (x < (ps[j].x - ps[i].x) * (y - ps[i].y) / (ps[j].y - ps[i].y) + ps[i].x))
                 c = !c;
         }
         return c;

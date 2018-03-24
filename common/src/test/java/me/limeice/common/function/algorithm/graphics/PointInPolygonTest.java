@@ -38,5 +38,22 @@ public class PointInPolygonTest {
         assertTrue(PointInPolygon.pnpoly(ps, 78.5f, 232.5f));
         assertTrue(PointInPolygon.pnpoly(ps, 211.5f, 227.5f));
         assertTrue(PointInPolygon.pnpoly(ps, 241, 151));
+
+        float[] pX = new float[ps.length];
+        float[] pY = new float[ps.length];
+
+        for (int i = 0; i < ps.length; i++) {
+            pX[i] = ps[i].x;
+            pY[i] = ps[i].y;
+        }
+        assertFalse(PointInPolygon.pnpoly(pX, pY, 82, 118));
+        assertFalse(PointInPolygon.pnpoly(pX, pY, 225, 120));
+        assertFalse(PointInPolygon.pnpoly(pX, pY, 221.5f, 237.5f));
+        assertFalse(PointInPolygon.pnpoly(pX, pY, 191.5f, 208.f));
+        assertTrue(PointInPolygon.pnpoly(pX, pY, 169, 106));
+        assertTrue(PointInPolygon.pnpoly(pX, pY, 158, 189));
+        assertTrue(PointInPolygon.pnpoly(pX, pY, 78.5f, 232.5f));
+        assertTrue(PointInPolygon.pnpoly(pX, pY, 211.5f, 227.5f));
+        assertTrue(PointInPolygon.pnpoly(pX, pY, 241, 151));
     }
 }
