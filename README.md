@@ -83,6 +83,44 @@ android {
      */
     @Nullable public static byte[] hexStringToBytes(@Nullable String hexString)
 ```
+* AppUtils: App Utils(App处理工具) => [AppUtils.java](https://github.com/LimeVista/EasyCommon/blob/master/common/src/main/java/me/limeice/common/function/AppUtils.java).
+```java
+  /**
+     * 获取版本信息
+     *
+     * @param context 上下文容器
+     * @return 版本信息（若获取失败返回null）
+     */
+    public static String getVerName(@NonNull Context context)
+
+    /**
+     * 获取版本号
+     *
+     * @param context 上下文容器
+     * @return 版本号（若获取失败返回0）
+     */
+    public static int getVerCode(@NonNull Context context)
+
+    /**
+     * 检测服务是否运行
+     *
+     * @param context   上下文容器
+     * @param className 服务类名
+     * @return 运行状态
+     */
+    public static boolean isServiceRunning(@NonNull Context context, String className) 
+
+    /**
+     * 停止运行中的服务
+     *
+     * @param context   上下文容器
+     * @param className 服务类名
+     * @return 是否执行成功
+     * @throws ClassNotFoundException 无找到此类
+     */
+    public static boolean stopRunningService(@NonNull Context context, String className)
+```
+
 * CloseUtils: Close Stream Utils(关闭流处理工具) => [CloseUtils.java](https://github.com/LimeVista/EasyCommon/blob/master/common/src/main/java/me/limeice/common/function/CloseUtils.java).
 ```java
     /**
@@ -778,4 +816,36 @@ android {
 
     /* 判断Android设备是否为平板 */
     inline fun <reified T : View> T.isPad()
+
+    /**
+     * 获取版本信息
+    *
+    * @return 版本信息（若获取失败返回null）
+    */
+    inline fun <reified T : Context> T.getVerName(): String?
+
+    /**
+     * 获取版本号
+     *
+     * @return 版本号（若获取失败返回0）
+     */
+    inline fun <reified T : Context> T.getVerCode(): Int
+
+    /**
+     * 检测服务是否运行
+     *
+     * @param className 服务类名
+     * @return 运行状态
+     */
+    inline fun <reified T : Context> T.isServiceRunning(className: String): Boolean
+
+    /**
+     * 停止运行中的服务
+     *
+     * @param className 服务类名
+     * @return 是否执行成功
+     * @throws ClassNotFoundException 无找到此类
+     */
+    @Throws(ClassNotFoundException::class)
+    inline fun <reified T : Context> T.stopRunningService(className: String): Boolean
 ```
