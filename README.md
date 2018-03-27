@@ -535,7 +535,94 @@ android {
      */
     @NonNull public String decryptBase64(@NonNull String msg, @NonNull String sKey) 
 ```
+* Devices: Devices Utils(设备相关工具) => [Hash.java](https://github.com/LimeVista/EasyCommon/blob/master/common/src/main/java/me/limeice/common/function/algorithm/security/DevicesUtils.java).
+```java
+    /**
+     * 获得CPU核心数
+     *
+     * @return CPU核心数
+     */
+    public static int getNumCores()
 
+    /**
+     * 获取处理器信息
+     *
+     * @return 处理器信息
+     * @throws IOException 获取/读取失败
+     */
+    @NonNull
+    public static String getProcessorName() throws IOException
+
+    /**
+     * 获取CPU详细信息
+     *
+     * @return CPU详细信息文本
+     * @throws IOException 获取/读取失败
+     */
+    @NonNull
+    public static String getCpuInfo() throws IOException 
+    /**
+     * 获取WIFI的MAC地址
+     *
+     * @param context 上下文容器
+     * @return MAC地址
+     */
+    @RequiresPermission(android.Manifest.permission.ACCESS_WIFI_STATE)
+    public static String getWifiMac(@NonNull Context context)
+
+    /**
+     * 获取设备内存相关信息
+     *
+     * @return 返回详细内存信息描述
+     * @throws IOException IOE
+     */
+    @NonNull
+    public static Map<String, String> getMemInfo() throws IOException
+
+    /**
+     * 获取设备IMEI和设备序列号，数组索引（index）第0个为IMEI，第1个为SimSerialNumber
+     *
+     * @param context 上下文容器
+     * @return IMEI和SimSerialNumber(值可能为空)
+     */
+    @NonNull
+    @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE)
+    public static String[] getImeiWithSN(@NonNull Context context)
+
+    /**
+     * 获取设备型号
+     *
+     * @return 设备型号
+     */
+    @NonNull
+    public static String getDevicesModel()
+
+    /**
+     * 获取设备制造商
+     *
+     * @return 设备制造商
+     */
+    @NonNull
+    public static String getManufacturer()
+
+    /**
+     * 获取全局UUID
+     *
+     * @param context 上下文容器
+     * @return UUID
+     */
+    @Nullable
+    public static String getUUID(@NonNull Context context) 
+
+    /**
+     * 初始化并获取屏幕相关信息
+     *
+     * @param activity {@link Activity}
+     * @return DisplayMetrics
+     */
+    @NonNull
+    public static DisplayMetrics getDisplayMetrics(@NonNull Activity activity)
+```
 * Hash: Hash Utils(哈希算法) => [Hash.java](https://github.com/LimeVista/EasyCommon/blob/master/common/src/main/java/me/limeice/common/function/algorithm/security/Hash.java).
 ```java
     /**
