@@ -535,7 +535,7 @@ android {
      */
     @NonNull public String decryptBase64(@NonNull String msg, @NonNull String sKey) 
 ```
-* Devices: Devices Utils(设备相关工具) => [Hash.java](https://github.com/LimeVista/EasyCommon/blob/master/common/src/main/java/me/limeice/common/function/algorithm/security/DevicesUtils.java).
+* Devices: Devices Utils(设备相关工具) => [DevicesUtils.java](https://github.com/LimeVista/EasyCommon/blob/master/common/src/main/java/me/limeice/common/function/DevicesUtils.java).
 ```java
     /**
      * 获得CPU核心数
