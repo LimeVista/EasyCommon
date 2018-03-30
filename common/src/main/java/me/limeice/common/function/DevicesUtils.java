@@ -1,5 +1,7 @@
 package me.limeice.common.function;
 
+
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -37,8 +39,6 @@ import java.util.regex.Pattern;
  */
 @SuppressWarnings("WeakerAccess")
 public final class DevicesUtils {
-    private DevicesUtils() {
-    }
 
     /**
      * 获得CPU核心数
