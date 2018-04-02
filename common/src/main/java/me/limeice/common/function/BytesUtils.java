@@ -88,6 +88,231 @@ public final class BytesUtils {
     }
 
     /**
+     * boolean value to byte
+     *
+     * @param value boolean value
+     * @return byte
+     */
+    public static byte toBytes(boolean value) {
+        return value ? (byte) 0x1 : (byte) 0x0;
+    }
+
+    /**
+     * short value to byte array(length = 2)
+     *
+     * @param value short value
+     * @return byte array(length = 2)
+     */
+    @NonNull
+    public static byte[] toBytes(short value) {
+        byte[] bs = new byte[2];
+        bs[0] = (byte) (value & 0xFF);
+        bs[1] = (byte) ((value >>> 8) & 0xFF);
+        return bs;
+    }
+
+    /**
+     * int value to byte array(length = 4)
+     *
+     * @param value int value
+     * @return byte array(length = 4)
+     */
+    @NonNull
+    public static byte[] toBytes(int value) {
+        byte[] bs = new byte[4];
+        bs[0] = (byte) (value & 0xFF);
+        bs[1] = (byte) ((value >>> 8) & 0xFF);
+        bs[2] = (byte) ((value >>> 16) & 0xFF);
+        bs[3] = (byte) ((value >>> 24) & 0xFF);
+        return bs;
+    }
+
+    /**
+     * long value to byte array(length = 8)
+     *
+     * @param value long value
+     * @return byte array(length = 8)
+     */
+    @NonNull
+    public static byte[] toBytes(long value) {
+        byte[] bs = new byte[8];
+        bs[0] = (byte) (value & 0xFF);
+        bs[1] = (byte) ((value >>> 8) & 0xFF);
+        bs[2] = (byte) ((value >>> 16) & 0xFF);
+        bs[3] = (byte) ((value >>> 24) & 0xFF);
+        bs[4] = (byte) ((value >>> 32) & 0xFF);
+        bs[5] = (byte) ((value >>> 40) & 0xFF);
+        bs[6] = (byte) ((value >>> 48) & 0xFF);
+        bs[7] = (byte) ((value >>> 56) & 0xFF);
+        return bs;
+    }
+
+    /**
+     * boolean value put byte array
+     *
+     * @param bs    bytes
+     * @param value boolean value
+     * @param index bytes offset
+     */
+    public static void put(@NonNull byte[] bs, boolean value, int index) {
+        bs[index] = (byte) (value ? 0x1 : 0x0);
+    }
+
+    /**
+     * short value put byte array
+     *
+     * @param bs    bytes
+     * @param value short value
+     * @param index bytes offset
+     */
+    public static void put(@NonNull byte[] bs, short value, int index) {
+        bs[index] = (byte) (value & 0xFF);
+        bs[index + 1] = (byte) ((value >>> 8) & 0xFF);
+    }
+
+    /**
+     * int value put byte array
+     *
+     * @param bs    bytes
+     * @param value int value
+     * @param index bytes offset
+     */
+    public static void put(@NonNull byte[] bs, int value, int index) {
+        bs[index] = (byte) (value & 0xFF);
+        bs[index + 1] = (byte) ((value >>> 8) & 0xFF);
+        bs[index + 2] = (byte) ((value >>> 16) & 0xFF);
+        bs[index + 3] = (byte) ((value >>> 24) & 0xFF);
+    }
+
+    /**
+     * long value put byte array
+     *
+     * @param bs    bytes
+     * @param value long value
+     * @param index bytes offset
+     */
+    public static void put(@NonNull byte[] bs, long value, int index) {
+        bs[index] = (byte) (value & 0xFF);
+        bs[index + 1] = (byte) ((value >>> 8) & 0xFF);
+        bs[index + 2] = (byte) ((value >>> 16) & 0xFF);
+        bs[index + 3] = (byte) ((value >>> 24) & 0xFF);
+        bs[index + 4] = (byte) ((value >>> 32) & 0xFF);
+        bs[index + 5] = (byte) ((value >>> 40) & 0xFF);
+        bs[index + 6] = (byte) ((value >>> 48) & 0xFF);
+        bs[index + 7] = (byte) ((value >>> 56) & 0xFF);
+    }
+
+    /**
+     * get boolean from byte
+     *
+     * @param bs    bytes
+     * @param index bs offset
+     * @return value
+     */
+    public static boolean getBoolean(@NonNull byte[] bs, int index) {
+        return bs[index] != 0;
+    }
+
+    /**
+     * get short from byte array
+     *
+     * @param bs    bytes
+     * @param index bs offset
+     * @return value
+     */
+    public static short getShort(@NonNull byte[] bs, int index) {
+        return (short) (
+                (bs[index] & 0xFF) |
+                        ((bs[index + 1] & 0xFF) << 8)
+        );
+    }
+
+    /**
+     * get int from byte array
+     *
+     * @param bs    bytes
+     * @param index bs offset
+     * @return value
+     */
+    public static int getInt(@NonNull byte[] bs, int index) {
+        return (bs[index] & 0xFF) |
+                ((bs[index + 1] & 0xFF) << 8) |
+                ((bs[index + 2] & 0xFF) << 16) |
+                ((bs[index + 3] & 0xFF) << 24);
+    }
+
+    /**
+     * get long from byte array
+     *
+     * @param bs    bytes
+     * @param index bs offset
+     * @return value
+     */
+    public static long getLong(@NonNull byte[] bs, int index) {
+        return ((long) bs[index] & 0xFF) |
+                ((long) (bs[1 + index] & 0xFF) << 8) |
+                ((long) (bs[2 + index] & 0xFF) << 16) |
+                ((long) (bs[3 + index] & 0xFF) << 24) |
+                ((long) (bs[4 + index] & 0xFF) << 32) |
+                ((long) (bs[5 + index] & 0xFF) << 40) |
+                ((long) (bs[6 + index] & 0xFF) << 48) |
+                ((long) (bs[7 + index] & 0xFF) << 56);
+    }
+
+    /**
+     * get boolean from byte array
+     *
+     * @param b byte
+     * @return value
+     */
+    public static boolean getBoolean(byte b) {
+        return b != 0;
+    }
+
+    /**
+     * get short from byte array
+     *
+     * @param bs bytes(length = 2)
+     * @return value
+     */
+    public static short getShort(@NonNull byte[] bs) {
+        return (short) (
+                (bs[0] & 0xFF) |
+                        ((bs[1] & 0xFF) << 8)
+        );
+    }
+
+    /**
+     * get int from byte array
+     *
+     * @param bs bytes(length = 4)
+     * @return value
+     */
+    public static int getInt(@NonNull byte[] bs) {
+        return (bs[0] & 0xFF) |
+                ((bs[1] & 0xFF) << 8) |
+                ((bs[2] & 0xFF) << 16) |
+                ((bs[3] & 0xFF) << 24);
+    }
+
+    /**
+     * get long from byte
+     *
+     * @param bs bytes(length = 8)
+     * @return value
+     */
+    public static long getLong(@NonNull byte[] bs) {
+        return ((long) bs[0] & 0xFF) |
+                ((long) (bs[1] & 0xFF) << 8) |
+                ((long) (bs[2] & 0xFF) << 16) |
+                ((long) (bs[3] & 0xFF) << 24) |
+                ((long) (bs[4] & 0xFF) << 32) |
+                ((long) (bs[5] & 0xFF) << 40) |
+                ((long) (bs[6] & 0xFF) << 48) |
+                ((long) (bs[7] & 0xFF) << 56);
+    }
+
+    /**
      * Convert char to byte
      *
      * @param c char
