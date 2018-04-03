@@ -105,29 +105,37 @@ class DataHolder implements DataType {
                 return bsString;
 
             case TYPE_ARRAY_1_BOOLEAN:
-                // TODO
+                meta.size = ((boolean[]) objects).length;
+                return ArraysUtils.writeArray1((boolean[]) objects);
 
             case TYPE_ARRAY_1_BYTE:
                 meta.size = ((byte[]) objects).length;
                 return (byte[]) objects;
 
             case TYPE_ARRAY_1_SHORT:
-                // TODO
+                meta.size = ((short[]) objects).length << 1;
+                return ArraysUtils.writeArray1((short[]) objects);
 
             case TYPE_ARRAY_1_INT:
-                // TODO
+                meta.size = ((int[]) objects).length << 2;
+                return ArraysUtils.writeArray1((int[]) objects);
 
             case TYPE_ARRAY_1_FLOAT:
-                // TODO
+                meta.size = ((float[]) objects).length << 2;
+                return ArraysUtils.writeArray1((float[]) objects);
 
             case TYPE_ARRAY_1_LONG:
-                // TODO
+                meta.size = ((long[]) objects).length << 3;
+                return ArraysUtils.writeArray1((long[]) objects);
 
             case TYPE_ARRAY_1_DOUBLE:
-                // TODO
+                meta.size = ((double[]) objects).length << 3;
+                return ArraysUtils.writeArray1((double[]) objects);
 
             case TYPE_ARRAY_1_STRING:
-                // TODO
+                ArraysUtils.WrapStringBytes wsb = ArraysUtils.writeArray1((String[]) objects);
+                meta.size = wsb.len;
+                return wsb.bytes;
 
             case TYPE_NONE:
                 return null;

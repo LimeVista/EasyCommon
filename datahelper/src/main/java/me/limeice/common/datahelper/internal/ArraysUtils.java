@@ -1,6 +1,8 @@
 package me.limeice.common.datahelper.internal;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 import me.limeice.common.function.BytesUtils;
 
@@ -68,5 +70,84 @@ final class ArraysUtils {
             array[i] = new String(bs, i + 4, len, Charset.forName("UTF-8"));
         }
         return array;
+    }
+
+    public static byte[] writeArray1(boolean[] value) {
+        byte[] array = new byte[value.length];
+        for (int i = 0; i < array.length; i++) {
+            BytesUtils.put(array, value[i], i);
+        }
+        return array;
+    }
+
+    public static byte[] writeArray1(short[] value) {
+        byte[] array = new byte[value.length << 1];
+        for (int i = 0; i < array.length; i++) {
+            BytesUtils.put(array, value[i], i << 1);
+        }
+        return array;
+    }
+
+    public static byte[] writeArray1(int[] value) {
+        byte[] array = new byte[value.length << 2];
+        for (int i = 0; i < array.length; i++) {
+            BytesUtils.put(array, value[i], i << 2);
+        }
+        return array;
+    }
+
+    public static byte[] writeArray1(float[] value) {
+        byte[] array = new byte[value.length << 2];
+        for (int i = 0; i < array.length; i++) {
+            BytesUtils.put(array, value[i], i << 2);
+        }
+        return array;
+    }
+
+    public static byte[] writeArray1(long[] value) {
+        byte[] array = new byte[value.length << 3];
+        for (int i = 0; i < array.length; i++) {
+            BytesUtils.put(array, value[i], i << 3);
+        }
+        return array;
+    }
+
+
+    public static byte[] writeArray1(double[] value) {
+        byte[] array = new byte[value.length << 3];
+        for (int i = 0; i < array.length; i++) {
+            BytesUtils.put(array, value[i], i << 3);
+        }
+        return array;
+    }
+
+    public static WrapStringBytes writeArray1(String[] value) {
+        List<WrapStringBytes> list = new ArrayList<>();
+        int len = 0;
+        for (String s : value) {
+            WrapStringBytes wsb = new WrapStringBytes();
+            wsb.bytes = s.getBytes(Charset.forName("UTF-8"));
+            wsb.len = wsb.bytes.length;
+            len += wsb.len + 4;
+            list.add(wsb);
+        }
+        byte[] bytes = new byte[len];
+        len = 0;
+        for (WrapStringBytes wsb : list) {
+            byte[] _size = BytesUtils.toBytes(wsb.len);
+            System.arraycopy(_size, 0, bytes, len, 4);
+            len += 4;
+            System.arraycopy(wsb.bytes, 0, bytes, len, wsb.bytes.length);
+            len += wsb.bytes.length;
+        }
+        WrapStringBytes wsb = new WrapStringBytes();
+        wsb.bytes = bytes;
+        wsb.len = len;
+        return wsb;
+    }
+
+    static class WrapStringBytes {
+        int len;
+        byte[] bytes;
     }
 }
