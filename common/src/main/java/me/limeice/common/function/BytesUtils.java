@@ -242,6 +242,20 @@ public final class BytesUtils {
     }
 
     /**
+     * get float from byte array
+     *
+     * @param bs    bytes
+     * @param index bs offset
+     * @return value
+     */
+    public static float getFloat(@NonNull byte[] bs, int index) {
+        return Float.intBitsToFloat(
+                (bs[index] & 0xFF) | ((bs[index + 1] & 0xFF) << 8) |
+                        ((bs[index + 2] & 0xFF) << 16) | ((bs[index + 3] & 0xFF) << 24)
+        );
+    }
+
+    /**
      * get long from byte array
      *
      * @param bs    bytes
@@ -257,6 +271,24 @@ public final class BytesUtils {
                 ((long) (bs[5 + index] & 0xFF) << 40) |
                 ((long) (bs[6 + index] & 0xFF) << 48) |
                 ((long) (bs[7 + index] & 0xFF) << 56);
+    }
+
+    /**
+     * get double from byte array
+     *
+     * @param bs    bytes
+     * @param index bs offset
+     * @return value
+     */
+    public static double getDouble(@NonNull byte[] bs, int index) {
+        return Double.longBitsToDouble(((long) bs[index] & 0xFF) |
+                ((long) (bs[1 + index] & 0xFF) << 8) |
+                ((long) (bs[2 + index] & 0xFF) << 16) |
+                ((long) (bs[3 + index] & 0xFF) << 24) |
+                ((long) (bs[4 + index] & 0xFF) << 32) |
+                ((long) (bs[5 + index] & 0xFF) << 40) |
+                ((long) (bs[6 + index] & 0xFF) << 48) |
+                ((long) (bs[7 + index] & 0xFF) << 56));
     }
 
     /**
@@ -296,6 +328,19 @@ public final class BytesUtils {
     }
 
     /**
+     * get float from byte array
+     *
+     * @param bs bytes(length = 4)
+     * @return value
+     */
+    public static float getFloat(@NonNull byte[] bs) {
+        return Float.intBitsToFloat(
+                (bs[0] & 0xFF) | ((bs[1] & 0xFF) << 8) |
+                        ((bs[2] & 0xFF) << 16) | ((bs[3] & 0xFF) << 24)
+        );
+    }
+
+    /**
      * get long from byte
      *
      * @param bs bytes(length = 8)
@@ -310,6 +355,25 @@ public final class BytesUtils {
                 ((long) (bs[5] & 0xFF) << 40) |
                 ((long) (bs[6] & 0xFF) << 48) |
                 ((long) (bs[7] & 0xFF) << 56);
+    }
+
+    /**
+     * get double from byte
+     *
+     * @param bs bytes(length = 8)
+     * @return value
+     */
+    public static double getDouble(@NonNull byte[] bs) {
+        return Double.longBitsToDouble(
+                ((long) bs[0] & 0xFF) |
+                        ((long) (bs[1] & 0xFF) << 8) |
+                        ((long) (bs[2] & 0xFF) << 16) |
+                        ((long) (bs[3] & 0xFF) << 24) |
+                        ((long) (bs[4] & 0xFF) << 32) |
+                        ((long) (bs[5] & 0xFF) << 40) |
+                        ((long) (bs[6] & 0xFF) << 48) |
+                        ((long) (bs[7] & 0xFF) << 56)
+        );
     }
 
     /**
