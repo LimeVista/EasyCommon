@@ -1,6 +1,7 @@
 package me.limeice.common.datahelper;
 
 public interface Reader {
+
     /**
      * 读取数据
      *
@@ -43,6 +44,13 @@ public interface Reader {
      */
     short readShort(short id);
 
+    /**
+     * 读取数据
+     *
+     * @param id         编号
+     * @param defaultVal 默认值
+     * @return value
+     */
     short readShort(short id, short defaultVal);
 
     /**
@@ -123,21 +131,68 @@ public interface Reader {
      */
     String readString(short id, String defaultVal);
 
-
+    /**
+     * 读取数组
+     *
+     * @param id 编号
+     * @return 数组
+     */
     boolean[] readBooleanArray1(short id);
 
+    /**
+     * 读取数组
+     *
+     * @param id 编号
+     * @return 数组
+     */
     byte[] readByteArray1(short id);
 
+    /**
+     * 读取数组
+     *
+     * @param id 编号
+     * @return 数组
+     */
     short[] readShortArray1(short id);
 
+    /**
+     * 读取数组
+     *
+     * @param id 编号
+     * @return 数组
+     */
     int[] readIntArray1(short id);
 
+    /**
+     * 读取数组
+     *
+     * @param id 编号
+     * @return 数组
+     */
     float[] readFloatArray1(short id);
 
+    /**
+     * 读取数组
+     *
+     * @param id 编号
+     * @return 数组
+     */
     long[] readLongArray1(short id);
 
+    /**
+     * 读取数组
+     *
+     * @param id 编号
+     * @return 数组
+     */
     double[] readDoubleArray1(short id);
 
+    /**
+     * 读取数组
+     *
+     * @param id 编号
+     * @return 数组
+     */
     String[] readStringArray1(short id);
 
     /**

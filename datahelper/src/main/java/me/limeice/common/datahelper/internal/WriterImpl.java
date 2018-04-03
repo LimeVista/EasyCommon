@@ -6,14 +6,15 @@ import android.support.v4.util.ArrayMap;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Map;
 
 import me.limeice.common.datahelper.DataHelperVerInfo;
 import me.limeice.common.datahelper.IORuntimeException;
 import me.limeice.common.datahelper.Writer;
+import me.limeice.common.function.CloseUtils;
 
 public class WriterImpl implements Writer, DataType {
-
-    static final String EXT = ".w_lime";
 
     private IDataReader mReader;
 
@@ -22,6 +23,12 @@ public class WriterImpl implements Writer, DataType {
     private DataHelperVerInfo mInfo;
 
     private ArrayMap<MetaData, Object> writeData = new ArrayMap<>();
+
+    public WriterImpl(IDataReader reader, File file, DataHelperVerInfo info) {
+        this.mReader = reader;
+        this.mFile = file;
+        this.mInfo = info;
+    }
 
     @NonNull
     @Override
@@ -120,45 +127,57 @@ public class WriterImpl implements Writer, DataType {
     }
 
     @Override
-    public boolean commit() {
-        File f = new File(mFile.getAbsoluteFile() + EXT);
-        if (f.exists() && !f.delete()) return false; // 删除
+    public synchronized boolean commit() {
+        File newFile = new File(mFile.getAbsoluteFile() + EXT);
+        if (newFile.exists() && !newFile.delete()) return false; // 删除
+        FileOutputStream out = null;
         try {
-            if (f.createNewFile()) return false;
-            final FileOutputStream out = new FileOutputStream(f);
+            if (newFile.createNewFile()) return false;
+            out = new FileOutputStream(newFile);
             byte[] bs = mInfo.createHead();
             out.write(bs);
+            final FileOutputStream outFinal = out;
             if (mReader instanceof MetaDataReader) {
                 mReader.each(new IDataReader.Consumer() {
                     @Override
                     public void accept(@NonNull WrapData wrapData) throws IOException {
-                        if (writeData.containsKey(wrapData.meta))
-                            return;
-                        out.write(wrapData.meta.write());
-                        out.write(wrapData.bytes);
+                        if (writeData.containsKey(wrapData.meta)) return;
+                        outFinal.write(wrapData.meta.write());
+                        outFinal.write(wrapData.bytes);
                     }
                 });
+
             } else if (mReader instanceof AllDataReader) {
                 mReader.each(new IDataReader.Consumer() {
                     @Override
                     public void accept(@NonNull WrapData wrapData) throws IOException {
-                        if (writeData.containsKey(wrapData.meta))
-                            return;
+                        if (writeData.containsKey(wrapData.meta)) return;
                         byte[] bs = DataHolder.put(wrapData.meta, wrapData.data);
-                        out.write(wrapData.meta.write());
-                        out.write(bs);
+                        outFinal.write(wrapData.meta.write());
+                        if (bs != null) outFinal.write(bs);
                     }
                 });
 
-            } else {
-                if (mReader != null) throw new IllegalArgumentException("mReader type unknown.");
             }
-            return true;
+            if (mReader != null) throw new IllegalArgumentException("mReader type unknown.");
+            writeMap(out);
+            out.flush();
+            return rename(newFile);
         } catch (IOException ex) {
             throw new IORuntimeException(ex);
+        } finally {
+            CloseUtils.closeIOQuietly(out);
         }
     }
 
+    /**
+     * 数据载入代理
+     *
+     * @param id    编号
+     * @param value 值
+     * @param type  值类型
+     * @return 类本身
+     */
     private Writer putProxy(short id, Object value, short type) {
         for (MetaData meta : writeData.keySet()) {
             if (meta.id == id) {
@@ -167,9 +186,35 @@ public class WriterImpl implements Writer, DataType {
                 writeData.remove(writeData);
                 meta.type = type;
                 writeData.put(meta, value);
+                return this;
             }
         }
         writeData.put(new MetaData(), value);
         return this;
+    }
+
+    /**
+     * 写入修改文件
+     *
+     * @param out 输出流
+     * @throws IOException IOE
+     */
+    private void writeMap(OutputStream out) throws IOException {
+        for (Map.Entry<MetaData, Object> set : writeData.entrySet()) {
+            MetaData meta = set.getKey();
+            byte[] bs = DataHolder.put(meta, set.getValue());
+            out.write(meta.write());
+            if (bs != null) out.write(bs);
+        }
+    }
+
+    /**
+     * 重命名新文件替换旧文件
+     *
+     * @param newFile 新文件
+     * @return 是否操作成功
+     */
+    private boolean rename(File newFile) {
+        return (!mFile.exists() || mFile.delete()) && newFile.renameTo(mFile);
     }
 }

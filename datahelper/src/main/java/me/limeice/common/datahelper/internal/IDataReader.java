@@ -5,8 +5,9 @@ import android.support.annotation.NonNull;
 import java.io.IOException;
 
 import me.limeice.common.datahelper.Reader;
+import me.limeice.common.datahelper.internal.WrapData;
 
-interface IDataReader extends Reader {
+public interface IDataReader extends Reader {
 
     /**
      * 初始化

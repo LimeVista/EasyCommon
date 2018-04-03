@@ -37,7 +37,7 @@ final class MetaData {
 
     byte[] write() {
         byte[] bs = new byte[8];
-        write();
+        write(bs);
         return bs;
     }
 

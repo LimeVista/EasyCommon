@@ -138,6 +138,7 @@ class DataHolder implements DataType {
                 return wsb.bytes;
 
             case TYPE_NONE:
+                meta.size = 0;
                 return null;
 
             default:

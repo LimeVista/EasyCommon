@@ -2,6 +2,8 @@ package me.limeice.common.datahelper.internal;
 
 interface DataType {
 
+    String EXT = ".w_lime";
+
     short TYPE_UNKNOWN = (short) 0xFFFF; // 未知类型
 
     short TYPE_NONE = 0x0;       // 空类型

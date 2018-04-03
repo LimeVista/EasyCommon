@@ -1,14 +1,32 @@
 package me.limeice.common.datahelper;
 
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+
+import io.reactivex.annotations.NonNull;
 
 public interface IDataHelper {
 
+    //////////////////////////////////////////
 
-    byte MODE_READ_ALL = 0;
+    byte MODE_READ_ALL = 0;     // 完整读取模式
 
-    byte MODE_READ_ID = 1;
+    byte MODE_READ_ID = 1;      // 仅读取基本信息
+
+    //////////////////////////////////////////
+
+    byte STATE_EXIST = 1;
+
+    byte STATE_NOT_EXIST = 2;
+
+    byte STATE_TYPE_ERROR = 3;
+
+    byte STATE_UNKNOWN = 0;
+
+    byte STATE_NOT_LOAD = -1;
+
+    byte STATE_OK = 4;
+
+    //////////////////////////////////////////
 
     /**
      * 获取数据相关信息
@@ -17,44 +35,27 @@ public interface IDataHelper {
      */
     DataHelperVerInfo getInfo();
 
+    /**
+     * 创建读取者
+     *
+     * @return 读取者
+     */
+    @NonNull
+    Reader reader();
 
     /**
-     * 读取基本类型和数组数据
+     * 打开编辑者
      *
-     * @param id  编号
-     * @param <T> 基本类型
-     * @return 基本类型数据
+     * @return 编辑者
      */
-    <T> T read(short id);
 
+    @NonNull
+    Writer writer();
 
     /**
-     * 读取基本类型和数组数据
+     * 重新加载
      *
-     * @param id         编号
-     * @param defaultVal 默认数据
-     * @param <T>        基本类型
-     * @return 基本类型数据
+     * @throws IOException File I/O Exception
      */
-    <T> T read(short id, T defaultVal);
-
-    /**
-     * 写入基本类型和数组数据
-     *
-     * @param id    编号
-     * @param value 基本数据
-     * @param <T>   基本数据类型
-     */
-    <T> void write(short id, T value);
-
-    <T extends List> T readList(short id);
-
-
-    <T extends List> T readList(short id, T inst);
-
-
-    <T extends Map> T readMap(short id);
-
-
-    <T extends Map> T readMap(short id, T inst);
+    void reload() throws IOException;
 }

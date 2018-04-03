@@ -11,39 +11,26 @@ import java.util.List;
 import java.util.Map;
 
 import me.limeice.common.datahelper.internal.AllDataReader;
+import me.limeice.common.datahelper.internal.IDataReader;
 import me.limeice.common.datahelper.internal.MetaDataReader;
+import me.limeice.common.datahelper.internal.WriterImpl;
 import me.limeice.common.function.BytesUtils;
 
-@SuppressWarnings("WeakerAccess")
 public class DataHelper implements IDataHelper {
-
-    static final byte STATE_EXIST = 1;
-
-    static final byte STATE_NOT_EXIST = 2;
-
-    static final byte STATE_TYPE_ERROR = 3;
-
-    static final byte STATE_UNKNOW = 0;
-
-    static final byte STATE_NOT_LOAD = -1;
-
-    static final byte STATE_OK = 4;
-
-    //////////////////////////////////////////
 
     private File mFile;
 
     private byte mState = STATE_NOT_LOAD;
 
-    private long mFileLength = 0L;
-
     private byte mode;
 
     private DataHelperVerInfo mInfo = new DataHelperVerInfo();
 
-    RandomAccessFile mRAF;
+    private RandomAccessFile mRAF;
 
-    private Reader mReader;
+    private IDataReader mReader;
+
+    private boolean isLoad = false;
 
     public DataHelper(@NonNull String filePath) {
         this(new File(filePath), MODE_READ_ALL);
@@ -61,19 +48,49 @@ public class DataHelper implements IDataHelper {
         mFile = file;
         switch (mode) {
             case MODE_READ_ALL:
-                mode = MODE_READ_ALL;
+                this.mode = MODE_READ_ALL;
                 break;
             case MODE_READ_ID:
-                mode = MODE_READ_ID;
+                this.mode = MODE_READ_ID;
             default:
-                throw new RuntimeException("Mode is error.");
+                throw new IllegalArgumentException("mode type error");
         }
     }
 
-    public void load() throws IOException {
+    public byte getState() {
+        return mState;
+    }
+
+    @Override
+    @NonNull
+    public DataHelperVerInfo getInfo() {
+        return mInfo;
+    }
+
+    @Override
+    @NonNull
+    public Reader reader() {
+        if (!isLoad)
+            try {
+                reload();
+            } catch (IOException ex) {
+                throw new IORuntimeException(ex);
+            }
+        requireStateOK();
+        return mReader;
+    }
+
+    @Override
+    @NonNull
+    public Writer writer() {
+        return new WriterImpl(mReader, mFile, mInfo);
+    }
+
+    @Override
+    public void reload() throws IOException {
         mState = mFile.exists() ? STATE_EXIST : STATE_NOT_EXIST;
         if (mState == STATE_EXIST) {
-            if ((mFileLength = mFile.length()) < DataHelperVerInfo.MIN_SIZE)
+            if (mFile.length() < DataHelperVerInfo.MIN_SIZE)
                 mState = STATE_TYPE_ERROR;
             else {
                 try {
@@ -89,54 +106,14 @@ public class DataHelper implements IDataHelper {
                 }
             }
         }
+        isLoad = true;
     }
 
-    @Override
-    @NonNull
-    public DataHelperVerInfo getInfo() {
-        return null;
-    }
-
-    @Override
-    @Nullable
-    public <T> T read(short id) {
-        return null;
-    }
-
-    @Override
-    @NonNull
-    public <T> T read(short id, @NonNull T defaultVal) {
-        return null;
-    }
-
-    @Override
-    public <T> void write(short id, @NonNull T value) {
-
-    }
-
-    @Override
-    @Nullable
-    public <T extends List> T readList(short id) {
-        return null;
-    }
-
-    @Override
-    @NonNull
-    public <T extends List> T readList(short id, @NonNull T inst) {
-        return null;
-    }
-
-    @Override
-    public <T extends Map> T readMap(short id) {
-        return null;
-    }
-
-    @Override
-    @NonNull
-    public <T extends Map> T readMap(short id, @NonNull T inst) {
-        return null;
-    }
-
+    /**
+     * 读取头信息
+     *
+     * @return 是否读取成功
+     */
     private boolean readHead() throws IOException {
         byte[] bs = new byte[DataHelperVerInfo.MIN_SIZE];
         int len = mRAF.read(bs);
@@ -145,16 +122,34 @@ public class DataHelper implements IDataHelper {
             if (DataHelperVerInfo.TAG[i] != bs[i])
                 return false;
         }
-        mInfo.setVer(BytesUtils.getShort(bs, 6));
-        mInfo.setUserVer(BytesUtils.getShort(bs, 8));
+        mInfo.setVer(BytesUtils.getShort(bs, DataHelperVerInfo.TAG.length));
+        mInfo.setUserVer(BytesUtils.getShort(bs, DataHelperVerInfo.TAG.length + 2));
         return true;
     }
 
+    /**
+     * 重新加载数据
+     */
     private void reloadData() throws IOException {
         if (mode == MODE_READ_ALL) {
             mReader = new AllDataReader(mRAF);
         } else {
             mReader = new MetaDataReader(mRAF);
+        }
+    }
+
+    private void requireStateOK() {
+        if (mState != STATE_OK) {
+            String str = "";
+            switch (mState) {
+                case STATE_TYPE_ERROR:
+                    str += "File corrupted or file type error!";
+                    break;
+                case STATE_NOT_EXIST:
+                    str += "File not found!";
+                    break;
+            }
+            throw new IllegalStateException("State exception -> " + mState + ", " + str);
         }
     }
 }

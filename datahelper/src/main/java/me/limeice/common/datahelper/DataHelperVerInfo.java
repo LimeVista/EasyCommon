@@ -2,6 +2,7 @@ package me.limeice.common.datahelper;
 
 import me.limeice.common.function.BytesUtils;
 
+@SuppressWarnings("WeakerAccess")
 public class DataHelperVerInfo {
 
     public static final short VER_CODE = 1;
@@ -34,9 +35,22 @@ public class DataHelperVerInfo {
 
     public byte[] createHead() {
         byte[] bs = new byte[MIN_SIZE];
-        System.arraycopy(DataHelperVerInfo.TAG, 0, bs, 0, DataHelperVerInfo.TAG.length);
-        BytesUtils.put(bs, getVer(), DataHelperVerInfo.TAG.length);
-        BytesUtils.put(bs, getUserVer(), DataHelperVerInfo.TAG.length + 2);
+        System.arraycopy(TAG, 0, bs, 0, TAG.length);
+        BytesUtils.put(bs, getVer(), TAG.length);
+        BytesUtils.put(bs, getUserVer(), TAG.length + 2);
         return bs;
+    }
+
+    static DataHelperVerInfo readFormBytes(byte[] bytes) {
+        if (bytes.length < MIN_SIZE)
+            throw new IllegalArgumentException("byte array < " + MIN_SIZE);
+        DataHelperVerInfo info = new DataHelperVerInfo();
+        for (int i = 0; i < TAG.length; i++) {
+            if (TAG[i] != bytes[i])
+                throw new FileCorruptedException();
+        }
+        info.setVer(BytesUtils.getShort(bytes, TAG.length));
+        info.setUserVer(BytesUtils.getShort(bytes, TAG.length + 2));
+        return info;
     }
 }
