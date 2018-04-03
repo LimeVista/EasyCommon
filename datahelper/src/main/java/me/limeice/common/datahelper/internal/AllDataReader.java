@@ -5,9 +5,7 @@ import android.support.v4.util.ArrayMap;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.charset.Charset;
-
-import me.limeice.common.function.BytesUtils;
+import java.util.Map;
 
 import static me.limeice.common.datahelper.DataHelperVerInfo.MIN_SIZE;
 
@@ -165,12 +163,20 @@ public class AllDataReader implements IDataReader, DataType {
         mData.clear();
         while ((len = mFile.read(bs)) == 8) {
             seek += len;
-            MetaData d = new MetaData();
-            d.id = BytesUtils.getShort(bs, 0);
-            d.type = BytesUtils.getShort(bs, 2);
-            d.size = BytesUtils.getInt(bs, 4);
+            MetaData d = MetaData.read(bs);
             d.address = seek;
             if (!reader(d)) break;
+        }
+    }
+
+    @Override
+    public void each(@NonNull Consumer consumer) throws IOException {
+        Objects.requireNonNull(consumer);
+        for (Map.Entry<MetaData, Object> entry : mData.entrySet()) {
+            WrapData wrap = new WrapData();
+            wrap.data = entry.getValue();
+            wrap.meta = entry.getKey();
+            consumer.accept(wrap);
         }
     }
 
@@ -178,65 +184,8 @@ public class AllDataReader implements IDataReader, DataType {
         byte[] bs = new byte[meta.size];
         int len = mFile.read(bs);
         if (len <= meta.size) return false;
-        mData.put(meta, get(meta, bs));
+        mData.put(meta, DataHolder.get(meta, bs));
         return true;
     }
 
-    private Object get(MetaData meta, byte[] bs) {
-        switch (meta.type) {
-            case TYPE_BOOLEAN:
-                return BytesUtils.getBoolean(bs[0]);
-
-            case TYPE_BYTE:
-                return bs[0];
-
-            case TYPE_SHORT:
-                return BytesUtils.getShort(bs);
-
-            case TYPE_INT:
-                return BytesUtils.getInt(bs);
-
-            case TYPE_FLOAT:
-                return BytesUtils.getFloat(bs);
-
-            case TYPE_LONG:
-                return BytesUtils.getLong(bs);
-
-            case TYPE_DOUBLE:
-                return BytesUtils.getDouble(bs);
-
-            case TYPE_STRING:
-                return new String(bs, Charset.forName("UTF-8"));
-
-            case TYPE_ARRAY_1_BOOLEAN:
-                return ArraysUtils.readBooleanArray1(bs);
-
-            case TYPE_ARRAY_1_BYTE:
-                return bs;
-
-            case TYPE_ARRAY_1_SHORT:
-                return ArraysUtils.readShortArray1(bs);
-
-            case TYPE_ARRAY_1_INT:
-                return ArraysUtils.readIntArray1(bs);
-
-            case TYPE_ARRAY_1_FLOAT:
-                return ArraysUtils.readFloatArray1(bs);
-
-            case TYPE_ARRAY_1_LONG:
-                return ArraysUtils.readLongArray1(bs);
-
-            case TYPE_ARRAY_1_DOUBLE:
-                return ArraysUtils.readDoubleArray1(bs);
-
-            case TYPE_ARRAY_1_STRING:
-                return ArraysUtils.readStringArray1(bs);
-
-            case TYPE_NONE:
-                return null;
-
-            default:
-                throw new UnsupportedOperationException("Type Unknown or Unsupported!");
-        }
-    }
 }

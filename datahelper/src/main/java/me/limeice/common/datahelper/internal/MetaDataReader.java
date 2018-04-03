@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.limeice.common.datahelper.FileCorruptedException;
+import me.limeice.common.datahelper.IORuntimeException;
 import me.limeice.common.datahelper.NotFoundDataException;
 import me.limeice.common.function.BytesUtils;
 
@@ -143,48 +144,48 @@ public class MetaDataReader implements IDataReader, DataType {
 
     @Override
     public boolean[] readBooleanArray1(short id) {
-        byte[] bs = check(id, TYPE_DOUBLE);
+        byte[] bs = check(id, TYPE_ARRAY_1_BOOLEAN);
         return ArraysUtils.readBooleanArray1(bs);
     }
 
     @Override
     public byte[] readByteArray1(short id) {
-        return check(id, TYPE_DOUBLE);
+        return check(id, TYPE_ARRAY_1_BYTE);
     }
 
     @Override
     public short[] readShortArray1(short id) {
-        byte[] bs = check(id, TYPE_DOUBLE);
+        byte[] bs = check(id, TYPE_ARRAY_1_SHORT);
         return ArraysUtils.readShortArray1(bs);
     }
 
     @Override
     public int[] readIntArray1(short id) {
-        byte[] bs = check(id, TYPE_DOUBLE);
+        byte[] bs = check(id, TYPE_ARRAY_1_INT);
         return ArraysUtils.readIntArray1(bs);
     }
 
     @Override
     public float[] readFloatArray1(short id) {
-        byte[] bs = check(id, TYPE_DOUBLE);
+        byte[] bs = check(id, TYPE_ARRAY_1_FLOAT);
         return ArraysUtils.readFloatArray1(bs);
     }
 
     @Override
     public long[] readLongArray1(short id) {
-        byte[] bs = check(id, TYPE_DOUBLE);
+        byte[] bs = check(id, TYPE_ARRAY_1_LONG);
         return ArraysUtils.readLongArray1(bs);
     }
 
     @Override
     public double[] readDoubleArray1(short id) {
-        byte[] bs = check(id, TYPE_DOUBLE);
+        byte[] bs = check(id, TYPE_ARRAY_1_DOUBLE);
         return ArraysUtils.readDoubleArray1(bs);
     }
 
     @Override
     public String[] readStringArray1(short id) {
-        byte[] bs = check(id, TYPE_DOUBLE);
+        byte[] bs = check(id, TYPE_ARRAY_1_STRING);
         return ArraysUtils.readStringArray1(bs);
     }
 
@@ -209,7 +210,7 @@ public class MetaDataReader implements IDataReader, DataType {
                     if (len != md.id) throw new FileCorruptedException();
                     return bs;
                 } catch (IOException e) {
-                    throw new RuntimeException("IOException->", e);
+                    throw new IORuntimeException(e);
                 }
             }
         }
@@ -225,12 +226,33 @@ public class MetaDataReader implements IDataReader, DataType {
         mData.clear();
         while ((len = mFile.read(bs)) == 8) {
             seek += len;
-            MetaData d = new MetaData();
-            d.id = BytesUtils.getShort(bs, 0);
-            d.type = BytesUtils.getShort(bs, 2);
-            d.size = BytesUtils.getInt(bs, 4);
+            MetaData d = MetaData.read(bs);
             d.address = seek;
             mData.add(d);
+        }
+    }
+
+    @Override
+    public void each(@NonNull Consumer consumer) throws IOException {
+        Objects.requireNonNull(consumer);
+        for (MetaData md : mData) {
+            WrapData wrap = new WrapData();
+            wrap.meta = md;
+            wrap.bytes = readBytes(md);
+            consumer.accept(wrap);
+        }
+    }
+
+    private byte[] readBytes(MetaData meta) {
+        try {
+            byte[] bs = new byte[meta.size];
+            int len;
+            mFile.seek(meta.address);
+            len = mFile.read(bs);
+            if (len != meta.id) throw new FileCorruptedException();
+            return bs;
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
         }
     }
 

@@ -4,36 +4,52 @@ import android.support.annotation.NonNull;
 
 public interface Writer {
 
+    @NonNull
     Writer put(short id, boolean value);
 
+    @NonNull
     Writer put(short id, byte value);
 
+    @NonNull
     Writer put(short id, short value);
 
+    @NonNull
     Writer put(short id, int value);
 
+    @NonNull
     Writer put(short id, float value);
 
+    @NonNull
     Writer put(short id, long value);
 
+    @NonNull
     Writer put(short id, double value);
 
+    @NonNull
     Writer put(short id, @NonNull String value);
 
-    Writer put(short id, boolean[] value);
+    @NonNull
+    Writer put(short id, @NonNull boolean[] value);
 
-    Writer put(short id, byte[] value);
+    @NonNull
+    Writer put(short id, @NonNull byte[] value);
 
-    Writer put(short id, short[] value);
+    @NonNull
+    Writer put(short id, @NonNull short[] value);
 
-    Writer put(short id, int[] value);
+    @NonNull
+    Writer put(short id, @NonNull int[] value);
 
-    Writer put(short id, float[] value);
+    @NonNull
+    Writer put(short id, @NonNull float[] value);
 
-    Writer put(short id, long[] value);
+    @NonNull
+    Writer put(short id, @NonNull long[] value);
 
-    Writer put(short id, double[] value);
+    @NonNull
+    Writer put(short id, @NonNull double[] value);
 
+    @NonNull
     Writer put(short id, @NonNull String[] value);
 
     boolean commit();
