@@ -174,7 +174,7 @@ public class AllDataReader implements IDataReader, DataType {
 
     @Override
     public void init() throws IOException {
-        long seek = MIN_SIZE - 1;
+        long seek = MIN_SIZE;
         mFile.seek(seek);
         byte[] bs = new byte[8];
         int len;
@@ -201,7 +201,7 @@ public class AllDataReader implements IDataReader, DataType {
     private boolean reader(MetaData meta) throws IOException {
         byte[] bs = new byte[meta.size];
         int len = mFile.read(bs);
-        if (len <= meta.size) return false;
+        if (len < meta.size) return false;
         mData.put(meta, DataHolder.get(meta, bs));
         return true;
     }

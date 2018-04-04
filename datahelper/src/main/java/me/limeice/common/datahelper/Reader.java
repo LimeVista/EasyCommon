@@ -97,6 +97,14 @@ public interface Reader {
      */
     long readLong(short id);
 
+
+    /**
+     * 读取数据
+     *
+     * @param id         编号
+     * @param defaultVal 默认值
+     * @return value
+     */
     long readLong(short id, long defaultVal);
 
     /**

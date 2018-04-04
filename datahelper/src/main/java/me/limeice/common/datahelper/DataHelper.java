@@ -1,20 +1,18 @@
 package me.limeice.common.datahelper;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.List;
-import java.util.Map;
 
 import me.limeice.common.datahelper.internal.AllDataReader;
 import me.limeice.common.datahelper.internal.IDataReader;
 import me.limeice.common.datahelper.internal.MetaDataReader;
 import me.limeice.common.datahelper.internal.WriterImpl;
 import me.limeice.common.function.BytesUtils;
+import me.limeice.common.function.CloseUtils;
 
 public class DataHelper implements IDataHelper {
 
@@ -52,6 +50,7 @@ public class DataHelper implements IDataHelper {
                 break;
             case MODE_READ_ID:
                 this.mode = MODE_READ_ID;
+                break;
             default:
                 throw new IllegalArgumentException("mode type error");
         }
@@ -83,7 +82,13 @@ public class DataHelper implements IDataHelper {
     @Override
     @NonNull
     public Writer writer() {
-        return new WriterImpl(mReader, mFile, mInfo);
+        if (!isLoad)
+            try {
+                reload();
+            } catch (IOException ex) {
+                throw new IORuntimeException(ex);
+            }
+        return new WriterImpl(this, mReader, mFile, mInfo);
     }
 
     @Override
@@ -107,6 +112,14 @@ public class DataHelper implements IDataHelper {
             }
         }
         isLoad = true;
+    }
+
+    /**
+     * 停止读取
+     */
+    public void stopReader() {
+        isLoad = false;
+        CloseUtils.closeIOQuietly(mRAF);
     }
 
     /**

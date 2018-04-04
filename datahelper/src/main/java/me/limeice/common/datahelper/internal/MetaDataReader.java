@@ -217,14 +217,14 @@ public class MetaDataReader implements IDataReader, DataType {
     private byte[] check(short id, short type) {
         for (MetaData md : mData) {
             if (md.id == id) {
-                if (md.type == type)
+                if (md.type != type)
                     throw new ClassCastException("Type Error! id: " + id + ",It's type id is " + md.type);
                 try {
                     byte[] bs = new byte[md.size];
                     int len;
                     mFile.seek(md.address);
                     len = mFile.read(bs);
-                    if (len != md.id) throw new FileCorruptedException();
+                    if (len != md.size) throw new FileCorruptedException();
                     return bs;
                 } catch (IOException e) {
                     throw new IORuntimeException(e);
@@ -257,7 +257,7 @@ public class MetaDataReader implements IDataReader, DataType {
 
     @Override
     public void init() throws IOException {
-        long seek = MIN_SIZE - 1;
+        long seek = MIN_SIZE;
         mFile.seek(seek);
         byte[] bs = new byte[8];
         int len;
@@ -266,6 +266,8 @@ public class MetaDataReader implements IDataReader, DataType {
             seek += len;
             MetaData d = MetaData.read(bs);
             d.address = seek;
+            seek += d.size;
+            mFile.seek(seek);
             mData.add(d);
         }
     }

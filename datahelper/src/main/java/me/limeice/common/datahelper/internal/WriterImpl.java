@@ -11,6 +11,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Map;
 
+import me.limeice.common.datahelper.DataHelper;
 import me.limeice.common.datahelper.DataHelperVerInfo;
 import me.limeice.common.datahelper.IORuntimeException;
 import me.limeice.common.datahelper.Writer;
@@ -26,9 +27,12 @@ public class WriterImpl implements Writer, DataType {
 
     private ArrayMap<MetaData, Object> writeData = new ArrayMap<>();
 
-    public WriterImpl(IDataReader reader, File file, DataHelperVerInfo info) {
+    private DataHelper helper;
+
+    public WriterImpl(DataHelper helper, IDataReader reader, File file, DataHelperVerInfo info) {
         this.mReader = reader;
         this.mFile = file;
+        this.helper = helper;
         this.mInfo = info;
     }
 
@@ -191,11 +195,11 @@ public class WriterImpl implements Writer, DataType {
                     }
                 });
 
-            }
-            if (mReader != null) throw new IllegalArgumentException("mReader type unknown.");
+            } else if (mReader != null) throw new IllegalArgumentException("mReader type unknown.");
             writeMap(out);
             out.flush();
             CloseUtils.closeIOQuietly(out);
+            helper.stopReader();
             return rename(newFile);
         } catch (IOException ex) {
             //noinspection ResultOfMethodCallIgnored
@@ -223,7 +227,10 @@ public class WriterImpl implements Writer, DataType {
                 return this;
             }
         }
-        writeData.put(new MetaData(), value);
+        MetaData meta = new MetaData();
+        meta.type = type;
+        meta.id = id;
+        writeData.put(meta, value);
         return this;
     }
 
@@ -249,6 +256,7 @@ public class WriterImpl implements Writer, DataType {
      * @return 是否操作成功
      */
     private boolean rename(File newFile) {
+        System.gc();
         return (!mFile.exists() || mFile.delete()) && newFile.renameTo(mFile);
     }
 }

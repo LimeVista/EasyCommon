@@ -68,10 +68,13 @@ final class ArraysUtils {
     public static String[] readStringArray1(byte[] bs) {
         int len = BytesUtils.getInt(bs);
         String[] array = new String[len];
-        for (int i = 4; i < array.length; i++) {
-            len = BytesUtils.getInt(bs);
+        int seek = 4;
+        for (int i = 0; i < array.length; i++) {
+            len = BytesUtils.getInt(bs, seek);
+            seek += 4;
             if (len == 0) continue; // isNull
-            array[i] = new String(bs, i + 4, len, Charset.forName("UTF-8"));
+            array[i] = new String(bs, seek, len, Charset.forName("UTF-8"));
+            seek += len;
         }
         return array;
     }
@@ -135,11 +138,11 @@ final class ArraysUtils {
             len += wsb.len + 4;
             list.add(wsb);
         }
-        byte[] bytes = new byte[len];
-        len = 0;
+        byte[] bytes = new byte[len + 4];
+        BytesUtils.put(bytes, value.length, 0);
+        len = 4;
         for (WrapStringBytes wsb : list) {
-            byte[] _size = BytesUtils.toBytes(wsb.len);
-            System.arraycopy(_size, 0, bytes, len, 4);
+            BytesUtils.put(bytes, wsb.len, len);
             len += 4;
             System.arraycopy(wsb.bytes, 0, bytes, len, wsb.bytes.length);
             len += wsb.bytes.length;

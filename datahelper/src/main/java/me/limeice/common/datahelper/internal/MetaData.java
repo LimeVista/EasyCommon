@@ -27,6 +27,11 @@ final class MetaData {
         return obj instanceof MetaData && id == ((MetaData) obj).id;
     }
 
+    @Override
+    public int hashCode() {
+        return 0xFFFF0000 + id;
+    }
+
     static MetaData read(byte[] bs) {
         MetaData meta = new MetaData();
         meta.id = BytesUtils.getShort(bs, 0);
