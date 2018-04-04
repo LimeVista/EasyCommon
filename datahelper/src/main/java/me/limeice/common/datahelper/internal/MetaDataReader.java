@@ -197,6 +197,23 @@ public class MetaDataReader implements IDataReader, DataType {
         return false;
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> List<T> readList(short id) {
+        MetaData meta = new MetaData();
+        byte[] bs = checkList(id, meta);
+        return (List<T>) ListUtils.read(meta, bs, new ArrayList<>());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> readList(short id, List<T> inst) {
+        Objects.requireNonNull(inst);
+        MetaData meta = new MetaData();
+        byte[] bs = checkList(id, meta);
+        return (List<T>) ListUtils.read(meta, bs, (List<Object>) inst);
+    }
+
     private byte[] check(short id, short type) {
         for (MetaData md : mData) {
             if (md.id == id) {
@@ -208,6 +225,27 @@ public class MetaDataReader implements IDataReader, DataType {
                     mFile.seek(md.address);
                     len = mFile.read(bs);
                     if (len != md.id) throw new FileCorruptedException();
+                    return bs;
+                } catch (IOException e) {
+                    throw new IORuntimeException(e);
+                }
+            }
+        }
+        throw new NotFoundDataException(id);
+    }
+
+    private byte[] checkList(short id, MetaData meta) {
+        for (MetaData md : mData) {
+            if (md.id == id) {
+                if (md.type >> 16 == TYPE_LIST >> 16)
+                    throw new ClassCastException("Type Error! id: " + id + ",It's type id is " + md.type);
+                try {
+                    byte[] bs = new byte[md.size];
+                    int len;
+                    mFile.seek(md.address);
+                    len = mFile.read(bs);
+                    if (len != md.id) throw new FileCorruptedException();
+                    md.copyTo(meta);
                     return bs;
                 } catch (IOException e) {
                     throw new IORuntimeException(e);

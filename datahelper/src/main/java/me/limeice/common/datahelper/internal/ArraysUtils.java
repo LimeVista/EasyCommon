@@ -17,17 +17,18 @@ final class ArraysUtils {
     }
 
     public static short[] readShortArray1(byte[] bs) {
-        short[] array = new short[bs.length >> 1];
-        for (int i = 0; i < array.length; i++) {
+        int len = bs.length >> 1;
+        short[] array = new short[len];
+        for (int i = 0; i < len; i++) {
             array[i] = BytesUtils.getShort(bs, i << 1);
         }
         return array;
     }
 
     public static int[] readIntArray1(byte[] bs) {
-
-        int[] array = new int[bs.length >> 2];
-        for (int i = 0; i < array.length; i++) {
+        int len = bs.length >> 2;
+        int[] array = new int[len];
+        for (int i = 0; i < len; i++) {
             array[i] = BytesUtils.getInt(bs, i << 2);
         }
         return array;
@@ -35,8 +36,9 @@ final class ArraysUtils {
 
 
     public static float[] readFloatArray1(byte[] bs) {
-        float[] array = new float[bs.length >> 2];
-        for (int i = 0; i < array.length; i++) {
+        int len = bs.length >> 2;
+        float[] array = new float[len];
+        for (int i = 0; i < len; i++) {
             array[i] = BytesUtils.getFloat(bs, i << 2);
         }
         return array;
@@ -44,8 +46,9 @@ final class ArraysUtils {
 
 
     public static long[] readLongArray1(byte[] bs) {
-        long[] array = new long[bs.length >> 3];
-        for (int i = 0; i < array.length; i++) {
+        int len = bs.length >> 3;
+        long[] array = new long[len];
+        for (int i = 0; i < len; i++) {
             array[i] = BytesUtils.getLong(bs, i << 3);
         }
         return array;
@@ -53,8 +56,9 @@ final class ArraysUtils {
 
 
     public static double[] readDoubleArray1(byte[] bs) {
-        double[] array = new double[bs.length >> 3];
-        for (int i = 0; i < array.length; i++) {
+        int len = bs.length >> 3;
+        double[] array = new double[len];
+        for (int i = 0; i < len; i++) {
             array[i] = BytesUtils.getDouble(bs, i << 3);
         }
         return array;
@@ -82,7 +86,7 @@ final class ArraysUtils {
 
     public static byte[] writeArray1(short[] value) {
         byte[] array = new byte[value.length << 1];
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < value.length; i++) {
             BytesUtils.put(array, value[i], i << 1);
         }
         return array;
@@ -90,7 +94,7 @@ final class ArraysUtils {
 
     public static byte[] writeArray1(int[] value) {
         byte[] array = new byte[value.length << 2];
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < value.length; i++) {
             BytesUtils.put(array, value[i], i << 2);
         }
         return array;
@@ -98,7 +102,7 @@ final class ArraysUtils {
 
     public static byte[] writeArray1(float[] value) {
         byte[] array = new byte[value.length << 2];
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < value.length; i++) {
             BytesUtils.put(array, value[i], i << 2);
         }
         return array;
@@ -106,7 +110,7 @@ final class ArraysUtils {
 
     public static byte[] writeArray1(long[] value) {
         byte[] array = new byte[value.length << 3];
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < value.length; i++) {
             BytesUtils.put(array, value[i], i << 3);
         }
         return array;
@@ -115,13 +119,13 @@ final class ArraysUtils {
 
     public static byte[] writeArray1(double[] value) {
         byte[] array = new byte[value.length << 3];
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < value.length; i++) {
             BytesUtils.put(array, value[i], i << 3);
         }
         return array;
     }
 
-    public static WrapStringBytes writeArray1(String[] value) {
+    public static byte[] writeArray1(String[] value) {
         List<WrapStringBytes> list = new ArrayList<>();
         int len = 0;
         for (String s : value) {
@@ -140,10 +144,7 @@ final class ArraysUtils {
             System.arraycopy(wsb.bytes, 0, bytes, len, wsb.bytes.length);
             len += wsb.bytes.length;
         }
-        WrapStringBytes wsb = new WrapStringBytes();
-        wsb.bytes = bytes;
-        wsb.len = len;
-        return wsb;
+        return bytes;
     }
 
     static class WrapStringBytes {

@@ -5,6 +5,7 @@ import android.support.v4.util.ArrayMap;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.List;
 import java.util.Map;
 
 import static me.limeice.common.datahelper.DataHelperVerInfo.MIN_SIZE;
@@ -23,7 +24,8 @@ public class AllDataReader implements IDataReader, DataType {
 
     @Override
     public boolean readBoolean(short id) {
-        return (boolean) mData.get(new MetaData(id));
+        Boolean val = returnCheckNull(id);
+        return val == null ? false : val;
     }
 
     @Override
@@ -34,7 +36,8 @@ public class AllDataReader implements IDataReader, DataType {
 
     @Override
     public byte readByte(short id) {
-        return (byte) mData.get(new MetaData(id));
+        Byte val = returnCheckNull(id);
+        return val == null ? 0 : val;
     }
 
     @Override
@@ -45,7 +48,8 @@ public class AllDataReader implements IDataReader, DataType {
 
     @Override
     public short readShort(short id) {
-        return (short) mData.get(new MetaData(id));
+        Short val = returnCheckNull(id);
+        return val == null ? 0 : val;
     }
 
     @Override
@@ -56,7 +60,8 @@ public class AllDataReader implements IDataReader, DataType {
 
     @Override
     public int readInt(short id) {
-        return (int) mData.get(new MetaData(id));
+        Integer val = returnCheckNull(id);
+        return val == null ? 0 : val;
     }
 
     @Override
@@ -67,7 +72,8 @@ public class AllDataReader implements IDataReader, DataType {
 
     @Override
     public float readFloat(short id) {
-        return (float) mData.get(new MetaData(id));
+        Float val = returnCheckNull(id);
+        return val == null ? 0 : val;
     }
 
     @Override
@@ -78,7 +84,8 @@ public class AllDataReader implements IDataReader, DataType {
 
     @Override
     public long readLong(short id) {
-        return (long) mData.get(new MetaData(id));
+        Long val = returnCheckNull(id);
+        return val == null ? 0 : val;
     }
 
     @Override
@@ -89,7 +96,8 @@ public class AllDataReader implements IDataReader, DataType {
 
     @Override
     public double readDouble(short id) {
-        return (double) mData.get(new MetaData(id));
+        Double val = returnCheckNull(id);
+        return val == null ? 0 : val;
     }
 
     @Override
@@ -100,58 +108,68 @@ public class AllDataReader implements IDataReader, DataType {
 
     @Override
     public String readString(short id) {
-        return (String) mData.get(new MetaData(id));
+        return returnCheckNull(id);
     }
 
     @Override
     public String readString(short id, String defaultVal) {
-        String b = (String) mData.get(new MetaData());
-        return b == null ? defaultVal : b;
+        String val = returnCheckNull(id);
+        return val == null ? defaultVal : val;
     }
 
     @Override
     public boolean[] readBooleanArray1(short id) {
-        return new boolean[0];
+        return returnCheckNull(id);
     }
 
     @Override
     public byte[] readByteArray1(short id) {
-        return new byte[0];
+        return returnCheckNull(id);
     }
 
     @Override
     public short[] readShortArray1(short id) {
-        return new short[0];
+        return returnCheckNull(id);
     }
 
     @Override
     public int[] readIntArray1(short id) {
-        return new int[0];
+        return returnCheckNull(id);
     }
 
     @Override
     public float[] readFloatArray1(short id) {
-        return new float[0];
+        return returnCheckNull(id);
     }
 
     @Override
     public long[] readLongArray1(short id) {
-        return new long[0];
+        return returnCheckNull(id);
     }
 
     @Override
     public double[] readDoubleArray1(short id) {
-        return new double[0];
+        return returnCheckNull(id);
     }
 
     @Override
     public String[] readStringArray1(short id) {
-        return new String[0];
+        return returnCheckNull(id);
     }
 
     @Override
     public boolean contains(short id) {
         return mData.containsKey(new MetaData(id));
+    }
+
+    @Override
+    public <T> List<T> readList(short id) {
+        return returnCheckNull(id);
+    }
+
+    @Override
+    public <T> List<T> readList(short id, List<T> inst) {
+        return returnCheckNull(id);
     }
 
     @Override
@@ -188,4 +206,9 @@ public class AllDataReader implements IDataReader, DataType {
         return true;
     }
 
+    @SuppressWarnings("unchecked")
+    private <T> T returnCheckNull(short id) {
+        Object ob = mData.get(new MetaData(id));
+        return ob == null ? null : (T) ob;
+    }
 }

@@ -22,4 +22,10 @@ public final class Objects {
             throw new NullPointerException();
         return obj;
     }
+
+    public static <T> void requireNonNull(T... obj) {
+        if (obj == null) throw new NullPointerException();
+        for (T t : obj)
+            if (t == null) throw new NullPointerException();
+    }
 }

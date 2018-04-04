@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
 import java.util.Map;
 
 import me.limeice.common.datahelper.DataHelperVerInfo;
@@ -81,18 +83,21 @@ public class WriterImpl implements Writer, DataType {
     @NonNull
     @Override
     public Writer put(short id, @NonNull boolean[] value) {
+        Objects.requireNonNull(value);
         return putProxy(id, value, TYPE_ARRAY_1_BOOLEAN);
     }
 
     @NonNull
     @Override
     public Writer put(short id, @NonNull byte[] value) {
+        Objects.requireNonNull(value);
         return putProxy(id, value, TYPE_ARRAY_1_BYTE);
     }
 
     @NonNull
     @Override
     public Writer put(short id, @NonNull short[] value) {
+        Objects.requireNonNull(value);
         return putProxy(id, value, TYPE_ARRAY_1_SHORT);
     }
 
@@ -105,25 +110,55 @@ public class WriterImpl implements Writer, DataType {
     @NonNull
     @Override
     public Writer put(short id, @NonNull float[] value) {
+        Objects.requireNonNull(value);
         return putProxy(id, value, TYPE_ARRAY_1_FLOAT);
     }
 
     @NonNull
     @Override
     public Writer put(short id, @NonNull long[] value) {
+        Objects.requireNonNull(value);
         return putProxy(id, value, TYPE_ARRAY_1_LONG);
     }
 
     @NonNull
     @Override
     public Writer put(short id, @NonNull double[] value) {
+        Objects.requireNonNull(value);
         return putProxy(id, value, TYPE_ARRAY_1_DOUBLE);
     }
 
     @NonNull
     @Override
     public Writer put(short id, @NonNull String[] value) {
+        Objects.requireNonNull(value);
         return putProxy(id, value, TYPE_ARRAY_1_STRING);
+    }
+
+    @NonNull
+    @Override
+    public <T> Writer put(short id, @NonNull List<T> value) {
+        Objects.requireNonNull(value);
+        Class<?> clazz = (Class<?>) ((ParameterizedType) value.getClass().getGenericSuperclass())
+                .getActualTypeArguments()[0];
+        if (boolean.class == clazz)
+            return putProxy(id, value, (short) 0x101);
+        else if (byte.class == clazz)
+            return putProxy(id, value, (short) 0x102);
+        else if (short.class == clazz)
+            return putProxy(id, value, (short) 0x103);
+        else if (int.class == clazz)
+            return putProxy(id, value, (short) 0x104);
+        else if (float.class == clazz)
+            return putProxy(id, value, (short) 0x105);
+        else if (long.class == clazz)
+            return putProxy(id, value, (short) 0x106);
+        else if (double.class == clazz)
+            return putProxy(id, value, (short) 0x107);
+        else if (String.class == clazz)
+            return putProxy(id, value, (short) 0x109);
+
+        throw new UnsupportedOperationException("Type Unsupported.");
     }
 
     @Override

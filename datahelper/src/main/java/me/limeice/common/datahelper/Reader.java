@@ -1,5 +1,7 @@
 package me.limeice.common.datahelper;
 
+import java.util.List;
+
 public interface Reader {
 
     /**
@@ -202,4 +204,25 @@ public interface Reader {
      * @return 是否存在
      */
     boolean contains(short id);
+
+    /**
+     * 读取列表使用{@link java.util.ArrayList}
+     *
+     * @param <T> 基本类型
+     * @param id  编号
+     * @return 返回数据
+     */
+    <T> List<T> readList(short id);
+
+    /**
+     * 读取列表
+     * {@link IDataHelper#MODE_READ_ALL}
+     * 此函数和{@link #readList(short)}效果相同，第二参数无效
+     *
+     * @param <T>  基本类型
+     * @param id   编号
+     * @param inst 一个空或者含有数据的list，不能为null
+     * @return 返回数据
+     */
+    <T> List<T> readList(short id, List<T> inst);
 }

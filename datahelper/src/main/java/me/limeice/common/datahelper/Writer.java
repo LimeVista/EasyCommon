@@ -2,6 +2,8 @@ package me.limeice.common.datahelper;
 
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
 public interface Writer {
 
     /**
@@ -163,6 +165,16 @@ public interface Writer {
      */
     @NonNull
     Writer put(short id, @NonNull String[] value);
+
+    /**
+     * 载入数据
+     *
+     * @param id    编号
+     * @param value 值
+     * @return 链式编程
+     */
+    @NonNull
+    <T> Writer put(short id, @NonNull List<T> value);
 
     /**
      * 提交操作（基本满足事务原子性）

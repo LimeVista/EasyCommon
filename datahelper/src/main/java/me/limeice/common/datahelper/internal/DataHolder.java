@@ -1,6 +1,8 @@
 package me.limeice.common.datahelper.internal;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 import me.limeice.common.function.BytesUtils;
 
@@ -58,10 +60,11 @@ class DataHolder implements DataType {
 
             case TYPE_NONE:
                 return null;
-
-            default:
-                throw new UnsupportedOperationException("Type Unknown or Unsupported!");
         }
+        if (meta.type >> 16 == TYPE_LIST >> 16) {
+            return ListUtils.read(meta, bs, new ArrayList<>());
+        }
+        throw new UnsupportedOperationException("Type Unknown or Unsupported!");
     }
 
     static byte[] put(MetaData meta, Object objects) {
@@ -133,16 +136,19 @@ class DataHolder implements DataType {
                 return ArraysUtils.writeArray1((double[]) objects);
 
             case TYPE_ARRAY_1_STRING:
-                ArraysUtils.WrapStringBytes wsb = ArraysUtils.writeArray1((String[]) objects);
-                meta.size = wsb.len;
-                return wsb.bytes;
+                byte[] bsStr = ArraysUtils.writeArray1((String[]) objects);
+                meta.size = bsStr.length;
+                return bsStr;
 
             case TYPE_NONE:
                 meta.size = 0;
                 return null;
-
-            default:
-                throw new UnsupportedOperationException("Type Unknown or Unsupported!");
         }
+
+        if (meta.type >> 16 == TYPE_LIST >> 16) {
+            //noinspection unchecked
+            return ListUtils.write(meta, (List<Object>) objects);
+        }
+        throw new UnsupportedOperationException("Type Unknown or Unsupported!");
     }
 }

@@ -46,4 +46,11 @@ final class MetaData {
         BytesUtils.put(bs, type, 2);
         BytesUtils.put(bs, size, 4);
     }
+
+    void copyTo(MetaData meta) {
+        meta.size = size;
+        meta.type = type;
+        meta.id = id;
+        meta.address = address;
+    }
 }
