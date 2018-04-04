@@ -165,20 +165,18 @@ public class WriterImpl implements Writer, DataType {
     public synchronized boolean commit() {
         File newFile = new File(mFile.getAbsoluteFile() + EXT);
         if (newFile.exists() && !newFile.delete()) return false; // 删除
-        FileOutputStream out = null;
         try {
-            if (newFile.createNewFile()) return false;
-            out = new FileOutputStream(newFile);
+            if (!newFile.createNewFile()) return false;
+            final FileOutputStream out = new FileOutputStream(newFile);
             byte[] bs = mInfo.createHead();
             out.write(bs);
-            final FileOutputStream outFinal = out;
             if (mReader instanceof MetaDataReader) {
                 mReader.each(new IDataReader.Consumer() {
                     @Override
                     public void accept(@NonNull WrapData wrapData) throws IOException {
                         if (writeData.containsKey(wrapData.meta)) return;
-                        outFinal.write(wrapData.meta.write());
-                        outFinal.write(wrapData.bytes);
+                        out.write(wrapData.meta.write());
+                        out.write(wrapData.bytes);
                     }
                 });
 
@@ -188,8 +186,8 @@ public class WriterImpl implements Writer, DataType {
                     public void accept(@NonNull WrapData wrapData) throws IOException {
                         if (writeData.containsKey(wrapData.meta)) return;
                         byte[] bs = DataHolder.put(wrapData.meta, wrapData.data);
-                        outFinal.write(wrapData.meta.write());
-                        if (bs != null) outFinal.write(bs);
+                        out.write(wrapData.meta.write());
+                        if (bs != null) out.write(bs);
                     }
                 });
 
@@ -197,11 +195,12 @@ public class WriterImpl implements Writer, DataType {
             if (mReader != null) throw new IllegalArgumentException("mReader type unknown.");
             writeMap(out);
             out.flush();
+            CloseUtils.closeIOQuietly(out);
             return rename(newFile);
         } catch (IOException ex) {
+            //noinspection ResultOfMethodCallIgnored
+            newFile.delete();
             throw new IORuntimeException(ex);
-        } finally {
-            CloseUtils.closeIOQuietly(out);
         }
     }
 
