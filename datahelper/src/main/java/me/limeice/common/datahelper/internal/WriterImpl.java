@@ -143,8 +143,8 @@ public class WriterImpl implements Writer, DataType {
     @Override
     public <T> Writer put(short id, @NonNull List<T> value) {
         Objects.requireNonNull(value);
-        Class<?> clazz = (Class<?>) ((ParameterizedType) value.getClass().getGenericSuperclass())
-                .getActualTypeArguments()[0];
+        ParameterizedType type = (ParameterizedType) value.getClass().getGenericSuperclass();
+        Class<?> clazz = (Class) type.getActualTypeArguments()[0].getClass();
         if (boolean.class == clazz)
             return putProxy(id, value, (short) 0x101);
         else if (byte.class == clazz)
