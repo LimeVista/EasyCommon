@@ -48,6 +48,24 @@ public final class Objects {
     }
 
     /**
+     * Checks that the specified object reference is not {@code null}. This
+     * method is designed primarily for doing parameter validation in methods
+     * and constructors, as demonstrated below:
+     * <pre>
+     * public Foo(Bar bar) {
+     *     Objects.checkNonNull(bar);
+     * }
+     * </pre>
+     *
+     * @param obj the object reference to check for nullity
+     * @param <T> the type of the reference
+     * @throws NullPointerException if {@code obj} is {@code null}
+     */
+    public static <T> void checkNonNull(T obj) {
+        if (obj == null) throw new NullPointerException();
+    }
+
+    /**
      * Checks that the specified object reference is not {@code null} and
      * throws a customized {@link NullPointerException} if it is. This method
      * is designed primarily for doing parameter validation in methods and
