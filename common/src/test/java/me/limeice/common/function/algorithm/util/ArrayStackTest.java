@@ -9,11 +9,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-public class LinkedStackTest {
+public class ArrayStackTest {
 
     @Test
     public void test() {
-        LinkedStack<Integer> stack = new LinkedStack<>();
+        ArrayStack<Integer> stack = new ArrayStack<>();
         assertTrue(stack.isEmpty());
         stack.push(2);
         stack.push(4);
@@ -33,7 +33,6 @@ public class LinkedStackTest {
         System.out.println("first:" + stack.first());
         System.out.println("last: " + stack.last());
         System.out.println("size: " + stack.size());
-
         assertEquals((int) stack.removeAt(1), 6);
         Iterator<Integer> it = stack.iterator();
         while (it.hasNext()) {

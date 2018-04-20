@@ -3,7 +3,7 @@
 package me.limeice.common.base.app
 
 import android.app.Activity
-import me.limeice.common.function.QStack
+import me.limeice.common.function.algorithm.util.ArrayStack
 
 /**
  * Application Manager
@@ -11,7 +11,7 @@ import me.limeice.common.function.QStack
  */
 class AppManager private constructor() {
 
-    private val mActStack: QStack<Activity> = QStack()
+    private val mActStack: ArrayStack<Activity> = ArrayStack()
 
     companion object {
         @JvmStatic val inst: AppManager by lazy { AppManager() }
