@@ -29,7 +29,7 @@ import javax.crypto.NoSuchPaddingException;
  * }</pre>
  *
  * @author Lime
- *         <p>2018.03.16
+ * <p>2018.03.16
  */
 public final class AES128 extends AES128Base {
 
@@ -69,7 +69,7 @@ public final class AES128 extends AES128Base {
             InvalidAlgorithmParameterException, NoSuchAlgorithmException,
             IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         try {
-            return Base64.encodeToString(encrypt(msg.getBytes(BYTE_TYPE), keyBytes), Base64.DEFAULT);
+            return Base64.encodeToString(encrypt(msg.getBytes(BYTE_TYPE), keyBytes), Base64.NO_WRAP);
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
             throw new RuntimeException("UTF-8 code does not support" + ex.getMessage());

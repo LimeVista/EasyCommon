@@ -2,7 +2,6 @@ package me.limeice.common.function.algorithm.security;
 
 import android.util.Log;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import me.limeice.common.function.BytesUtils;
@@ -10,7 +9,7 @@ import me.limeice.common.function.BytesUtils;
 import static org.junit.Assert.assertEquals;
 
 
-@SuppressWarnings({"SpellCheckingInspection", "unused", "ConstantConditions"})
+@SuppressWarnings({"SpellCheckingInspection", "ConstantConditions"})
 public class AES128Test {
 
     private AES128 aesCbc = new AES128(AES128.CBC | AES128.ISO10126Padding);
@@ -34,10 +33,6 @@ public class AES128Test {
 
     public AES128Test() {
         aesCbc.setIV(iv);
-    }
-
-    @Before
-    public void setUp() throws Exception {
     }
 
     private static void log(String msg) {
@@ -90,5 +85,15 @@ public class AES128Test {
         assertEquals(msg2, MSG);
         assertEquals(msg3, MSG);
         assertEquals(msg4, MSG);
+    }
+
+
+    @Test
+    public void decryptEasy2() throws Exception {
+        String msg = "hello 안녕하세요 hej Olá 你好 こんにちは tere hallo bonjour привет здраво";
+        String msg1 = aesEcb.encryptBase64(msg + msg, KEY_BYTES);
+        log("msg1->" + msg1);
+        String msg3 = aesEcb.decryptBase64(msg1, SKEY);
+        assertEquals(msg3, msg + msg);
     }
 }
