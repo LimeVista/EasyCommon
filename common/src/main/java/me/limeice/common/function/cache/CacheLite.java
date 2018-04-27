@@ -47,4 +47,23 @@ public interface CacheLite<V> {
      * 清空缓存
      */
     void clean();
+
+    /**
+     * 生命周期（内存缓存在内存中最大超时，超出时间后，删除），单位：秒
+     *
+     * @return 生命周期
+     */
+    int getDuration();
+
+    /**
+     * 设置生命周期
+     *
+     * @param duration 维持时间：单位秒
+     */
+    void setDuration(int duration);
+
+    /**
+     * 清除超生命周期（过期）数据
+     */
+    void cleanInvalid();
 }

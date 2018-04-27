@@ -23,4 +23,23 @@ public interface MemCache<V> extends CacheLite<V> {
          */
         int sizeOf(@NonNull String key, ItemType value);
     }
+
+    /**
+     * 添加到缓存（如果存在则放弃添加）
+     *
+     * @param key      唯一编号
+     * @param item     数据
+     * @param deadline 过期期限
+     * @return 是否添加成功，{@code true}，添加成功，且不存在重复数据
+     */
+    boolean add(@NonNull String key, V item, long deadline);
+
+    /**
+     * 添加到缓存（如果存在则覆盖）
+     *
+     * @param key      唯一编号
+     * @param item     数据
+     * @param deadline 过期期限
+     */
+    void addOrOverlay(@NonNull String key, V item, long deadline);
 }

@@ -12,13 +12,15 @@ import me.limeice.common.function.Objects;
 
 public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
 
-    private static final String CACHE_DIR = "StorageCacheV1";
+    private static final String CACHE_DIR = "StorageCacheV1";   // 默认缓存路径
 
-    private MemCache<V> memCache = null;
+    private MemCache<V> memCache = null;                        // 内存缓存
 
-    private StorageCacheHelper<V, BEAN> mHelper;
+    private StorageCacheHelper<V, BEAN> mHelper;                // 磁盘操作助手
 
-    private File folder;
+    private File folder;                                        // 缓存文件夹
+
+    private int duration = 0;                                   // 缓存生命，默认不过期
 
     /**
      * 磁盘缓存，不带内存缓存
@@ -37,7 +39,10 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
      * @param helper   存储助手
      * @param memCache 内存缓存助手
      */
-    public StorageCache(@NonNull Context context, @NonNull StorageCacheHelper<V, BEAN> helper, @NonNull MemCache<V> memCache) {
+    public StorageCache(
+            @NonNull Context context,
+            @NonNull StorageCacheHelper<V, BEAN> helper,
+            @NonNull MemCache<V> memCache) {
         init(new File(context.getCacheDir(), CACHE_DIR), helper, null);
     }
 
@@ -48,10 +53,53 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
      * @param helper      存储助手
      * @param memCache    内存缓存助手
      */
-    public StorageCache(@NonNull String cacheFolder, @NonNull StorageCacheHelper<V, BEAN> helper, @NonNull MemCache<V> memCache) {
+    public StorageCache(
+            @NonNull String cacheFolder,
+            @NonNull StorageCacheHelper<V, BEAN> helper,
+            @NonNull MemCache<V> memCache) {
         File file = new File(cacheFolder);
         memCache = Objects.requireNonNull(memCache, "Mem Cache must not null.");
         init(file, helper, memCache);
+    }
+
+    /**
+     * 生成精简版磁盘缓存，不带内存缓存，不使用 Bean
+     *
+     * @param context 上下文容器
+     * @param helper  存储助手
+     */
+    public static <VAL> StorageCacheLite<VAL> buildLite(
+            @NonNull Context context,
+            @NonNull StorageCacheHelper<VAL, Object> helper) {
+        return new StorageCacheLite<>(context, helper);
+    }
+
+    /**
+     * 生成精简版磁盘缓存，带内存缓存，不使用 Bean
+     *
+     * @param context  上下文容器
+     * @param helper   存储助手
+     * @param memCache 内存缓存助手
+     */
+    public static <VAL> StorageCacheLite<VAL> buildLite(
+            @NonNull Context context,
+            @NonNull StorageCacheHelper<VAL, Object> helper,
+            @NonNull MemCache<VAL> memCache) {
+        return new StorageCacheLite<>(context, helper, memCache);
+    }
+
+    /**
+     * 生成精简版磁盘缓存，带内存缓存,自定义路径，不使用 Bean
+     *
+     * @param cacheFolder 上下文容器
+     * @param helper      存储助手
+     * @param memCache    内存缓存助手
+     */
+    public static <VAL> StorageCacheLite<VAL> buildLite(
+            @NonNull String cacheFolder,
+            @NonNull StorageCacheHelper<VAL, Object> helper,
+            @NonNull MemCache<VAL> memCache) {
+        return new StorageCacheLite<>(cacheFolder, helper, memCache);
     }
 
     private void init(File file, StorageCacheHelper<V, BEAN> helper, MemCache<V> memCache) {
@@ -172,11 +220,16 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
         File cache = getCacheFile(key);
         if (!cache.exists())
             return null;
+        long lastModified = cache.lastModified();
+        if (System.currentTimeMillis() - lastModified > duration) {
+            remove(key);
+            return null;
+        }
         ReaderHelper helper = new ReaderHelper(cache);
         try {
             V item = mHelper.read(key, bean, helper);
             if (item != null && memCache != null)
-                memCache.add(key, item);
+                memCache.add(key, item, lastModified + duration);
             return item;
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -200,6 +253,8 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
             return;
         //noinspection ResultOfMethodCallIgnored
         cache.delete();
+        //noinspection ResultOfMethodCallIgnored
+        getCacheFileBak(key).delete();
     }
 
     /**
@@ -212,6 +267,85 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
         deleteFilesInDir(folder);
         //noinspection ResultOfMethodCallIgnored
         folder.mkdirs();
+    }
+
+    /**
+     * 生命周期（内存缓存在内存中最大超时，超出时间后，删除），单位：秒
+     *
+     * @return 生命周期
+     */
+    @Override
+    public int getDuration() {
+        return duration;
+    }
+
+    /**
+     * 设置生命周期(当内存缓存时，内存缓存会被设置与磁盘缓存超时相同)
+     *
+     * @param duration 维持时间：单位秒
+     */
+    @Override
+    public void setDuration(int duration) {
+        this.duration = duration <= 0 ? 0 : duration * 1000;
+        if (memCache != null) memCache.setDuration(duration);
+    }
+
+    /**
+     * 清除超生命周期（过期）数据
+     */
+    @Override
+    public synchronized void cleanInvalid() {
+        for (File f : folder.listFiles()) {
+            if (f.isFile() && f.lastModified() + duration < System.currentTimeMillis()) {
+                //noinspection ResultOfMethodCallIgnored
+                f.delete();
+            }
+        }
+    }
+
+    /**
+     * 精简版
+     *
+     * @param <VAL>
+     */
+    public static class StorageCacheLite<VAL> extends StorageCache<VAL, Object> {
+
+        /**
+         * 磁盘缓存，不带内存缓存
+         *
+         * @param context 上下文容器
+         * @param helper  存储助手
+         */
+        StorageCacheLite(@NonNull Context context,
+                         @NonNull StorageCacheHelper<VAL, Object> helper) {
+            super(context, helper);
+        }
+
+        /**
+         * 磁盘缓存，不带内存缓存
+         *
+         * @param context  上下文容器
+         * @param helper   存储助手
+         * @param memCache 内存缓存助手
+         */
+        StorageCacheLite(@NonNull Context context,
+                         @NonNull StorageCacheHelper<VAL, Object> helper,
+                         @NonNull MemCache<VAL> memCache) {
+            super(context, helper, memCache);
+        }
+
+        /**
+         * 磁盘缓存，带内存缓存
+         *
+         * @param cacheFolder 文件路径
+         * @param helper      存储助手
+         * @param memCache    内存缓存助手
+         */
+        StorageCacheLite(@NonNull String cacheFolder,
+                         @NonNull StorageCacheHelper<VAL, Object> helper,
+                         @NonNull MemCache<VAL> memCache) {
+            super(cacheFolder, helper, memCache);
+        }
     }
 
     private File getCacheFile(String key) {
