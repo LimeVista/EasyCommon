@@ -17,9 +17,9 @@ import android.view.animation.TranslateAnimation;
  *     github: https://github.com/LimeVista/EasyCommon
  * </pre>
  */
-public final class ViewAnimUtilsLite {
+public final class ViewAnimLiteUtils {
 
-    private ViewAnimUtilsLite() {
+    private ViewAnimLiteUtils() {
         throw new AssertionError("No ValueOfUtils instances for you!");
     }
 
