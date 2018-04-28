@@ -27,17 +27,8 @@ public class AnyMemCache<V> implements MemCache<V> {
      * @param config 配置缓存
      */
     public AnyMemCache(@NonNull CacheConfig<V> config) {
-
         //获取系统分配给应用的总内存大小,设置内存缓存占用八分之一
-        int mCacheSize = (int) (Runtime.getRuntime().maxMemory() >>> 3);
-
-        //创建缓存
-        mCache = new LruCache<String, WrapCache>(mCacheSize) {
-            @Override
-            protected int sizeOf(String key, WrapCache value) {
-                return config.sizeOf(key, value.value);
-            }
-        };
+        this((int) (Runtime.getRuntime().maxMemory() >>> 3), config);
     }
 
     /**

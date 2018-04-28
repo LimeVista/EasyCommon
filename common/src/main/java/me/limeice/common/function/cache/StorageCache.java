@@ -9,18 +9,22 @@ import java.io.IOException;
 
 import me.limeice.common.function.IOUtils;
 import me.limeice.common.function.Objects;
+import me.limeice.common.function.helper.ReaderSource;
+import me.limeice.common.function.helper.StorageCacheHelper;
+import me.limeice.common.function.helper.WriterSource;
 
+@SuppressWarnings("WeakerAccess")
 public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
 
-    private static final String CACHE_DIR = "StorageCacheV1";   // 默认缓存路径
+    public static final String CACHE_DIR = "RxStorageCacheV1"; // 默认缓存路径
 
-    private MemCache<V> memCache = null;                        // 内存缓存
+    protected MemCache<V> memCache = null;                     // 内存缓存
 
-    private StorageCacheHelper<V, BEAN> mHelper;                // 磁盘操作助手
+    private StorageCacheHelper<V, BEAN> mHelper;               // 磁盘操作助手
 
-    private File folder;                                        // 缓存文件夹
+    private File folder;                                       // 缓存文件夹
 
-    private int duration = 0;                                   // 缓存生命，默认不过期
+    private int duration = 0;                                  // 缓存生命，默认不过期
 
     /**
      * 磁盘缓存，不带内存缓存
@@ -112,6 +116,10 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
         return new StorageCacheLite<>(cacheFolder, helper, memCache);
     }
 
+    protected StorageCache(File file, StorageCacheHelper<V, BEAN> helper, MemCache<V> memCache) {
+        init(file, helper, memCache);
+    }
+
     private void init(File file, StorageCacheHelper<V, BEAN> helper, MemCache<V> memCache) {
         if (!file.exists())
             if (!file.mkdirs())
@@ -131,11 +139,12 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
      */
     @Override
     public boolean add(@NonNull String key, V item, @Nullable BEAN bean) {
-        if (memCache != null)
+        if (memCache != null && memCache.get(key) == null) {
             memCache.add(key, item);
+        }
         File cache = getCacheFile(key);
         if (cache.exists()) return false;
-        WriterHelper helper = new WriterHelper(cache);
+        WriterSource helper = new WriterSource(cache);
         try {
             mHelper.write(key, item, bean, helper);
         } catch (IOException ex) {
@@ -169,13 +178,14 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
     public void addOrOverlay(@NonNull String key, V item, @Nullable BEAN bean) {
         if (memCache != null)
             memCache.add(key, item);
+
         File cache = getCacheFile(key);
         File cacheBak = getCacheFileBak(key);
         if (cacheBak.exists()) {
             //noinspection ResultOfMethodCallIgnored
             cacheBak.delete();
         }
-        WriterHelper helper = new WriterHelper(cacheBak);
+        WriterSource helper = new WriterSource(cacheBak);
         try {
             mHelper.write(key, item, bean, helper);
             helper.close();
@@ -234,7 +244,7 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
             remove(key);
             return null;
         }
-        ReaderHelper helper = new ReaderHelper(cache);
+        ReaderSource helper = new ReaderSource(cache);
         try {
             V item = mHelper.read(key, bean, helper);
             if (item != null && memCache != null)
@@ -357,11 +367,11 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
         }
     }
 
-    private File getCacheFile(String key) {
+    public File getCacheFile(String key) {
         return new File(folder, key);
     }
 
-    private File getCacheFileBak(String key) {
+    public File getCacheFileBak(String key) {
         return new File(folder, key + "_$FILE$BAK$_");
     }
 

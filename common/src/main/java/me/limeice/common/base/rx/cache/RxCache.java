@@ -4,24 +4,32 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.io.File;
+import java.io.IOException;
+
 import io.reactivex.Observable;
+import me.limeice.common.function.IOUtils;
 import me.limeice.common.function.Objects;
 import me.limeice.common.function.cache.MemCache;
 import me.limeice.common.function.cache.StorageCache;
-import me.limeice.common.function.cache.StorageCacheHelper;
+import me.limeice.common.function.helper.ReaderSource;
+import me.limeice.common.function.helper.StorageCacheHelper;
+import me.limeice.common.function.helper.StorageReaderHelper;
+import me.limeice.common.function.helper.WriterSource;
 
+@SuppressWarnings("WeakerAccess")
 public class RxCache<V, BEAN> {
 
-    public interface RxCacheHelper<V, BEAN> extends StorageCacheHelper<V, BEAN> {
+    public interface RxCacheHelper<V, BEAN> extends StorageReaderHelper<V, BEAN> {
 
         /**
          * 下载或获取数据
          *
-         * @param key  唯一标识，键
-         * @param bean 数据 Bean
-         * @return 下载数据，不能为空
+         * @param key    唯一标识，键
+         * @param bean   数据 Bean
+         * @param writer 写入工具
          */
-        V download(@NonNull String key, @Nullable BEAN bean);
+        void download(@NonNull String key, @Nullable BEAN bean, @NonNull WriterSource writer) throws IOException;
     }
 
     private int duration = 0;                       // 缓存最大生命周期
@@ -71,18 +79,11 @@ public class RxCache<V, BEAN> {
          */
         public RxCache<V, BEAN> create() {
             StorageCache<V, BEAN> cache;
-            if (memCache == null) {
-                if (cachePath == null)
-                    cache = new StorageCache<>(context, rxCache.rxHelper);
-                else
-                    cache = new StorageCache<>(cachePath, rxCache.rxHelper);
-            } else {
-                if (cachePath == null)
-                    cache = new StorageCache<>(context, rxCache.rxHelper, memCache);
-                else
-                    cache = new StorageCache<>(cachePath, rxCache.rxHelper, memCache);
+            if (cachePath == null)
+                rxCache.initCache(new File(context.getCacheDir(), StorageCache.CACHE_DIR), memCache);
+            else {
+                rxCache.initCache(new File(cachePath), memCache);
             }
-            rxCache.cache = cache;
             rxCache.cache.setDuration(rxCache.duration);
             return rxCache;
         }
@@ -150,15 +151,81 @@ public class RxCache<V, BEAN> {
      */
     public Observable<V> getDownloadObservable(@NonNull String key, @Nullable BEAN bean) {
         return Observable.create(emitter -> {
-            V value = rxHelper.download(key, bean);
+            File cache = this.cache.getCacheFile(key);
+            File cacheBak = this.cache.getCacheFileBak(key);
+            if (cacheBak.exists()) {
+                //noinspection ResultOfMethodCallIgnored
+                cacheBak.delete();
+            }
+            WriterSource helper = new WriterSource(cacheBak);
+            try {
+                rxHelper.download(key, bean, helper);
+                helper.close();
+                if (!cache.exists() || cache.delete())
+                    IOUtils.moveFile(cacheBak, cache);
+            } finally {
+                helper.close();
+            }
+            V value = this.cache.get(key, bean);
             if (value == null)
-                emitter.onError(new NullPointerException("Download data must be not null"));
-            emitter.onNext(value);
+                emitter.onError(new NullPointerException("cache is null"));
+            else
+                emitter.onNext(value);
         });
     }
+
 
     public RxDispatcherCache<V, BEAN> buildRxDispatcherCache(RxDispatcherCache.Dispatcher dispatcher) {
         Objects.requireNonNull(dispatcher);
         return new RxDispatcherCache<>(this, dispatcher);
+    }
+
+    private void initCache(File file, MemCache<V> memCache) {
+        cache = new RxStorageCache(file, memCache);
+    }
+
+    private class RxStorageCache extends StorageCache<V, BEAN> {
+
+        RxStorageCache(File file, MemCache<V> memCache) {
+            super(file, new StorageCacheHelper<V, BEAN>() {
+
+                @Override
+                public void write(@NonNull String key, @NonNull V data, @Nullable BEAN bean, @NonNull WriterSource output) {
+                    // 什么都不做
+                }
+
+                @Nullable
+                @Override
+                public V read(@NonNull String key, @Nullable BEAN bean, @NonNull ReaderSource reader) throws IOException {
+                    return rxHelper.read(key, bean, reader);
+                }
+            }, memCache);
+        }
+
+        /**
+         * 添加到缓存（如果存在则放弃添加）
+         *
+         * @param key  唯一编号
+         * @param item 数据
+         * @param bean 数据Bean(用于辅助数据操作)
+         * @return 是否添加成功，{@code true}，添加成功，且不存在重复数据
+         */
+        @Override
+        public boolean add(@NonNull String key, V item, @Nullable BEAN bean) {
+            return memCache != null && memCache.get(key) == null && memCache.add(key, item);
+        }
+
+        /**
+         * 添加到缓存（如果存在则覆盖）
+         *
+         * @param key  唯一编号
+         * @param item 数据
+         * @param bean 数据Bean(用于辅助数据操作)
+         */
+        @Override
+        public void addOrOverlay(@NonNull String key, V item, @Nullable BEAN bean) {
+            if (memCache != null)
+                memCache.add(key, item);
+        }
     }
 }

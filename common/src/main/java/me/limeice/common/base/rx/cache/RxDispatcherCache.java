@@ -3,7 +3,12 @@ package me.limeice.common.base.rx.cache;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.io.File;
+import java.io.IOException;
+
 import io.reactivex.Observable;
+import me.limeice.common.function.IOUtils;
+import me.limeice.common.function.helper.WriterSource;
 
 public class RxDispatcherCache<V, BEAN> {
 
@@ -108,8 +113,9 @@ public class RxDispatcherCache<V, BEAN> {
                 V data = rxCache.cache.get(key, bean);
                 if (data != null)
                     return data;
-                else
-                    return rxCache.rxHelper.download(key, bean);
+                else {
+                    return download(key, bean);
+                }
             } finally {
                 dispatcher.locker.release(key);
             }
@@ -126,7 +132,7 @@ public class RxDispatcherCache<V, BEAN> {
                     if (data != null)
                         return data;
                     else
-                        return rxCache.rxHelper.download(key, bean);
+                        return download(key, bean);
                 } finally {
                     dispatcher.locker.release(key);
                 }
@@ -134,5 +140,24 @@ public class RxDispatcherCache<V, BEAN> {
             dispatcher.locker.lock(key, ob);
             return ob;
         }
+    }
+
+    private V download(@NonNull final String key, @Nullable final BEAN bean) throws IOException {
+        File cache = rxCache.cache.getCacheFile(key);
+        File cacheBak = rxCache.cache.getCacheFileBak(key);
+        if (cacheBak.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            cacheBak.delete();
+        }
+        WriterSource helper = new WriterSource(cacheBak);
+        try {
+            rxCache.rxHelper.download(key, bean, helper);
+            helper.close();
+            if (!cache.exists() || cache.delete())
+                IOUtils.moveFile(cacheBak, cache);
+        } finally {
+            helper.close();
+        }
+        return rxCache.cache.get(key, bean);
     }
 }
