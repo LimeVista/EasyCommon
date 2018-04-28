@@ -33,7 +33,17 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
     }
 
     /**
-     * 磁盘缓存，不带内存缓存
+     * 磁盘缓存，不带内存缓存,自定义存储路径
+     *
+     * @param cachePath 保存文件夹
+     * @param helper    存储助手
+     */
+    public StorageCache(@NonNull String cachePath, @NonNull StorageCacheHelper<V, BEAN> helper) {
+        init(new File(cachePath), helper, null);
+    }
+
+    /**
+     * 磁盘缓存，带内存缓存
      *
      * @param context  上下文容器
      * @param helper   存储助手
@@ -43,7 +53,7 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
             @NonNull Context context,
             @NonNull StorageCacheHelper<V, BEAN> helper,
             @NonNull MemCache<V> memCache) {
-        init(new File(context.getCacheDir(), CACHE_DIR), helper, null);
+        init(new File(context.getCacheDir(), CACHE_DIR), helper, memCache);
     }
 
     /**
