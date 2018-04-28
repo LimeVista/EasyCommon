@@ -17,7 +17,7 @@ public class RxCache<V, BEAN> {
         /**
          * 下载或获取数据
          *
-         * @param key  唯一标识，键值
+         * @param key  唯一标识，键
          * @param bean 数据 Bean
          * @return 下载数据，不能为空
          */
@@ -25,8 +25,8 @@ public class RxCache<V, BEAN> {
     }
 
     private int duration = 0;                       // 缓存最大生命周期
-    StorageCache<V, BEAN> cache;           // 内存缓存
-    RxCacheHelper<V, BEAN> rxHelper; // 下载助手
+    StorageCache<V, BEAN> cache;                    // 内存缓存
+    RxCacheHelper<V, BEAN> rxHelper;                // 下载助手
 
     public static class Builder<V, BEAN> {
 
@@ -108,7 +108,7 @@ public class RxCache<V, BEAN> {
     /**
      * 获得缓存机制的被观察者
      *
-     * @param key 键值
+     * @param key 键
      * @return 被观察者
      */
     public Observable<V> getCacheObservable(@NonNull String key) {
@@ -118,7 +118,7 @@ public class RxCache<V, BEAN> {
     /**
      * 获得缓存机制的被观察者
      *
-     * @param key  键值
+     * @param key  键
      * @param bean 数据 Bean
      * @return 被观察者
      */
@@ -134,7 +134,7 @@ public class RxCache<V, BEAN> {
     /**
      * 获得下载机制的被观察者
      *
-     * @param key 键值
+     * @param key 键
      * @return 被观察者
      */
     public Observable<V> getDownloadObservable(@NonNull String key) {
@@ -144,7 +144,7 @@ public class RxCache<V, BEAN> {
     /**
      * 获得下载机制的被观察者
      *
-     * @param key  键值
+     * @param key  键
      * @param bean 数据 Bean
      * @return 被观察者
      */
@@ -155,5 +155,10 @@ public class RxCache<V, BEAN> {
                 emitter.onError(new NullPointerException("Download data must be not null"));
             emitter.onNext(value);
         });
+    }
+
+    public RxDispatcherCache<V, BEAN> buildRxDispatcherCache(RxDispatcherCache.Dispatcher dispatcher) {
+        Objects.requireNonNull(dispatcher);
+        return new RxDispatcherCache<>(this, dispatcher);
     }
 }

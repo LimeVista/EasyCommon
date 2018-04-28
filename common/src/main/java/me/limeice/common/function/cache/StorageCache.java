@@ -170,21 +170,20 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
         if (memCache != null)
             memCache.add(key, item);
         File cache = getCacheFile(key);
-        if (cache.exists()) {
-            File cacheBak = getCacheFileBak(key);
-            if (cacheBak.exists()) {
-                if (cacheBak.delete())
-                    IOUtils.moveFile(cache, cacheBak);
-            } else {
-                IOUtils.moveFile(cache, cacheBak);
-            }
+        File cacheBak = getCacheFileBak(key);
+        if (cacheBak.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            cacheBak.delete();
         }
-        WriterHelper helper = new WriterHelper(cache);
+        WriterHelper helper = new WriterHelper(cacheBak);
         try {
             mHelper.write(key, item, bean, helper);
+            helper.close();
+            if (cache.exists() && (!cache.delete()))
+                return;
+            IOUtils.moveFile(cacheBak, cache);
         } catch (IOException ex) {
             ex.printStackTrace();
-            IOUtils.moveFile(getCacheFileBak(key), cache);
         } finally {
             helper.close();
         }

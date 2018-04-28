@@ -11,7 +11,7 @@ public interface StorageCacheHelper<V, BEAN> {
     /**
      * 读取数据
      *
-     * @param key    键值
+     * @param key    键
      * @param bean   数据Bean，如果在初始化的时候，你没有传递或使用Bean，该数据则为空
      * @param reader 读取通道
      * @return 读取缓存
@@ -23,7 +23,7 @@ public interface StorageCacheHelper<V, BEAN> {
     /**
      * 写入数据
      *
-     * @param key    键值
+     * @param key    键
      * @param data   写入数据（不允许存在空）
      * @param bean   数据Bean，如果在初始化的时候，你没有传递或使用Bean，该数据则为空
      * @param output 写入通道
