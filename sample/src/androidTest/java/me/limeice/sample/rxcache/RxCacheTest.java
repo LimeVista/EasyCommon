@@ -19,13 +19,14 @@ import java.net.URL;
 import me.limeice.common.base.rx.RxSchedulers;
 import me.limeice.common.base.rx.cache.RxCache;
 import me.limeice.common.function.CloseUtils;
+import me.limeice.common.function.cache.BitmapMemCache;
 import me.limeice.common.function.helper.ReaderSource;
 import me.limeice.common.function.helper.WriterSource;
 
 public class RxCacheTest {
 
     @Test
-    public void testData() throws InterruptedException {
+    public void rxCacheTestFull() throws InterruptedException {
 
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
@@ -48,8 +49,9 @@ public class RxCacheTest {
                 return BitmapFactory.decodeStream(reader.getInputStream());
             }
         })
-                .setDuration(20)        // 20秒
-                // .setStorageCachePath(context.getCacheDir() + "/tmp")
+                .setDuration(1000)        // 秒
+                .setStorageCachePath(context.getCacheDir() + "/tmp")
+                .useMemCache(new BitmapMemCache())
                 .create();
 
         cacheRxCache.get("000001")

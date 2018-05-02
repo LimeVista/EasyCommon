@@ -49,7 +49,7 @@ public class RxOkHttpCache<V, BEAN extends UrlModel> extends RxCache<V, BEAN> {
                         Objects.requireNonNull(body);
                         in = body.byteStream();
                         OutputStream out = writer.getOutStream();
-                        Utils.InputSteamToOutputStream(in, out);
+                        Utils.inputSteamToOutputStream(in, out);
                     } finally {
                         CloseUtils.closeIOQuietly(response, in);
                     }

@@ -10,7 +10,7 @@ import me.limeice.common.function.CloseUtils;
 
 class Utils {
 
-    public static void InputSteamToOutputStream(InputStream in, OutputStream out) throws IOException {
+    public static void inputSteamToOutputStream(InputStream in, OutputStream out) throws IOException {
         int size;
         byte[] bytes = new byte[1024];
         while ((size = in.read(bytes)) != -1) {
@@ -19,7 +19,7 @@ class Utils {
         CloseUtils.closeIOQuietly(out);
     }
 
-    public static void InputSteamToFile(InputStream in, File file) throws IOException {
+    public static void inputSteamToFile(InputStream in, File file) throws IOException {
         FileOutputStream outputStream = new FileOutputStream(file);
         int size;
         byte[] bytes = new byte[1024];

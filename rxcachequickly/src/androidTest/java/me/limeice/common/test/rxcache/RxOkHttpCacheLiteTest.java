@@ -81,9 +81,7 @@ public class RxOkHttpCacheLiteTest {
             final int n = i;
             rxOkHttpCache.get("bitmap_001", model)
                     .compose(RxSchedulers.io_main()) // IO 线程切换到 UI 线程
-                    .subscribe(bitmap -> {
-                        Log.d("图片下载成功," + n, "图片大小->" + bitmap.getByteCount());
-                    });
+                    .subscribe(bitmap -> Log.d("图片下载成功," + n, "图片大小->" + bitmap.getByteCount()));
         }
         Thread.sleep(8000);
     }
