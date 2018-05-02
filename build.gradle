@@ -12,6 +12,8 @@ buildscript {
     }
 
     ext.versions = [
+            'ver_name'      : "0.7.0",
+            'ver_code'      : 20180502,
             'minSdk'        : 16,
             'compileSdk'    : 27,
             'targetSdk'     : 26,
@@ -34,7 +36,7 @@ buildscript {
                             "com.android.support:cardview-v7:${versions.supportLibrary}",
                             "com.android.support:recyclerview-v7:${versions.supportLibrary}"
                     ],
-                    'appcompat' :"com.android.support:appcompat-v7:${versions.supportLibrary}",
+                    'appcompat'  : "com.android.support:appcompat-v7:${versions.supportLibrary}",
                     'annotations': "com.android.support:support-annotations:${versions.supportLibrary}"
             ],
             'test'    : [
@@ -56,7 +58,8 @@ buildscript {
                     "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
                     "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}"
             ],
-            'gson'    : "com.google.code.gson:gson:${versions.gson_ver}"
+            'gson'    : "com.google.code.gson:gson:${versions.gson_ver}",
+            'OKHttp'  : "com.squareup.okhttp3:okhttp:3.10.0"
     ]
 }
 

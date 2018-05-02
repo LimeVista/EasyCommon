@@ -17,7 +17,6 @@ import me.limeice.common.function.helper.StorageCacheHelper;
 import me.limeice.common.function.helper.StorageReaderHelper;
 import me.limeice.common.function.helper.WriterSource;
 
-@SuppressWarnings("WeakerAccess")
 public class RxCache<V, BEAN> {
 
     public interface RxCacheHelper<V, BEAN> extends StorageReaderHelper<V, BEAN> {
@@ -32,9 +31,14 @@ public class RxCache<V, BEAN> {
         void download(@NonNull String key, @Nullable BEAN bean, @NonNull WriterSource writer) throws IOException;
     }
 
-    private int duration = 0;                       // 缓存最大生命周期
+    protected int duration = 0;                     // 缓存最大生命周期
     StorageCache<V, BEAN> cache;                    // 内存缓存
     RxCacheHelper<V, BEAN> rxHelper;                // 下载助手
+
+
+    protected RxCache() {
+        // 保护
+    }
 
     public static class Builder<V, BEAN> {
 
@@ -78,7 +82,6 @@ public class RxCache<V, BEAN> {
          * @return 链式编程
          */
         public RxCache<V, BEAN> create() {
-            StorageCache<V, BEAN> cache;
             if (cachePath == null)
                 rxCache.initCache(new File(context.getCacheDir(), StorageCache.CACHE_DIR), memCache);
             else {
@@ -106,6 +109,12 @@ public class RxCache<V, BEAN> {
                 .toObservable();
     }
 
+    public Observable<V> get(@NonNull String key, @Nullable BEAN bean) {
+        return Observable.concat(getCacheObservable(key, bean), getDownloadObservable(key, bean))
+                .firstOrError()
+                .toObservable();
+    }
+
     /**
      * 获得缓存机制的被观察者
      *
@@ -128,7 +137,8 @@ public class RxCache<V, BEAN> {
             V data;
             if ((data = cache.get(key, bean)) == null)
                 emitter.onComplete();
-            emitter.onNext(data);
+            else
+                emitter.onNext(data);
         });
     }
 
@@ -174,13 +184,24 @@ public class RxCache<V, BEAN> {
         });
     }
 
-
+    /**
+     * 建造为带策略模式的 RxCache
+     *
+     * @param dispatcher 策略
+     * @return {@link RxDispatcherCache}
+     */
     public RxDispatcherCache<V, BEAN> buildRxDispatcherCache(RxDispatcherCache.Dispatcher dispatcher) {
         Objects.requireNonNull(dispatcher);
         return new RxDispatcherCache<>(this, dispatcher);
     }
 
-    private void initCache(File file, MemCache<V> memCache) {
+    /**
+     * 初始化Cache
+     *
+     * @param file     文件
+     * @param memCache 内存Cache,如果不使用，则为空
+     */
+    protected void initCache(File file, MemCache<V> memCache) {
         cache = new RxStorageCache(file, memCache);
     }
 
@@ -225,7 +246,16 @@ public class RxCache<V, BEAN> {
         @Override
         public void addOrOverlay(@NonNull String key, V item, @Nullable BEAN bean) {
             if (memCache != null)
-                memCache.add(key, item);
+                memCache.addOrOverlay(key, item);
         }
+    }
+
+    protected void setRxHelper(RxCacheHelper<V, BEAN> rxHelper) {
+        Objects.requireNonNull(rxHelper);
+        this.rxHelper = rxHelper;
+    }
+
+    protected StorageCache<V, BEAN> getCache() {
+        return this.cache;
     }
 }

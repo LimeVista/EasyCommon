@@ -54,7 +54,7 @@ final class HotSafeLocker implements ISafeLocker {
      *
      * @param key 键
      */
-    public void release(@NonNull String key) {
+    public synchronized void release(@NonNull String key) {
         final AutoDestroySemaphore semaphore = semaphoreLocker.get(key);
         if (semaphore != null)
             semaphoreLocker.remove(key, semaphore);

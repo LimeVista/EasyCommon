@@ -22,7 +22,7 @@ final class SafeLocker implements ISafeLocker {
      *
      * @param key 键
      */
-    public void lock(@NonNull String key) {
+    public synchronized void lock(@NonNull String key) {
         if (!semaphoreLocker.containsKey(key))
             semaphoreLocker.put(key, new AutoDestroySemaphore());
 
@@ -37,7 +37,7 @@ final class SafeLocker implements ISafeLocker {
      *
      * @param key 简直
      */
-    public void release(@NonNull String key) {
+    public synchronized void release(@NonNull String key) {
         final AutoDestroySemaphore semaphore = semaphoreLocker.get(key);
         if (semaphore == null)
             throw new IllegalStateException("Couldn't release semaphore.The key("

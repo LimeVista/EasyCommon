@@ -43,6 +43,7 @@ public class RxDispatcherCache<V, BEAN> {
          *
          * @return 策略
          */
+        @SuppressWarnings("unused")
         public static Dispatcher rearward() {
             throw new UnsupportedOperationException();
             // return new Dispatcher(REARWARD, new SafeLocker());
@@ -58,9 +59,8 @@ public class RxDispatcherCache<V, BEAN> {
         }
     }
 
-    private RxCache<V, BEAN> rxCache;
-
-    private Dispatcher dispatcher;
+    private RxCache<V, BEAN> mRxCache;   // RxCache
+    private Dispatcher mDispatcher;      // 策略
 
     /**
      * 请使用 {@link RxCache#buildRxDispatcherCache(Dispatcher)} 初始化
@@ -69,8 +69,8 @@ public class RxDispatcherCache<V, BEAN> {
      * @param dispatcher 控制策略
      */
     RxDispatcherCache(RxCache<V, BEAN> rxCache, Dispatcher dispatcher) {
-        this.rxCache = rxCache;
-        this.dispatcher = dispatcher;
+        this.mRxCache = rxCache;
+        this.mDispatcher = dispatcher;
     }
 
     /**
@@ -81,7 +81,7 @@ public class RxDispatcherCache<V, BEAN> {
      * @return 被观察者
      */
     public Observable<V> get(@NonNull final String key, @Nullable final BEAN bean) {
-        switch (dispatcher.mode) {
+        switch (mDispatcher.mode) {
             case Dispatcher.NORMAL:
                 return getNormalMode(key, bean);
 
@@ -109,55 +109,55 @@ public class RxDispatcherCache<V, BEAN> {
     private Observable<V> getNormalMode(@NonNull final String key, @Nullable final BEAN bean) {
         return Observable.fromCallable(() -> {
             try {
-                dispatcher.locker.lock(key);
-                V data = rxCache.cache.get(key, bean);
+                mDispatcher.locker.lock(key);
+                V data = mRxCache.cache.get(key, bean);
                 if (data != null)
                     return data;
                 else {
                     return download(key, bean);
                 }
             } finally {
-                dispatcher.locker.release(key);
+                mDispatcher.locker.release(key);
             }
         });
     }
 
     private Observable<V> getPublishMode(@NonNull final String key, @Nullable final BEAN bean) {
-        if (dispatcher.locker.containsKey(key)) {
-            return ((HotSafeLocker.AutoDestroySemaphore) dispatcher.locker.get(key)).getObservable();
+        if (mDispatcher.locker.containsKey(key)) {
+            return ((HotSafeLocker.AutoDestroySemaphore) mDispatcher.locker.get(key)).getObservable();
         } else {
             final Observable<V> ob = Observable.fromCallable(() -> {
                 try {
-                    V data = rxCache.cache.get(key, bean);
+                    V data = mRxCache.cache.get(key, bean);
                     if (data != null)
                         return data;
                     else
                         return download(key, bean);
                 } finally {
-                    dispatcher.locker.release(key);
+                    mDispatcher.locker.release(key);
                 }
             }).share();
-            dispatcher.locker.lock(key, ob);
+            mDispatcher.locker.lock(key, ob);
             return ob;
         }
     }
 
     private V download(@NonNull final String key, @Nullable final BEAN bean) throws IOException {
-        File cache = rxCache.cache.getCacheFile(key);
-        File cacheBak = rxCache.cache.getCacheFileBak(key);
+        File cache = mRxCache.cache.getCacheFile(key);
+        File cacheBak = mRxCache.cache.getCacheFileBak(key);
         if (cacheBak.exists()) {
             //noinspection ResultOfMethodCallIgnored
             cacheBak.delete();
         }
         WriterSource helper = new WriterSource(cacheBak);
         try {
-            rxCache.rxHelper.download(key, bean, helper);
+            mRxCache.rxHelper.download(key, bean, helper);
             helper.close();
             if (!cache.exists() || cache.delete())
                 IOUtils.moveFile(cacheBak, cache);
         } finally {
             helper.close();
         }
-        return rxCache.cache.get(key, bean);
+        return mRxCache.cache.get(key, bean);
     }
 }
