@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import io.reactivex.Observable;
+import me.limeice.common.annotation.UnSupported;
 import me.limeice.common.base.rx.cache.RxCache;
 import me.limeice.common.function.CloseUtils;
 import me.limeice.common.function.Objects;
@@ -123,5 +125,11 @@ public class RxOkHttpCacheLite<V> extends RxCache<V, String> {
             rxCache.mOkHttpClient = Objects.requireNonNull(client);
             return this;
         }
+    }
+
+    @UnSupported
+    @Override
+    public Observable<V> get(@NonNull String key) {
+        throw new UnsupportedOperationException("the method is UnSupported");
     }
 }
