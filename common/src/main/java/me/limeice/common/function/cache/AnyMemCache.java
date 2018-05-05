@@ -17,6 +17,27 @@ public class AnyMemCache<V> implements MemCache<V> {
     private LruCache<String, WrapCache> mCache;
 
     /**
+     * 读取过滤器
+     */
+    private GetDataAvailable<V> mGetDataFilter = null;
+
+    /**
+     * 判定获取数据是否可用
+     *
+     * @param <V>
+     */
+    public interface GetDataAvailable<V> {
+        /**
+         * 判定数据是否可用
+         *
+         * @param key   键
+         * @param value 值
+         * @return 是否可用
+         */
+        boolean available(String key, V value);
+    }
+
+    /**
      * 持续时间，毫秒
      */
     private int duration = 0;
@@ -95,9 +116,8 @@ public class AnyMemCache<V> implements MemCache<V> {
         WrapCache cache = mCache.get(key);
         if (cache == null)
             return null;
-        if (duration == 0)
-            return cache.value;
-        if (System.currentTimeMillis() <= cache.deadline)
+        if ((duration == 0 || System.currentTimeMillis() <= cache.deadline)
+                && (mGetDataFilter == null || mGetDataFilter.available(key, cache.value)))
             return cache.value;
         remove(key);
         return null;
@@ -185,6 +205,15 @@ public class AnyMemCache<V> implements MemCache<V> {
                 mCache.put(key, new WrapCache(item, deadline));
             }
         }
+    }
+
+    /**
+     * 设置内存数据过滤器
+     *
+     * @param getDataFilter 内存数据过滤器
+     */
+    public void setGetDataFilter(@Nullable GetDataAvailable<V> getDataFilter) {
+        this.mGetDataFilter = getDataFilter;
     }
 
     private class WrapCache {
