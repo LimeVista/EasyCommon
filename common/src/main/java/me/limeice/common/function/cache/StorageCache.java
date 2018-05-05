@@ -140,7 +140,7 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
     @Override
     public boolean add(@NonNull String key, V item, @Nullable BEAN bean) {
         if (memCache != null && memCache.get(key) == null) {
-            memCache.add(key, item);
+            memCache.addOrOverlay(key, item);
         }
         File cache = getCacheFile(key);
         if (cache.exists()) return false;
