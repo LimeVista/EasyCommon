@@ -2,7 +2,7 @@ package me.limeice.common.base.rx.cache;
 
 import android.support.annotation.NonNull;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -10,7 +10,11 @@ import java.util.concurrent.Semaphore;
  */
 final class SafeLocker implements ISafeLocker {
 
-    private final ConcurrentHashMap<String, AutoDestroySemaphore> semaphoreLocker = new ConcurrentHashMap<>();
+    // private final ConcurrentHashMap<String, AutoDestroySemaphore> semaphoreLocker = new ConcurrentHashMap<>();
+
+    private final HashMap<String, AutoDestroySemaphore> semaphoreLocker = new HashMap<>();
+
+    private final byte[] lock = new byte[0];
 
     class AutoDestroySemaphore extends ISafeLocker.AutoDestroySemaphore {
 
@@ -22,12 +26,16 @@ final class SafeLocker implements ISafeLocker {
      *
      * @param key 键
      */
-    public synchronized void lock(@NonNull String key) {
-        if (!semaphoreLocker.containsKey(key))
-            semaphoreLocker.put(key, new AutoDestroySemaphore());
-
-        AutoDestroySemaphore semaphore = semaphoreLocker.get(key);
-        semaphore.count.incrementAndGet();  // 引用计数+1
+    public void lock(@NonNull String key) {
+        AutoDestroySemaphore semaphore;
+        synchronized (lock) {
+            if (!semaphoreLocker.containsKey(key)) {
+                semaphore = new AutoDestroySemaphore();
+                semaphoreLocker.put(key, semaphore);
+            } else
+                semaphore = semaphoreLocker.get(key);
+            semaphore.count.incrementAndGet();  // 引用计数+1
+        }
         // semaphore.acquire();
         semaphore.semaphore.acquireUninterruptibly();
     }
@@ -37,14 +45,16 @@ final class SafeLocker implements ISafeLocker {
      *
      * @param key 简直
      */
-    public synchronized void release(@NonNull String key) {
+    public void release(@NonNull String key) {
         final AutoDestroySemaphore semaphore = semaphoreLocker.get(key);
         if (semaphore == null)
             throw new IllegalStateException("Couldn't release semaphore.The key("
                     + key + ") isn't call lock(String) method.");
         semaphore.semaphore.release();
-        if (semaphore.count.decrementAndGet() <= 0) // 引用计数-1
-            semaphoreLocker.remove(key, semaphore); // 当引用计数为0时，删除引用
+        synchronized (lock) {
+            if (semaphore.count.decrementAndGet() <= 0) // 引用计数-1
+                semaphoreLocker.remove(key); // 当引用计数为0时，删除引用
+        }
     }
 
     /**
