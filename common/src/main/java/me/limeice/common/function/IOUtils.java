@@ -25,7 +25,6 @@ import java.util.zip.GZIPOutputStream;
  *     github: https://github.com/LimeVista/EasyCommon
  * </pre>
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
 public final class IOUtils {
 
     private IOUtils() {
@@ -35,7 +34,7 @@ public final class IOUtils {
     /**
      * 缓冲区大小
      */
-    private static final int BUFFER_SIZE = 1024;
+    private static final int BUFFER_SIZE = 4096;
 
     /**
      * 从输入流中读取数据，并转换为Byte数组
@@ -286,5 +285,58 @@ public final class IOUtils {
      */
     public static boolean moveFile(@Nullable File input, @Nullable File output) {
         return !(input == null || output == null) && input.exists() && input.renameTo(output);
+    }
+
+    /**
+     * 复制源 InputStream 到目标 OutputStream
+     *
+     * @param source 源
+     * @param sink   目标
+     * @return 复制长度
+     * @throws IOException IO 异常
+     */
+    public static long copy(InputStream source, OutputStream sink)
+            throws IOException {
+        long nRead = 0L;
+        byte[] buf = new byte[BUFFER_SIZE];
+        int n;
+        while ((n = source.read(buf)) > 0) {
+            sink.write(buf, 0, n);
+            nRead += n;
+        }
+        return nRead;
+    }
+
+    /**
+     * 复制 源 InputStream 到文件
+     *
+     * @param input   源
+     * @param outFile 目标
+     * @return 复制长度
+     * @throws IOException IO 异常
+     */
+    public static long copy(InputStream input, File outFile) throws IOException {
+        FileOutputStream output = new FileOutputStream(outFile);
+        return copy(input, output);
+    }
+
+    /**
+     * 文件复制
+     *
+     * @param source 源文件
+     * @param sink   目标文件
+     * @return 复制长度
+     * @throws IOException IO 异常
+     */
+    public static long copy(File source, File sink) throws IOException {
+        FileChannel fileIn = null;
+        FileChannel fileOut = null;
+        try {
+            fileIn = new FileInputStream(source).getChannel();
+            fileOut = new FileOutputStream(sink).getChannel();
+            return fileIn.transferTo(0, fileIn.size(), fileOut);
+        } finally {
+            CloseUtils.closeIOQuietly(fileIn, fileOut);
+        }
     }
 }

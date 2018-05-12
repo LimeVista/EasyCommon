@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/EasyCommon.iml" filepath="$PROJECT_DIR$/.idea/EasyCommon.iml" />
       <module fileurl="file://$PROJECT_DIR$/EasyCommon.iml" filepath="$PROJECT_DIR$/EasyCommon.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/rxcachequickly/rxcachequickly.iml" filepath="$PROJECT_DIR$/rxcachequickly/rxcachequickly.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rxcachequickly/rxcachequickly.iml" filepath="$PROJECT_DIR$/rxcachequickly/rxcachequickly.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
     </modules>
   </component>
