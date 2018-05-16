@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import me.limeice.common.function.IOUtils;
@@ -41,12 +42,11 @@ public class IOUtilsTest {
 
 
     @Test
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void write() throws IOException {
         File file = new File(mFileHome, "PointInPolygonTest.png");
         byte[] bs1 = IOUtils.read(file);
         File writeFile = new File(mTmpDir, "PointInPolygonTest.png");
-        writeFile.delete();
+        delete(writeFile);
         IOUtils.write(writeFile, bs1);
 
         // Check
@@ -69,7 +69,7 @@ public class IOUtilsTest {
         assertTrue(delResult);
         IOUtils.write(writeFile.getAbsolutePath(), bs2);
 
-        writeFile.delete();
+        delete(writeFile);
     }
 
 
@@ -80,8 +80,7 @@ public class IOUtilsTest {
         IOUtils.writeAppend(writeFile, TEST_MSG.getBytes());
         assertFalse(TEST_MSG.equals(new String(IOUtils.read(writeFile))));
 
-        //noinspection ResultOfMethodCallIgnored
-        writeFile.delete();
+        delete(writeFile);
     }
 
     @Test
@@ -91,11 +90,24 @@ public class IOUtilsTest {
     }
 
     @Test
-    public void zip() {
+    public void zip() throws IOException {
+        File file = new File(mFileHome, "PointInPolygonTest.png");
+        File writeFile = new File(mTmpDir, "PointInPolygonTest.png");
+        IOUtils.zip(new FileInputStream(file), new FileOutputStream(writeFile));
+        assertTrue(writeFile.length() > 0);
+        delete(writeFile);
     }
 
     @Test
-    public void unzip() {
+    public void unzip() throws IOException {
+        File file = new File(mFileHome, "PointInPolygonTest.png");
+        File writeFile = new File(mTmpDir, "PointInPolygonTest.png");
+        IOUtils.zip(new FileInputStream(file), new FileOutputStream(writeFile));
+
+        File writeFile2 = new File(mTmpDir, "PointInPolygonTest.png.bak");
+        IOUtils.unzip(new FileInputStream(writeFile), new FileOutputStream(writeFile2));
+        assertTrue(file.length() == writeFile2.length());
+        delete(writeFile, writeFile2);
     }
 
     @Test
@@ -108,5 +120,14 @@ public class IOUtilsTest {
 
     @Test
     public void copy() {
+    }
+
+
+    private void delete(File... files) {
+        if (files == null)
+            return;
+        for (File file : files)
+            //noinspection ResultOfMethodCallIgnored
+            file.delete();
     }
 }
