@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import me.limeice.common.function.CloseUtils;
 import me.limeice.common.function.IOUtils;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -112,16 +113,39 @@ public class IOUtilsTest {
 
     @Test
     public void copyFile() {
+        File file = new File(mFileHome, "PointInPolygonTest.png");
+        File writeFile = new File(mTmpDir, "PointInPolygonTest.png");
+        assertTrue(IOUtils.copyFile(file, writeFile));
+        delete(writeFile);
     }
 
     @Test
     public void moveFile() {
+        File file = new File(mFileHome, "PointInPolygonTest.png");
+        File writeFile = new File(mTmpDir, "PointInPolygonTest.png");
+        File writeFile2 = new File(mTmpDir, "PointInPolygonTest.png.bak");
+        assertTrue(IOUtils.copyFile(file, writeFile));
+        assertTrue(IOUtils.moveFile(writeFile, writeFile2));
+        delete(writeFile, writeFile2);
     }
 
     @Test
-    public void copy() {
+    public void copy() throws IOException {
+        File file = new File(mFileHome, "PointInPolygonTest.png");
+        File writeFile = new File(mTmpDir, "PointInPolygonTest.png");
+        File writeFile2 = new File(mTmpDir, "PointInPolygonTest.png.bak");
+        long len1 = IOUtils.copy(file, writeFile);
+        FileInputStream in = new FileInputStream(file);
+        long len2 = IOUtils.copy(in, writeFile2);
+        assertEquals(len1, len2);
+        delete(writeFile2);
+        FileOutputStream out = new FileOutputStream(writeFile2);
+        CloseUtils.closeIOQuietly(in);
+        in = new FileInputStream(file);
+        len1 = IOUtils.copy(in, out);
+        assertEquals(len2, len1);
+        delete(writeFile, writeFile2);
     }
-
 
     private void delete(File... files) {
         if (files == null)

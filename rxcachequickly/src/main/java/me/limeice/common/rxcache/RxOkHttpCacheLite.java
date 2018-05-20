@@ -13,6 +13,7 @@ import io.reactivex.Observable;
 import me.limeice.common.annotation.UnSupported;
 import me.limeice.common.base.rx.cache.RxCache;
 import me.limeice.common.function.CloseUtils;
+import me.limeice.common.function.IOUtils;
 import me.limeice.common.function.Objects;
 import me.limeice.common.function.cache.MemCache;
 import me.limeice.common.function.cache.StorageCache;
@@ -51,7 +52,7 @@ public class RxOkHttpCacheLite<V> extends RxCache<V, String> {
                         Objects.requireNonNull(body);
                         in = body.byteStream();
                         OutputStream out = writer.getOutStream();
-                        Utils.inputSteamToOutputStream(in, out);
+                        IOUtils.copy(in, out);
                     } finally {
                         CloseUtils.closeIOQuietly(response, in);
                     }

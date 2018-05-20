@@ -317,7 +317,11 @@ public final class IOUtils {
      */
     public static long copy(InputStream input, File outFile) throws IOException {
         FileOutputStream output = new FileOutputStream(outFile);
-        return copy(input, output);
+        try {
+            return copy(input, output);
+        } finally {
+            CloseUtils.closeIOQuietly(output);
+        }
     }
 
     /**
