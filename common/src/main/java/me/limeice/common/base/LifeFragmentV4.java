@@ -13,6 +13,16 @@ import me.limeice.common.function.algorithm.util.ArrayStack;
 
 /**
  * 用于管理Fragment生命周期
+ * 使用方法：
+ * <p>1. 复写{@link Activity#attachBaseContext(Context)},使用{@link #install(Context, Activity)}
+ * <pre>
+ *     <code>
+ * protected void attachBaseContext(Context base) {
+ *      super.attachBaseContext(LifeFragment.install(base, this));
+ * }
+ *     </code>
+ * </pre>
+ * <p>2. 继承{@link BaseLifeFragmentV4},或者依据其原理，参见自定义使用方法
  */
 public final class LifeFragmentV4 {
 
@@ -33,6 +43,20 @@ public final class LifeFragmentV4 {
         return InternalContextWrapper.getLifeFragment(context);
     }
 
+    /**
+     * 使用方法：复写{@link Activity#attachBaseContext(Context)},使用{@link #install(Context, Activity)}
+     * <pre>
+     *     <code>
+     * protected void attachBaseContext(Context base) {
+     *      super.attachBaseContext(LifeFragment.install(base, this));
+     * }
+     *     </code>
+     * </pre>
+     *
+     * @param baseContext 上下文
+     * @param activity    Activity
+     * @return newBaseContext
+     */
     @NonNull
     public static Context install(@NonNull final Context baseContext, @NonNull final Activity activity) {
         return new InternalContextWrapper(baseContext.getApplicationContext(), activity);
