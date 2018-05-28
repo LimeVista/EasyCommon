@@ -22,7 +22,7 @@ import me.limeice.common.function.algorithm.util.ArrayStack;
  * }
  *     </code>
  * </pre>
- * <p>2. 继承{@link BaseLifeFragmentV4},或者依据其原理，参见自定义使用方法
+ * <p>2. 继承{@link BaseLifeFragmentV4},或者依据其原理，自定义使用方法
  */
 public final class LifeFragmentV4 {
 
