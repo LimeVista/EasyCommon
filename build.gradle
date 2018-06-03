@@ -7,23 +7,24 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:3.1.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 
     ext.versions = [
-            'ver_name'      : "0.7.0",
-            'ver_code'      : 20180528,
+            'ver_name'      : "0.8.0",
+            'ver_code'      : 20180618,
             'minSdk'        : 16,
             'compileSdk'    : 27,
             'targetSdk'     : 26,
-            'supportLibrary': '27.1.0',
-            'gson_ver'      : '2.8.2',
+            'supportLibrary': '26.1.0',
+            'gson_ver'      : '2.8.5',
             'rxJava'        : '2.1.10',
             'rxAndroid'     : '2.0.2',
-            'retrofit'      : '2.3.0',
-            'runner'        : '1.0.1',
-            'espresso'      : '3.0.1'
+            'retrofit'      : '2.4.0',
+            'runner'        : '1.0.2',
+            'espresso'      : '3.0.2',
+            'okhttp'        : '3.10.0'
     ]
 
     ext.deps = [
@@ -59,7 +60,7 @@ buildscript {
                     "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}"
             ],
             'gson'    : "com.google.code.gson:gson:${versions.gson_ver}",
-            'OKHttp'  : "com.squareup.okhttp3:okhttp:3.10.0"
+            'OkHttp'  : "com.squareup.okhttp3:okhttp:${versions.okhttp}"
     ]
 }
 

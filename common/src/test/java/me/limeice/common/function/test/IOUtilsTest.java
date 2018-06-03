@@ -154,4 +154,34 @@ public class IOUtilsTest {
             //noinspection ResultOfMethodCallIgnored
             file.delete();
     }
+
+    @Test
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public void deleteDir0() throws IOException {
+        File f = new File(mTmpDir, "0me.lime.common.test.dir_0");
+        if (f.mkdirs()) {
+            for (int i = 0; i < 8; i++) {
+                File fChild = new File(f, "child" + i);
+                File fChildDir = new File(f, "dir" + i);
+                fChild.createNewFile();
+                fChildDir.mkdirs();
+            }
+        }
+        IOUtils.deleteDirectoryQuietly(f);
+    }
+
+    @Test
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public void deleteDir1() throws IOException {
+        File f = new File(mTmpDir, "0me.lime.common.test.dir_1");
+        if (f.mkdirs()) {
+            for (int i = 0; i < 8; i++) {
+                File fChild = new File(f, "child" + i);
+                File fChildDir = new File(f, "dir" + i);
+                fChild.createNewFile();
+                fChildDir.mkdirs();
+            }
+        }
+        IOUtils.deleteDirectory(f);
+    }
 }

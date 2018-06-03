@@ -283,7 +283,7 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
     public void clean() {
         if (memCache != null)
             memCache.clean();
-        deleteFilesInDir(folder);
+        IOUtils.deleteDirectoryQuietly(folder);
         //noinspection ResultOfMethodCallIgnored
         folder.mkdirs();
     }
@@ -373,45 +373,5 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
 
     public File getCacheFileBak(String key) {
         return new File(folder, key + "_$FILE$BAK$_");
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    private static boolean deleteFilesInDir(final File dir) {
-        if (dir == null) return false;
-        // dir doesn't exist then return true
-        if (!dir.exists()) return true;
-        // dir isn't a directory then return false
-        if (!dir.isDirectory()) return false;
-        File[] files = dir.listFiles();
-        if (files != null && files.length != 0) {
-            for (File file : files) {
-                if (file.isFile()) {
-                    if (!file.delete()) return false;
-                } else if (file.isDirectory()) {
-                    if (!deleteDir(file)) return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private static boolean deleteDir(final File dir) {
-        if (dir == null) return false;
-        // dir doesn't exist then return true
-        if (!dir.exists()) return true;
-        // dir isn't a directory then return false
-        if (!dir.isDirectory()) return false;
-        File[] files = dir.listFiles();
-        if (files != null && files.length != 0) {
-            for (File file : files) {
-                if (file.isFile()) {
-                    if (!file.delete()) return false;
-                } else if (file.isDirectory()) {
-                    if (!deleteDir(file)) return false;
-                }
-            }
-        }
-        return dir.delete();
     }
 }
