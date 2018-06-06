@@ -15,7 +15,7 @@ buildscript {
             'ver_name'      : "0.8.0",
             'ver_code'      : 20180618,
             'minSdk'        : 16,
-            'compileSdk'    : 27,
+            'compileSdk'    : 26,
             'targetSdk'     : 26,
             'supportLibrary': '26.1.0',
             'gson_ver'      : '2.8.5',
