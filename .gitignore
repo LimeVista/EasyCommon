@@ -42,6 +42,7 @@ captures/
 .idea/codeStyles
 .idea/modules.xml
 .idea/misc.xml
+.idea/modules.xml
 
 # Keystore files
 *.jks

@@ -1,5 +1,6 @@
 package me.limeice.common.function;
 
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -13,6 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -342,5 +344,100 @@ public final class IOUtils {
         } finally {
             CloseUtils.closeIOQuietly(fileIn, fileOut);
         }
+    }
+
+    /**
+     * 删除文件夹
+     *
+     * @param directory 文件夹
+     * @throws IOException IOE
+     */
+    public static void deleteDirectory(@NonNull final File directory) throws IOException {
+        Objects.requireNonNull(directory, "directory is null");
+        if (!directory.exists())
+            return;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            if (!Files.isSymbolicLink(directory.toPath())) {
+                cleanDirectory(directory);
+            }
+        } else {
+            cleanDirectory(directory);
+        }
+        if (!directory.delete())
+            throw new IOException("Unable to delete directory " + directory + ".");
+    }
+
+    /**
+     * 删除文件夹
+     *
+     * @param directory 文件夹
+     */
+    public static void deleteDirectoryQuietly(@NonNull final File directory) {
+        Objects.requireNonNull(directory, "directory is null");
+        if (!directory.exists() || directory.isFile())
+            return;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            if (!Files.isSymbolicLink(directory.toPath())) {
+                cleanDirectoryQuietly(directory);
+            }
+            //noinspection ResultOfMethodCallIgnored
+            directory.delete();
+        } else {
+            cleanDirectoryQuietly(directory);
+        }
+    }
+
+    /**
+     * 强制删除
+     *
+     * @param file 文件
+     * @throws IOException IOE
+     */
+    private static void forceDelete(final File file) throws IOException {
+        if (file.isDirectory()) {
+            deleteDirectory(file);
+        } else {
+            if (file.exists())
+                if (!file.delete()) throw new IOException("Unable to delete file: " + file);
+        }
+    }
+
+    /**
+     * 清空文件夹
+     *
+     * @param directory 文件夹
+     * @throws IOException IOE
+     */
+    private static void cleanDirectory(final File directory) throws IOException {
+        final File[] files = directory.listFiles();
+        if (files == null)
+            throw new IOException("Failed to list contents of " + directory);
+        IOException exception = null;
+        for (final File file : files) {
+            try {
+                forceDelete(file);
+            } catch (final IOException ioe) {
+                exception = ioe;
+            }
+        }
+        if (null != exception) throw exception;
+    }
+
+    /**
+     * 清空文件夹
+     *
+     * @param directory 文件夹
+     */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private static void cleanDirectoryQuietly(final File directory) {
+        final File[] files = directory.listFiles();
+        if (files != null)
+            for (final File file : files) {
+                if (file.isDirectory())
+                    cleanDirectoryQuietly(file);
+                else
+                    file.delete();
+            }
+        directory.delete();
     }
 }

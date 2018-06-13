@@ -26,8 +26,32 @@ android {
 dependencies {
     api deps.support.appcompat
     api deps.rxJava
-    api deps.OKHttp
+    api deps.OkHttp
     testImplementation deps.test.junit
     androidTestImplementation deps.test.android
     implementation project(':common')
+}
+
+//// build a jar with source files
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.source
+}
+
+task javadoc(type: Javadoc) {
+    failOnError false
+    source = android.sourceSets.main.java.sourceFiles
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.compile
+}
+
+// build a jar with javadoc
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
 }
