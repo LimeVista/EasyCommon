@@ -15,9 +15,9 @@ allprojects {
 
 * Step 2. Add the dependency
 ```groovy
- compile 'com.github.LimeVista.EasyCommon:common:0.7.5'
+ compile 'com.github.LimeVista.EasyCommon:common:0.8.1'
  // if use rxcachequickly
- compile 'com.github.LimeVista.EasyCommon:rxcachequickly:0.7.5'
+ compile 'com.github.LimeVista.EasyCommon:rxcachequickly:0.8.1'
 ```
 
 * Step 3.CompileOptions
