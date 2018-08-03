@@ -8,8 +8,8 @@ android {
         applicationId "me.limeice.sample"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
-        versionCode 1
-        versionName "1.0"
+        versionCode versions.ver_code
+        versionName versions.ver_name
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

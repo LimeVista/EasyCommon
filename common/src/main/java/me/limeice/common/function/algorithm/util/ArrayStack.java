@@ -84,7 +84,10 @@ public class ArrayStack<E> implements IStack<E>, Serializable {
      */
     @Override
     public IStack<E> deepClone() {
-        return null;
+        ArrayStack<E> as = new ArrayStack<>(elementData.length);
+        System.arraycopy(elementData, 0, as.elementData, 0, as.elementData.length);
+        as.size = size;
+        return as;
     }
 
     /**
