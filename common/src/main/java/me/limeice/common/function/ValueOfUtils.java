@@ -74,4 +74,34 @@ public final class ValueOfUtils {
             return defaultVal;
         }
     }
+
+    /**
+     * convert a string value to a float value (String -> Float)
+     *
+     * @param value      String value
+     * @param defaultVal Default value
+     * @return float
+     */
+    public static float valueOf(String value, float defaultVal) {
+        try {
+            return Float.valueOf(value);
+        } catch (NumberFormatException ex) {
+            return defaultVal;
+        }
+    }
+
+    /**
+     * convert a string value to a double value (String -> Float)
+     *
+     * @param value      String value
+     * @param defaultVal Default value
+     * @return double
+     */
+    public static double valueOf(String value, double defaultVal) {
+        try {
+            return Double.valueOf(value);
+        } catch (NumberFormatException ex) {
+            return defaultVal;
+        }
+    }
 }
