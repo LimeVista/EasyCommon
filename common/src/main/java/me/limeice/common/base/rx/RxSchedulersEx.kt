@@ -18,6 +18,13 @@ inline fun <T> Observable<T>.ioToMain() =
         subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 
+
+/* IO线程切换到主线程 */
+inline fun <T> Observable<T>.ioToMainDelayError() =
+        subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread(), true)
+
+
 /* 计算线程切换到主线程 */
 inline fun <T> Observable<T>.computationToMain() =
         subscribeOn(Schedulers.computation())

@@ -13,9 +13,10 @@ import android.util.TypedValue;
  * ColorUtils 用于处理颜色资源的和转换
  *
  * @author Lime
- *         Created at 2016.08.16
- *         Update at 2018.3.15
- * @version 2.0
+ * Created at 2016.08.16
+ * Update at 2018.03.15
+ * Update at 2018.08.31
+ * @version 2.1
  */
 public final class ColorUtils {
 
@@ -29,11 +30,10 @@ public final class ColorUtils {
      * @param context Context容器
      * @param attr    属性ID
      * @return 颜色值
+     * @see AttrUtils#getAttrColor(Context, int)
      */
     public static int getAttrColor(@NonNull Context context, @AttrRes int attr) {
-        TypedValue typedValue = new TypedValue();
-        context.getTheme().resolveAttribute(attr, typedValue, true);
-        return typedValue.data;
+        return AttrUtils.getAttrColor(context, attr);
     }
 
     /**

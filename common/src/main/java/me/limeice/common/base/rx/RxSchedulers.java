@@ -1,6 +1,7 @@
 package me.limeice.common.base.rx;
 
 
+import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -57,5 +58,16 @@ public class RxSchedulers {
     public static <T> ObservableTransformer<T, T> main_computation() {
         return in -> in.subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(Schedulers.computation());
+    }
+
+    /**
+     * Io线程切换到主线程,延迟错误相应
+     *
+     * @param <T> 泛型约束
+     * @return RxJava流
+     */
+    public static <T> ObservableTransformer<T,T> io_mainDelayError(){
+        return in -> in.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread(),true);
     }
 }
