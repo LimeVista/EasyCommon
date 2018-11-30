@@ -11,22 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-/**
- * 用于管理Fragment生命周期, 配合 {@link LifeFragmentCompat} 使用
- * <p>
- * The class is deprecated,please use {@link BaseLifeFragmentCompat}
- *
- * @see BaseLifeFragmentCompat
- * @deprecated 1.0 版本删除此接口
- */
-@SuppressWarnings("deprecation")
-@Deprecated
-public class BaseLifeFragmentV4 extends Fragment {
+public class BaseLifeFragmentCompat extends Fragment {
 
     /**
      * Temporary solution: Must call super {@link Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)} method.
      * <p>
-     * <p>Added to LifeFragmentV4,{@link LifeFragmentV4#addFragment(Fragment)}
+     * <p>Added to LifeFragmentCompat,{@link LifeFragmentCompat#addFragment(Fragment)}
      * <p>
      * <p>If you return a View from here, you will later be called in
      * {@link #onDestroyView} when the view is being released.
@@ -44,7 +34,7 @@ public class BaseLifeFragmentV4 extends Fragment {
     @Override
     @CallSuper
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        LifeFragmentV4.getLifeFragment(inflater.getContext()).addFragment(this);
+        LifeFragmentCompat.getLifeFragment(inflater.getContext()).addFragment(this);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -57,12 +47,13 @@ public class BaseLifeFragmentV4 extends Fragment {
      * non-null view.  Internally it is called after the view's state has
      * been saved but before it has been removed from its parent.
      * <p>
-     * <p>Remove this Fragment form LifeFragmentV4
+     * <p>Remove this Fragment form LifeFragmentCompat
      */
     @Override
+    @CallSuper
     public void onDestroyView() {
         super.onDestroyView();
         Context context = getContext();
-        if (context != null) LifeFragmentV4.getLifeFragment(context).removeFragment(this);
+        if (context != null) LifeFragmentCompat.getLifeFragment(context).removeFragment(this);
     }
 }

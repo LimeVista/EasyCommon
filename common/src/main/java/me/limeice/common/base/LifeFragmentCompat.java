@@ -3,18 +3,22 @@ package me.limeice.common.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.Iterator;
 
+import me.limeice.common.function.Objects;
 import me.limeice.common.function.algorithm.util.ArrayStack;
 
 /**
- * 用于管理Fragment生命周期
+ * 用于管理 Fragment 生命周期，本类不建议用于管理树状 Fragment, 仅建议用于代替早期的多个 Activity 改为多 Fragment
+ *
  * 使用方法：
- * <p>1. 复写{@link Activity#attachBaseContext(Context)},使用{@link #install(Context, Activity)}
+ * <p>1. 复写{@link Activity#attachBaseContext(Context)},使用{@link #install(Context, AppCompatActivity)}
  * <pre>
  *     <code>
  * protected void attachBaseContext(Context base) {
@@ -22,21 +26,15 @@ import me.limeice.common.function.algorithm.util.ArrayStack;
  * }
  *     </code>
  * </pre>
- * <p>2. 继承{@link BaseLifeFragmentV4},或者依据其原理，自定义使用方法
- * <p>
- * The class is deprecated,please use {@link LifeFragmentCompat}
- *
- * @see LifeFragmentCompat
- * @deprecated 1.0 版本删除此接口
+ * <p>2. 继承{@link BaseLifeFragmentCompat},或者依据其原理，自定义使用方法
  */
-@SuppressWarnings({"WeakerAccess", "unused", "deprecation"})
-@Deprecated
-public final class LifeFragmentV4 {
+@SuppressWarnings("WeakerAccess")
+public final class LifeFragmentCompat {
 
     private final ArrayStack<Fragment> mFragments = new ArrayStack<>();
-    private final Activity mActivity;
+    private final AppCompatActivity mActivity;
 
-    private LifeFragmentV4(final Activity activity) {
+    private LifeFragmentCompat(final AppCompatActivity activity) {
         mActivity = activity;
     }
 
@@ -46,12 +44,12 @@ public final class LifeFragmentV4 {
      * @param context 上下文容器
      * @return 当前LifeFragment
      */
-    public static LifeFragmentV4 getLifeFragment(@NonNull Context context) {
+    public static LifeFragmentCompat getLifeFragment(@NonNull Context context) {
         return InternalContextWrapper.getLifeFragment(context);
     }
 
     /**
-     * 使用方法：复写{@link Activity#attachBaseContext(Context)}
+     * 使用方法：复写{@link Activity#attachBaseContext(Context)},使用{@link #install(Context, AppCompatActivity)}
      * <pre>
      *     <code>
      * protected void attachBaseContext(Context base) {
@@ -64,8 +62,9 @@ public final class LifeFragmentV4 {
      * @param activity    Activity
      * @return newBaseContext
      */
+    @SuppressWarnings("JavaDoc")
     @NonNull
-    public static Context install(@NonNull final Context baseContext, @NonNull final Activity activity) {
+    public static Context install(@NonNull final Context baseContext, @NonNull final AppCompatActivity activity) {
         return new InternalContextWrapper(baseContext.getApplicationContext(), activity);
     }
 
@@ -100,8 +99,41 @@ public final class LifeFragmentV4 {
      * @return Activity
      */
     @NonNull
-    public Activity getActivity() {
+    public AppCompatActivity getActivity() {
         return mActivity;
+    }
+
+
+    /**
+     * 跳转到 Fragment
+     *
+     * @param layoutId Identifier of the container whose fragment(s) are to be replaced.
+     * @param fragment {@link Fragment}
+     * @param tag      {@link Fragment} 标识
+     */
+    public void replaceCommitAllowingStateLoss(@IdRes int layoutId, @NonNull Fragment fragment, @NonNull String tag) {
+        Objects.checkNonNull(fragment);
+        Objects.checkNonNull(tag);
+        mActivity.getSupportFragmentManager().beginTransaction()
+                .replace(layoutId, fragment, tag)
+                .addToBackStack(null)
+                .commitAllowingStateLoss();
+    }
+
+    /**
+     * 跳转到 Fragment
+     *
+     * @param layoutId Identifier of the container whose fragment(s) are to be replaced.
+     * @param fragment {@link Fragment}
+     * @param tag      {@link Fragment} 标识
+     */
+    public void replaceCommit(@IdRes int layoutId, @NonNull Fragment fragment, @NonNull String tag) {
+        Objects.checkNonNull(fragment);
+        Objects.checkNonNull(tag);
+        mActivity.getSupportFragmentManager().beginTransaction()
+                .replace(layoutId, fragment, tag)
+                .addToBackStack(null)
+                .commit();
     }
 
     /**
@@ -114,7 +146,7 @@ public final class LifeFragmentV4 {
             if (fragment == null) return;
             Iterator<Fragment> it = mFragments.iterator();
             while (it.hasNext()) {
-                Fragment f = it.next();
+                final Fragment f = it.next();
                 if (f != fragment)
                     continue;
                 it.remove();
@@ -125,19 +157,19 @@ public final class LifeFragmentV4 {
 
     static final class InternalContextWrapper extends ContextWrapper {
 
-        private static final String FRAGMENT_SERVICE = "ME.LIME_ICE.FRAGMENT_SERVICE";
+        private static final String FRAGMENT_SERVICE = "ME.LIME_ICE.FRAGMENT_COMPAT_SERVICE";
 
-        private final LifeFragmentV4 life;
+        private final LifeFragmentCompat life;
 
-        InternalContextWrapper(Context baseContext, Activity activity) {
+        InternalContextWrapper(Context baseContext, AppCompatActivity activity) {
             super(baseContext);
-            life = new LifeFragmentV4(activity);
+            life = new LifeFragmentCompat(activity);
         }
 
         @Nullable
-        public static LifeFragmentV4 getLifeFragment(Context context) {
+        public static LifeFragmentCompat getLifeFragment(Context context) {
             @SuppressWarnings("WrongConstant")
-            LifeFragmentV4 systemService = (LifeFragmentV4) context.getSystemService(FRAGMENT_SERVICE);
+            LifeFragmentCompat systemService = (LifeFragmentCompat) context.getSystemService(FRAGMENT_SERVICE);
             return systemService;
         }
 

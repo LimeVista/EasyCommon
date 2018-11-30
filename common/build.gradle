@@ -26,7 +26,6 @@ android {
 }
 
 dependencies {
-    // api fileTree(include: ['*.jar'], dir: 'libs')
     api deps.kotlin.stdlib
     api deps.support.appcompat
     api deps.rxJava
