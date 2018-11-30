@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 
 /**
- * 用于管理Fragment生命周期, 配合 {@link LifeFragmentCompat} 使用
+ * 用于管理Fragment生命周期, 配合 {@link LifeFragmentV4} 使用
  * <p>
  * The class is deprecated,please use {@link BaseLifeFragmentCompat}
  *

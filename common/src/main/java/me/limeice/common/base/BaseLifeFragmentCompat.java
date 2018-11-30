@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
+/**
+ * 用于管理Fragment生命周期, 配合 {@link LifeFragmentCompat} 使用
+ */
 public class BaseLifeFragmentCompat extends Fragment {
 
     /**

@@ -1,4 +1,5 @@
 @file:JvmName("DensityUtils")
+@file:Suppress("unused")
 
 package me.limeice.common.function
 
@@ -16,9 +17,10 @@ import me.limeice.common.base.BasePresenter
 /**
  * Density Utils用于处理像素点与dp单位sp单位之间的相互转换
  *
- * @author Lime
- * Created at 2016.08.16
- * @version 1.0
+ *  @author LimeVista(Lime)
+ *  Created at 2016.08.16,Last Update at 2018.11.30
+ *  github: https://github.com/LimeVista/EasyCommon
+ *  @version 1.0
  */
 
 /**
@@ -28,7 +30,7 @@ import me.limeice.common.base.BasePresenter
  * @return px(像素)值
  */
 fun Context.dip2px(dpValue: Float): Int {
-    val scale = QuickBridge.getDensity(this)
+    val scale = resources.displayMetrics.density
     return (dpValue * scale + 0.5f).toInt()
 }
 
@@ -39,7 +41,7 @@ fun Context.dip2px(dpValue: Float): Int {
  * @return dp值
  */
 fun Context.px2dip(pxValue: Float): Int {
-    val scale = QuickBridge.getDensity(this)
+    val scale = resources.displayMetrics.density
     return (pxValue / scale + 0.5f).toInt()
 }
 
@@ -50,7 +52,7 @@ fun Context.px2dip(pxValue: Float): Int {
  * @return sp值
  */
 fun Context.px2sp(pxValue: Float): Int {
-    val fontScale = QuickBridge.getDensity(this)
+    val fontScale = resources.displayMetrics.density
     return (pxValue / fontScale + 0.5f).toInt()
 }
 
@@ -61,7 +63,7 @@ fun Context.px2sp(pxValue: Float): Int {
  * @return px(像素)值
  */
 fun Context.sp2px(spValue: Float): Int {
-    val fontScale = QuickBridge.getDensity(this)
+    val fontScale = resources.displayMetrics.density
     return (spValue * fontScale + 0.5f).toInt()
 }
 
@@ -70,14 +72,14 @@ fun Context.sp2px(spValue: Float): Int {
  *
  * @return (px像素)屏幕宽度
  */
-fun Context.getScreenWidth(): Int = resources!!.displayMetrics.widthPixels
+fun Context.getScreenWidth(): Int = resources.displayMetrics.widthPixels
 
 /**
  * 获取屏幕高度
  *
  * @return (px像素)屏幕高度
  */
-fun Context.getScreenHeight(): Int = resources!!.displayMetrics.heightPixels
+fun Context.getScreenHeight(): Int = resources.displayMetrics.heightPixels
 
 
 /**
@@ -181,7 +183,7 @@ fun Context.isSW720dp(): Boolean = resources.configuration.smallestScreenWidthDp
  * @return px(像素)值
  */
 fun View.dip2px(dpValue: Float): Int {
-    val scale = QuickBridge.getDensity(context)
+    val scale = context.resources.displayMetrics.density
     return (dpValue * scale + 0.5f).toInt()
 }
 
@@ -192,7 +194,7 @@ fun View.dip2px(dpValue: Float): Int {
  * @return dp值
  */
 fun View.px2dip(pxValue: Float): Int {
-    val scale = QuickBridge.getDensity(context)
+    val scale = context.resources.displayMetrics.density
     return (pxValue / scale + 0.5f).toInt()
 }
 
@@ -203,7 +205,7 @@ fun View.px2dip(pxValue: Float): Int {
  * @return sp值
  */
 fun View.px2sp(pxValue: Float): Int {
-    val fontScale = QuickBridge.getDensity(context)
+    val fontScale = context.resources.displayMetrics.density
     return (pxValue / fontScale + 0.5f).toInt()
 }
 
@@ -214,7 +216,7 @@ fun View.px2sp(pxValue: Float): Int {
  * @return px(像素)值
  */
 fun View.sp2px(spValue: Float): Int {
-    val fontScale = QuickBridge.getDensity(context)
+    val fontScale = context.resources.displayMetrics.density
     return (spValue * fontScale + 0.5f).toInt()
 }
 
@@ -263,7 +265,7 @@ fun View.isSW720dp(): Boolean = resources.configuration.smallestScreenWidthDp >=
  * @return px(像素)值
  */
 fun BasePresenter<*, *>.dip2px(dpValue: Float): Int {
-    val scale = QuickBridge.getDensity(mContext)
+    val scale = mContext.resources.displayMetrics.density
     return (dpValue * scale + 0.5f).toInt()
 }
 
@@ -274,7 +276,7 @@ fun BasePresenter<*, *>.dip2px(dpValue: Float): Int {
  * @return dp值
  */
 fun BasePresenter<*, *>.px2dip(pxValue: Float): Int {
-    val scale = QuickBridge.getDensity(mContext)
+    val scale = mContext.resources.displayMetrics.density
     return (pxValue / scale + 0.5f).toInt()
 }
 
@@ -285,7 +287,7 @@ fun BasePresenter<*, *>.px2dip(pxValue: Float): Int {
  * @return sp值
  */
 fun BasePresenter<*, *>.px2sp(pxValue: Float): Int {
-    val fontScale = QuickBridge.getDensity(mContext)
+    val fontScale = mContext.resources.displayMetrics.density
     return (pxValue / fontScale + 0.5f).toInt()
 }
 
@@ -296,7 +298,7 @@ fun BasePresenter<*, *>.px2sp(pxValue: Float): Int {
  * @return px(像素)值
  */
 fun BasePresenter<*, *>.sp2px(spValue: Float): Int {
-    val fontScale = QuickBridge.getDensity(mContext)
+    val fontScale = mContext.resources.displayMetrics.density
     return (spValue * fontScale + 0.5f).toInt()
 }
 

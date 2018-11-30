@@ -7,11 +7,14 @@ import android.support.annotation.NonNull;
 import android.util.TypedValue;
 
 /**
- * ColorUtils 用于处理属性资源
+ * AttrUtils 用于处理属性资源
  *
- * @author Lime
- * Created at 2018.08.31
- * @version 1.0
+ * <pre>
+ *     author: LimeVista(Lime)
+ *     time  : 2018/11/30
+ *     desc  : 用于处理属性资源
+ *     github: https://github.com/LimeVista/EasyCommon
+ * </pre>
  */
 public final class AttrUtils {
 

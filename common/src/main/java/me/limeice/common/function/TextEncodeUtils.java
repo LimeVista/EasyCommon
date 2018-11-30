@@ -4,6 +4,16 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.Html;
 
+/**
+ * 用于处理文本
+ *
+ * <pre>
+ *     author: LimeVista(Lime)
+ *     time  : 2018/11/30
+ *     desc  : 用于处理文本
+ *     github: https://github.com/LimeVista/EasyCommon
+ * </pre>
+ */
 public final class TextEncodeUtils {
 
     private TextEncodeUtils() {
