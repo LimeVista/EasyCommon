@@ -65,7 +65,7 @@ public final class LifeFragmentCompat {
     @SuppressWarnings("JavaDoc")
     @NonNull
     public static Context install(@NonNull final Context baseContext, @NonNull final AppCompatActivity activity) {
-        return new InternalContextWrapper(baseContext.getApplicationContext(), activity);
+        return new InternalContextWrapper(baseContext, activity);
     }
 
     /**
