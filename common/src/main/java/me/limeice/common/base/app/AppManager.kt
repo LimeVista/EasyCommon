@@ -3,14 +3,17 @@
 package me.limeice.common.base.app
 
 import android.app.Activity
+import android.os.Looper
+import android.support.annotation.MainThread
 import me.limeice.common.function.algorithm.util.ArrayStack
+import java.util.concurrent.locks.ReentrantReadWriteLock
 
 /**
  * Application Manager
  *
  * <pre>
  *     author: LimeVista(Lime)
- *     time  : 2018/02/28,lat update 2018.11.30
+ *     time  : 2018/02/28, last update 2019.01.03
  *     desc  : Application Manager
  *     github: https://github.com/LimeVista/EasyCommon
  * </pre>
@@ -18,6 +21,7 @@ import me.limeice.common.function.algorithm.util.ArrayStack
 class AppManager private constructor() {
 
     private val mActStack: ArrayStack<Activity> = ArrayStack()
+    private val mRWLock = ReentrantReadWriteLock()
 
     companion object {
         @JvmStatic
@@ -27,9 +31,17 @@ class AppManager private constructor() {
     /**
      * 结束当前Activity
      */
+    @MainThread
     fun finishActivity() {
-        mActStack.pop()?.let {
-            if (!it.isFinishing) it.finish()
+        checkIsMainThread()
+        try {
+            mRWLock.writeLock().lock()
+            mActStack.pop()?.let {
+                if (!it.isFinishing)
+                    it.finish()
+            }
+        } finally {
+            mRWLock.writeLock().unlock()
         }
     }
 
@@ -37,13 +49,25 @@ class AppManager private constructor() {
      * 添加Activity
      */
     fun addActivity(activity: Activity) {
-        mActStack.push(activity)
+        try {
+            mRWLock.writeLock().lock()
+            mActStack.push(activity)
+        } finally {
+            mRWLock.writeLock().unlock()
+        }
     }
 
     /**
      * 当前Activity
      */
-    fun currentActivity(): Activity? = mActStack.last()
+    fun currentActivity(): Activity? {
+        try {
+            mRWLock.readLock().lock()
+            return mActStack.last()
+        } finally {
+            mRWLock.readLock().unlock()
+        }
+    }
 
 
     /**
@@ -51,9 +75,17 @@ class AppManager private constructor() {
      *
      * @param activity Activity
      */
+    @MainThread
     fun finishActivity(activity: Activity) {
-        mActStack.remove(activity)
-        activity.finish()
+        checkIsMainThread()
+        try {
+            mRWLock.writeLock().lock()
+            mActStack.remove(activity)
+            if (!activity.isFinishing)
+                activity.finish()
+        } finally {
+            mRWLock.writeLock().unlock()
+        }
     }
 
     /**
@@ -61,20 +93,32 @@ class AppManager private constructor() {
      *
      * @param activity Activity
      */
-    fun removeActivity(activity: Activity) = mActStack.remove(activity)
+    fun removeActivity(activity: Activity): Boolean {
+        mRWLock.writeLock().lock()
+        val result = mActStack.remove(activity)
+        mRWLock.writeLock().unlock()
+        return result
+    }
 
     /**
      * 返回到指定的Activity
      */
+    @MainThread
     fun <T> returnToActivity(clazz: Class<T>) where T : Activity {
-        while (mActStack.size() > 0) {
-            val act = mActStack.pop() ?: continue
-            if (act.javaClass == clazz) {
-                mActStack.push(act)
-                break
-            } else {
-                act.finish()
+        checkIsMainThread()
+        try {
+            mRWLock.writeLock().lock()
+            while (mActStack.size() > 0) {
+                val act = mActStack.pop() ?: continue
+                if (act.javaClass == clazz) {
+                    mActStack.push(act)
+                    break
+                } else {
+                    act.finish()
+                }
             }
+        } finally {
+            mRWLock.writeLock().unlock()
         }
     }
 
@@ -85,10 +129,12 @@ class AppManager private constructor() {
      * @return Activity? 不存在时返回空
      */
     fun <T> findActivity(clazz: Class<T>): Activity? where T : Activity {
+        mRWLock.readLock().lock()
         for (act in mActStack) {
             if (act.javaClass == clazz)
                 return act
         }
+        mRWLock.readLock().unlock()
         return null
     }
 
@@ -98,6 +144,7 @@ class AppManager private constructor() {
      * @return
      */
     fun <T> isOpenActivity(clazz: Class<T>): Boolean where T : Activity {
+        mRWLock.readLock().lock()
         var isOpen = false
         mActStack.forEach { act ->
             if (act.javaClass == clazz) {
@@ -105,14 +152,43 @@ class AppManager private constructor() {
                 return@forEach
             }
         }
+        mRWLock.readLock().unlock()
         return isOpen
+    }
+
+    /**
+     * 遍历打开的 Activity,只读模式
+     * @param consumer me.limeice.common.function.Consumer<Activity>
+     */
+    fun forEachReadOnly(consumer: me.limeice.common.function.Consumer<Activity>) {
+        try {
+            mRWLock.readLock().lock()
+            mActStack.foreach(consumer)
+        } finally {
+            mRWLock.readLock().unlock()
+        }
+    }
+
+    /**
+     * 遍历打开的 Activity,读写模式
+     * @param consumer me.limeice.common.function.Consumer<Activity>
+     */
+    fun forEachReadAndWrite(consumer: me.limeice.common.function.Consumer<Activity>) {
+        try {
+            mRWLock.writeLock().lock()
+            mActStack.foreach(consumer)
+        } finally {
+            mRWLock.writeLock().unlock()
+        }
     }
 
     /**
      * 退出应用程序
      * @param isBackground 是否开开启后台运行
      */
+    @MainThread
     fun appExit(isBackground: Boolean) {
+        checkIsMainThread()
         try {
             finishAll()
         } catch (e: Exception) {
@@ -126,9 +202,18 @@ class AppManager private constructor() {
     /**
      * 清除所有Activity
      */
-    @Synchronized
     private fun finishAll() {
-        mActStack.forEach { it?.finish() }
-        mActStack.clear()
+        try {
+            mRWLock.writeLock().lock()
+            mActStack.forEach { it?.finish() }
+            mActStack.clear()
+        } finally {
+            mRWLock.writeLock().unlock()
+        }
+    }
+
+    private fun checkIsMainThread() {
+        if (Looper.getMainLooper() != Looper.myLooper())
+            throw IllegalStateException("The method must be run Main(UI) Thread.")
     }
 }
