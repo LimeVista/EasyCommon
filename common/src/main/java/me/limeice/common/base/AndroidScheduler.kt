@@ -31,6 +31,13 @@ object AndroidScheduler {
     }
 
     /**
+     *  get a main(ui) thread handler,if use kotlin, see [mainHandler]
+     */
+    fun getMainThreadHandler(): Handler {
+        return mainHandler
+    }
+
+    /**
      *  post to ui(main) thread queue
      *
      * @param run Runnable
