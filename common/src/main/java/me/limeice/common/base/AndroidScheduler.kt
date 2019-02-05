@@ -33,6 +33,7 @@ object AndroidScheduler {
     /**
      *  get a main(ui) thread handler,if use kotlin, see [mainHandler]
      */
+    @JvmStatic
     fun getMainThreadHandler(): Handler {
         return mainHandler
     }
