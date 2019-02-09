@@ -1,7 +1,6 @@
 package me.limeice.common.function.algorithm.graphics;
 
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.support.annotation.NonNull;
 
 /**

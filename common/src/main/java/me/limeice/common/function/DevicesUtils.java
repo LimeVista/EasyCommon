@@ -1,9 +1,7 @@
 package me.limeice.common.function;
 
 
-
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -130,34 +128,6 @@ public final class DevicesUtils {
     }
 
     /**
-     * 获取设备内存相关信息,与{@link #getMemInfo()}存在的不同是，
-     * 一个使用兼容库的ArrayMap,
-     * 一个采用SDK19版本以上自带的ArrayMap
-     *
-     * @return 返回详细内存信息描述
-     * @throws IOException 获取/读取失败
-     * @see #getMemInfo() 兼容低版本
-     */
-    @NonNull
-    @TargetApi(19)
-    public static Map<String, String> getMemInfoApi19() throws IOException {
-        FileReader reader = new FileReader("/proc/meminfo");
-        BufferedReader br = new BufferedReader(reader);
-        android.util.ArrayMap<String, String> map = new android.util.ArrayMap<>();
-        String line;
-        String[] kv;
-        while ((line = br.readLine()) != null) {
-            kv = line.split(":\\s+", 2);
-            if (kv[0] == null || kv[0].trim().equals(""))
-                continue;
-            map.put(kv[0].trim(), kv[1].trim());
-        }
-        br.close();
-        reader.close();
-        return map;
-    }
-
-    /**
      * 获取设备IMEI和设备序列号，数组索引（index）第0个为IMEI，第1个为SimSerialNumber
      *
      * @param context 上下文容器
@@ -171,11 +141,11 @@ public final class DevicesUtils {
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (tm != null) {
             if (Build.VERSION.SDK_INT < 26) {
-                info[0] = tm.getDeviceId();//IMEI
+                info[0] = tm.getDeviceId(); //IMEI
             } else {
-                info[0] = tm.getImei();//IMEI
+                info[0] = tm.getImei(); //IMEI
             }
-            info[1] = tm.getSimSerialNumber();//SimSerialNumber
+            info[1] = tm.getSimSerialNumber();  //SimSerialNumber
         }
         return info;
     }
@@ -218,7 +188,6 @@ public final class DevicesUtils {
             if (preferences != null)
                 preferences.edit().putString("uuid", uuid).apply();
         }
-        // if (BuildConfig.DEBUG) Log.d(TAG, "getUUID : " + uuid);  //DEBUG
         return uuid;
     }
 
