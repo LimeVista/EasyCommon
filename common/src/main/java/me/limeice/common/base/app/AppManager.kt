@@ -3,8 +3,8 @@
 package me.limeice.common.base.app
 
 import android.app.Activity
-import android.os.Looper
 import android.support.annotation.MainThread
+import me.limeice.common.base.AndroidScheduler
 import me.limeice.common.function.algorithm.util.ArrayStack
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock
  *
  * <pre>
  *     author: LimeVista(Lime)
- *     time  : 2018/02/28, last update 2019.01.03
+ *     time  : 2018/02/28, last update 2019.02.14
  *     desc  : Application Manager
  *     github: https://github.com/LimeVista/EasyCommon
  * </pre>
@@ -33,7 +33,7 @@ class AppManager private constructor() {
      */
     @MainThread
     fun finishActivity() {
-        checkIsMainThread()
+        AndroidScheduler.requireMainThread()
         try {
             mRWLock.writeLock().lock()
             mActStack.pop()?.let {
@@ -77,7 +77,7 @@ class AppManager private constructor() {
      */
     @MainThread
     fun finishActivity(activity: Activity) {
-        checkIsMainThread()
+        AndroidScheduler.requireMainThread()
         try {
             mRWLock.writeLock().lock()
             mActStack.remove(activity)
@@ -105,7 +105,7 @@ class AppManager private constructor() {
      */
     @MainThread
     fun <T> returnToActivity(clazz: Class<T>) where T : Activity {
-        checkIsMainThread()
+        AndroidScheduler.requireMainThread()
         try {
             mRWLock.writeLock().lock()
             while (mActStack.size() > 0) {
@@ -188,7 +188,7 @@ class AppManager private constructor() {
      */
     @MainThread
     fun appExit(isBackground: Boolean) {
-        checkIsMainThread()
+        AndroidScheduler.requireMainThread()
         try {
             finishAll()
         } catch (e: Exception) {
@@ -210,10 +210,5 @@ class AppManager private constructor() {
         } finally {
             mRWLock.writeLock().unlock()
         }
-    }
-
-    private fun checkIsMainThread() {
-        if (Looper.getMainLooper() != Looper.myLooper())
-            throw IllegalStateException("The method must be run Main(UI) Thread.")
     }
 }

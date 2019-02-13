@@ -72,4 +72,12 @@ object AndroidScheduler {
     inline fun postUiThread(crossinline run: () -> Unit) {
         postMainThread(run)
     }
+
+    /**
+     * require run main thread
+     */
+    fun requireMainThread() {
+        if (Looper.getMainLooper() != Looper.myLooper())
+            throw IllegalStateException("require to run on main thread.")
+    }
 }
