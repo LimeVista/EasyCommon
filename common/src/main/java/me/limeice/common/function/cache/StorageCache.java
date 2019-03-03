@@ -240,7 +240,7 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
         if (!cache.exists())
             return null;
         long lastModified = cache.lastModified();
-        if (duration > 0 && System.currentTimeMillis() - lastModified > duration) {
+        if (duration > 0 && Math.abs(System.currentTimeMillis() - lastModified) > duration) {
             remove(key);
             return null;
         }

@@ -154,11 +154,11 @@ public class AnyMemCache<V> implements MemCache<V> {
     /**
      * 设置生命周期
      *
-     * @param duration 维持时间：单位秒
+     * @param sec 维持时间：单位秒
      */
     @Override
-    public void setDuration(int duration) {
-        this.duration = duration <= 0 ? 0 : duration * 1000;
+    public void setDuration(int sec) {
+        this.duration = sec <= 0 ? 0 : sec * 1000;
     }
 
     /**
