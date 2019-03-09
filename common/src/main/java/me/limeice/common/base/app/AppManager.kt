@@ -37,8 +37,7 @@ class AppManager private constructor() {
         try {
             mRWLock.writeLock().lock()
             mActStack.pop()?.let {
-                if (!it.isFinishing)
-                    it.finish()
+                if (!it.isFinishing) it.finish()
             }
         } finally {
             mRWLock.writeLock().unlock()
