@@ -7,7 +7,7 @@ An Android Common Component（一个用于Android快速开发小工具集合）
 ```groovy
 allprojects {
 	repositories {
-		...
+		// ...
 		maven { url 'https://jitpack.io' }
 	}
 }
@@ -15,15 +15,15 @@ allprojects {
 
 * Step 2. Add the dependency
 ```groovy
- compile 'com.github.LimeVista.EasyCommon:common:0.9.0'
+ compile 'com.github.LimeVista.EasyCommon:common:0.9.9'
  // if use rxcachequickly
- compile 'com.github.LimeVista.EasyCommon:rxcachequickly:0.9.0'
+ compile 'com.github.LimeVista.EasyCommon:rxcachequickly:0.9.9'
 ```
 
 * Step 3.CompileOptions
 ```groovy
 android {
-    ...
+    // ...
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
