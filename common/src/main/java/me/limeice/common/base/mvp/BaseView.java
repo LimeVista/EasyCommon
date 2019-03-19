@@ -1,4 +1,4 @@
-package me.limeice.common.base;
+package me.limeice.common.base.mvp;
 
 /**
  * 基础Model MVP架构核心接口

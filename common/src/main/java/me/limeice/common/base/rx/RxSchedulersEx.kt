@@ -4,7 +4,6 @@
 package me.limeice.common.base.rx
 
 import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 

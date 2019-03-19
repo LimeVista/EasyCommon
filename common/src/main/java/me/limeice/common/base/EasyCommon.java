@@ -13,14 +13,14 @@ import me.limeice.common.function.Objects;
  *
  * <pre>
  *     author: LimeVista(Lime)
- *     time  : 2019.01.03
- *     desc  : Android Main Thread Scheduler
- *     github: https://github.com/LimeVista/EasyCommonLifecycle
+ *     time  : 2019.03.18
+ *     desc  : EasyCommon Lifecycle
+ *     github: https://github.com/LimeVista/EasyCommon
  * </pre>
  */
-public final class EasyCommonLifecycle {
+public final class EasyCommon {
 
-    private static final EasyCommonLifecycle COMMON_LIFECYCLE = new EasyCommonLifecycle();
+    private static final EasyCommon COMMON_LIFECYCLE = new EasyCommon();
 
     private Application mApp = null;
 
@@ -38,8 +38,8 @@ public final class EasyCommonLifecycle {
     }
 
     /**
-     * Get application, if not call {@link EasyCommonLifecycle#init(Context)},
-     * try call {@link EasyCommonLifecycle#getAppByReflect()}
+     * Get application, if not call {@link EasyCommon#init(Context)},
+     * try call {@link EasyCommon#getAppByReflect()}
      *
      * @return {@link Application}, it is non-null.
      */
@@ -71,6 +71,6 @@ public final class EasyCommonLifecycle {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return (Application) Objects.requireNonNull(app, "EasyCommonLifecycle.init is not called.");
+        return (Application) Objects.requireNonNull(app, "EasyCommon.init is not called.");
     }
 }

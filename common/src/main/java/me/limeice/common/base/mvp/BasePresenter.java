@@ -1,4 +1,4 @@
-package me.limeice.common.base;
+package me.limeice.common.base.mvp;
 
 import android.content.Context;
 
@@ -11,11 +11,10 @@ import io.reactivex.disposables.CompositeDisposable;
 @SuppressWarnings("WeakerAccess")
 public abstract class BasePresenter<VIEW, MODEL> {
 
-    public Context mContext;
-    public MODEL mModel;
-    public VIEW mView;
+    protected Context mContext;
+    protected MODEL mModel;
+    protected VIEW mView;
 
-    /* Use this,please call {@link #getDisposable()} */
     private final CompositeDisposable mDisposable = new CompositeDisposable();
 
     public BasePresenter<VIEW, MODEL> set(VIEW view, MODEL model) {
@@ -28,7 +27,7 @@ public abstract class BasePresenter<VIEW, MODEL> {
 
     }
 
-    public void onStop(){
+    public void onStop() {
 
     }
 
@@ -36,9 +35,25 @@ public abstract class BasePresenter<VIEW, MODEL> {
         getDisposable().clear();
     }
 
+    public abstract void onCreate();
+
     public CompositeDisposable getDisposable() {
         return mDisposable;
     }
 
-    public abstract void onCreate();
+    public Context getContext() {
+        return mContext;
+    }
+
+    public void setContext(Context mContext) {
+        this.mContext = mContext;
+    }
+
+    public MODEL getModel() {
+        return mModel;
+    }
+
+    public VIEW getView() {
+        return mView;
+    }
 }
