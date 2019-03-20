@@ -9,6 +9,8 @@ import android.support.annotation.RequiresPermission;
 import android.view.Window;
 import android.view.WindowManager;
 
+import me.limeice.common.base.EasyCommon;
+
 /**
  * 亮度处理工具
  * <pre>
@@ -27,16 +29,14 @@ public final class BrightnessUtils {
     /**
      * 获取窗口亮度
      *
-     * @param window   {@link Window}
-     * @param resolver {@link ContentResolver}
+     * @param window {@link Window}
      * @return 屏幕亮度 [0, 255]
      */
     public static int getWindowBrightness(
-            final Window window,
-            @NonNull final ContentResolver resolver) {
+            final Window window) {
         WindowManager.LayoutParams lp = window.getAttributes();
         float brightness = lp.screenBrightness;
-        return brightness < 0 ? getBrightness(resolver) : (int) (brightness * 255);
+        return brightness < 0 ? getBrightness() : (int) (brightness * 255);
     }
 
     /**
@@ -45,8 +45,9 @@ public final class BrightnessUtils {
      * @param window     {@link Window}
      * @param brightness 亮度值 [0, 255]
      */
-    public static void setWindowBrightness(@NonNull final Window window,
-                                           @IntRange(from = 0, to = 255) final int brightness) {
+    public static void setWindowBrightness(
+            @NonNull final Window window,
+            @IntRange(from = 0, to = 255) final int brightness) {
         WindowManager.LayoutParams lp = window.getAttributes();
         lp.screenBrightness = brightness / 255f;
         window.setAttributes(lp);
@@ -55,11 +56,10 @@ public final class BrightnessUtils {
     /**
      * 是否开启自动亮度
      *
-     * @param resolver {@link ContentResolver}
      * @return {@code true}: auto
      */
-    public static boolean isAutoBrightness(@NonNull final ContentResolver resolver) {
-        Objects.requireNonNull(resolver);
+    public static boolean isAutoBrightness() {
+        final ContentResolver resolver = EasyCommon.getApp().getContentResolver();
         try {
             return Settings.System.getInt(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE)
                     == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
@@ -72,15 +72,12 @@ public final class BrightnessUtils {
     /**
      * 打开自动亮度设置
      *
-     * @param resolver {@link ContentResolver}
-     * @param enabled  {@code true}: enable
+     * @param enabled {@code true}: enable
      * @return {@code true}: successful
      */
     @RequiresPermission(Manifest.permission.WRITE_SETTINGS)
-    public static boolean setAutoBrightness(
-            @NonNull final ContentResolver resolver,
-            final boolean enabled) {
-        Objects.requireNonNull(resolver);
+    public static boolean setAutoBrightness(final boolean enabled) {
+        final ContentResolver resolver = EasyCommon.getApp().getContentResolver();
         return Settings.System.putInt(
                 resolver,
                 Settings.System.SCREEN_BRIGHTNESS_MODE,
@@ -92,11 +89,10 @@ public final class BrightnessUtils {
     /**
      * 获取屏幕亮度
      *
-     * @param resolver {@link ContentResolver}
      * @return 屏幕亮度 [0, 255]
      */
-    public static int getBrightness(@NonNull final ContentResolver resolver) {
-        Objects.requireNonNull(resolver);
+    public static int getBrightness() {
+        final ContentResolver resolver = EasyCommon.getApp().getContentResolver();
         try {
             return Settings.System.getInt(resolver, Settings.System.SCREEN_BRIGHTNESS);
         } catch (Settings.SettingNotFoundException e) {
@@ -108,15 +104,13 @@ public final class BrightnessUtils {
     /**
      * 设置屏幕亮度
      *
-     * @param resolver   {@link ContentResolver}
      * @param brightness 亮度值 [0, 255]
      */
     @RequiresPermission(Manifest.permission.WRITE_SETTINGS)
-    public static boolean setBrightness(
-            @NonNull ContentResolver resolver,
-            @IntRange(from = 0, to = 255) final int brightness) {
-        Objects.requireNonNull(resolver);
-        boolean result = Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS, brightness);
+    public static boolean setBrightness(@IntRange(from = 0, to = 255) final int brightness) {
+        final ContentResolver resolver = EasyCommon.getApp().getContentResolver();
+        boolean result = Settings.System.putInt(resolver,
+                Settings.System.SCREEN_BRIGHTNESS, brightness);
         resolver.notifyChange(Settings.System.getUriFor("screen_brightness"), null); // notify
         return result;
     }

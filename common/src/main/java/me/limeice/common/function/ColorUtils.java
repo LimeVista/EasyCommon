@@ -9,13 +9,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 
+import me.limeice.common.base.EasyCommon;
+
 /**
  * ColorUtils 用于处理颜色资源的和转换
  *
  * @author Lime
  * Created at 2016.08.16
- * Update at 2018.03.15
- * Update at 2018.08.31
  * @version 2.1
  */
 public final class ColorUtils {
@@ -35,21 +35,6 @@ public final class ColorUtils {
     public static int getAttrColor(@NonNull Context context, @AttrRes int attr) {
         return AttrUtils.getAttrColor(context, attr);
     }
-
-    /**
-     * 根据Resources的Color id值获取颜色值
-     *
-     * @param context Context容器
-     * @param id      res中颜色的id值
-     * @return 颜色值
-     * @deprecated 请使用{@link ContextCompat#getColor(Context, int)}，避免过度封装
-     */
-    @ColorInt
-    @Deprecated
-    public static int getColor(@NonNull Context context, @ColorRes int id) {
-        return ContextCompat.getColor(context, id);
-    }
-
 
     /**
      * 根据Resources的Color id值生成ColorDrawable
