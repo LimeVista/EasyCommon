@@ -1,6 +1,6 @@
 package me.limeice.common.function.cache;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * 内存缓存类

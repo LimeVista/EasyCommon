@@ -2,20 +2,20 @@ package me.limeice.common.function;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresPermission;
-import android.support.v4.util.ArrayMap;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
+import androidx.collection.ArrayMap;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
+
+import me.limeice.common.base.EasyCommon;
 
 /**
  * 设备信息相关处理工具
@@ -91,13 +93,13 @@ public final class DevicesUtils {
     /**
      * 获取WIFI的MAC地址
      *
-     * @param context 上下文容器
      * @return MAC地址
      */
     @SuppressLint("HardwareIds")
     @RequiresPermission(android.Manifest.permission.ACCESS_WIFI_STATE)
-    public static String getWifiMac(@NonNull Context context) {
-        WifiManager manager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+    public static String getWifiMac() {
+        WifiManager manager = (WifiManager) EasyCommon.getApp().getApplicationContext()
+                .getSystemService(Context.WIFI_SERVICE);
         if (manager == null) throw new NullPointerException("Get WIFI SERVICE Failed");
         WifiInfo info = manager.getConnectionInfo();
         return info.getMacAddress();
@@ -130,15 +132,15 @@ public final class DevicesUtils {
     /**
      * 获取设备IMEI和设备序列号，数组索引（index）第0个为IMEI，第1个为SimSerialNumber
      *
-     * @param context 上下文容器
      * @return IMEI和SimSerialNumber(值可能为空)
      */
     @NonNull
     @SuppressLint("HardwareIds")
     @RequiresPermission(android.Manifest.permission.READ_PHONE_STATE)
-    public static String[] getImeiWithSN(@NonNull Context context) {
+    public static String[] getImeiWithSN() {
         String[] info = new String[2];
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) EasyCommon.getApp()
+                .getSystemService(Context.TELEPHONY_SERVICE);
         if (tm != null) {
             if (Build.VERSION.SDK_INT < 26) {
                 info[0] = tm.getDeviceId(); //IMEI
@@ -173,14 +175,13 @@ public final class DevicesUtils {
     /**
      * 获取全局UUID
      *
-     * @param context 上下文容器
      * @return UUID
      */
     @Nullable
-    public static String getUUID(@NonNull Context context) {
+    public static String getUUID() {
         String uuid = null;
         SharedPreferences preferences =
-                PreferenceManager.getDefaultSharedPreferences(context);
+                PreferenceManager.getDefaultSharedPreferences(EasyCommon.getApp());
         if (preferences != null)
             uuid = preferences.getString("uuid", "");
         if (TextUtils.isEmpty(uuid)) {
@@ -194,13 +195,14 @@ public final class DevicesUtils {
     /**
      * 初始化并获取屏幕相关信息
      *
-     * @param activity {@link Activity}
      * @return DisplayMetrics
      */
     @NonNull
-    public static DisplayMetrics getDisplayMetrics(@NonNull Activity activity) {
+    public static DisplayMetrics getDisplayMetrics() {
         DisplayMetrics metrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        WindowManager mgr = (WindowManager) EasyCommon.getApp()
+                .getSystemService(Context.WINDOW_SERVICE);
+        mgr.getDefaultDisplay().getMetrics(metrics);
         return metrics;
     }
 }

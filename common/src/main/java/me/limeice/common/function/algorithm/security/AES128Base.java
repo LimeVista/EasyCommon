@@ -1,6 +1,6 @@
 package me.limeice.common.function.algorithm.security;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;

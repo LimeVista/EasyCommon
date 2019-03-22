@@ -1,4 +1,0 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.limeice.common.rxcache" >
-    <uses-permission android:name="android.permission.INTERNET"/>
-</manifest>

@@ -3,7 +3,7 @@
 package me.limeice.common.base.app
 
 import android.app.Activity
-import android.support.annotation.MainThread
+import androidx.annotation.MainThread
 import me.limeice.common.base.AndroidScheduler
 import me.limeice.common.function.algorithm.util.ArrayStack
 import java.util.concurrent.locks.ReentrantReadWriteLock
