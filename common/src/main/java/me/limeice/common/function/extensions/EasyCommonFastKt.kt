@@ -4,10 +4,10 @@
 package me.limeice.common.function.extensions
 
 import android.content.Context
-import android.support.annotation.AttrRes
-import android.support.annotation.ColorInt
-import android.support.annotation.ColorRes
-import android.support.v4.content.ContextCompat
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import me.limeice.common.base.EasyCommon
 import me.limeice.common.function.*
 import java.io.Closeable

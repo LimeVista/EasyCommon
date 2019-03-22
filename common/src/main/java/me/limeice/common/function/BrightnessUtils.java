@@ -3,9 +3,9 @@ package me.limeice.common.function;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.provider.Settings;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresPermission;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresPermission;
 import android.view.Window;
 import android.view.WindowManager;
 

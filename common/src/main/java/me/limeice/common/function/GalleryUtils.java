@@ -8,14 +8,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.OutputStream;
-
-import me.limeice.common.function.CloseUtils;
 
 /**
  * Android internals have been modified to store images in the media folder with

@@ -17,24 +17,24 @@ buildscript {
             'minSdk'        : 16,
             'compileSdk'    : 28,
             'targetSdk'     : 28,
-            'supportLibrary': '28.0.0',
+            'supportLibrary': '1.0.2',
             'rxJava'        : '2.2.7',
             'rxAndroid'     : '2.1.1',
-            'runner'        : '1.0.2',
-            'espresso'      : '3.0.2',
+            'runner'        : '1.1.1',
+            'espresso'      : '3.1.1',
             'okhttp'        : '3.12.2'
     ]
 
     ext.deps = [
             'support': [
-                    'appcompat'  : "com.android.support:appcompat-v7:${versions.supportLibrary}",
+                    'appcompat'  : "androidx.appcompat:appcompat:${versions.supportLibrary}",
                     'annotations': "com.android.support:support-annotations:${versions.supportLibrary}"
             ],
             'test'   : [
                     'junit'  : 'junit:junit:4.12',
                     'android': [
-                            "com.android.support.test:runner:${versions.runner}",
-                            "com.android.support.test.espresso:espresso-core:${versions.espresso}"
+                            "androidx.test:runner:${versions.runner}",
+                            "androidx.test.espresso:espresso-core:${versions.espresso}"
                     ]
             ],
             'kotlin' : [
