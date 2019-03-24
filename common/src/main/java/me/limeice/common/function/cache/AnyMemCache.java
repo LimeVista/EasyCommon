@@ -19,14 +19,14 @@ public class AnyMemCache<V> implements MemCache<V> {
     /**
      * 读取过滤器
      */
-    private GetDataAvailable<V> mGetDataFilter = null;
+    private DataFilter<V> mGetDataFilter = null;
 
     /**
-     * 判定获取数据是否可用
+     * 数据过滤器
      *
      * @param <V>
      */
-    public interface GetDataAvailable<V> {
+    public interface DataFilter<V> {
         /**
          * 判定数据是否可用
          *
@@ -212,7 +212,7 @@ public class AnyMemCache<V> implements MemCache<V> {
      *
      * @param getDataFilter 内存数据过滤器
      */
-    public void setGetDataFilter(@Nullable GetDataAvailable<V> getDataFilter) {
+    public void setGetDataFilter(@Nullable DataFilter<V> getDataFilter) {
         this.mGetDataFilter = getDataFilter;
     }
 

@@ -1,6 +1,7 @@
 package me.limeice.common.function.cache;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -72,8 +73,7 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
             @NonNull StorageCacheHelper<V, BEAN> helper,
             @NonNull MemCache<V> memCache) {
         File file = new File(cacheFolder);
-        memCache = Objects.requireNonNull(memCache, "Mem Cache must not null.");
-        init(file, helper, memCache);
+        init(file, helper, Objects.requireNonNull(memCache, "Mem Cache must not null."));
     }
 
     /**
