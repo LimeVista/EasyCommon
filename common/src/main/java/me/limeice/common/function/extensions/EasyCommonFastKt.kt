@@ -4,10 +4,10 @@
 package me.limeice.common.function.extensions
 
 import android.content.Context
-import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
+import androidx.annotation.*
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import me.limeice.common.base.EasyCommon
 import me.limeice.common.function.*
 import java.io.Closeable
@@ -164,3 +164,63 @@ inline fun <reified T : Serializable> File.deepClone(): T? = DeepClone.deseriali
  */
 @JvmName("kt_024")
 inline fun String.string2Html() = TextEncodeUtils.string2Html(this)
+
+/**
+ * @see FragmentUtils.installToolbar
+ */
+@JvmName("kt_025")
+inline fun Fragment.installToolbar(bar: Toolbar) = FragmentUtils.installToolbar(this, bar)
+
+/**
+ * @see FragmentUtils.installToolbar
+ */
+@JvmName("kt_026")
+inline fun Fragment.installToolbar(bar: Toolbar, title: String?) =
+    FragmentUtils.installToolbar(this, bar, title)
+
+/**
+ * @see FragmentUtils.installToolbar
+ */
+@JvmName("kt_027")
+inline fun Fragment.installToolbar(bar: Toolbar, @StringRes title: Int) =
+    FragmentUtils.installToolbar(this, bar, title)
+
+/**
+ * @see FragmentUtils.installToolbar
+ */
+@JvmName("kt_028")
+inline fun Fragment.installToolbar(bar: Toolbar, showHomeBtn: Boolean, @ColorInt btnColor: Int) =
+    FragmentUtils.installToolbar(this, bar, showHomeBtn, btnColor)
+
+/**
+ * @see FragmentUtils.installToolbar
+ */
+@JvmName("kt_029")
+inline fun Fragment.installToolbar(bar: Toolbar, @ColorInt btnColor: Int, title: String?) =
+    FragmentUtils.installToolbar(this, bar, btnColor, title)
+
+/**
+ * @see FragmentUtils.installToolbar
+ */
+@JvmName("kt_029")
+inline fun Fragment.installToolbar(bar: Toolbar, @ColorInt btnColor: Int, @StringRes title: Int) =
+    FragmentUtils.installToolbar(this, bar, btnColor, title)
+
+/**
+ * @see FragmentUtils.uninstallToolbar
+ */
+@JvmName("kt_030")
+inline fun Fragment.uninstallToolbar() = FragmentUtils.uninstallToolbar(this)
+
+/**
+ * @see FragmentUtils.setToolbarTitle
+ */
+@JvmName("kt_031")
+inline fun Fragment.setToolbarTitle(@StringRes title: Int) =
+    FragmentUtils.setToolbarTitle(this, title)
+
+/**
+ * @see FragmentUtils.setToolbarTitle
+ */
+@JvmName("kt_031")
+inline fun Fragment.setToolbarTitle(title: String?) = FragmentUtils.setToolbarTitle(this, title)
