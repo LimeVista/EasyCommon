@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -97,6 +98,42 @@ public final class FragmentUtils {
     /**
      * install bar to activity, the fragment parent must be {@link AppCompatActivity}
      *
+     * @param fragment {@link Fragment}
+     * @param bar      {@link Toolbar}
+     * @param drawable home button drawable, {@link ActionBar#setHomeAsUpIndicator(Drawable)}
+     */
+    public static void installToolbarCustomHomeButton(@NonNull final Fragment fragment,
+                                                      @NonNull final Toolbar bar,
+                                                      @Nullable Drawable drawable) {
+        AppCompatActivity act = installAndGetToolbar(fragment, bar);
+        final ActionBar actionBar;
+        if (act == null || (actionBar = act.getSupportActionBar()) == null)
+            return;
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(drawable);
+    }
+
+    /**
+     * install bar to activity, the fragment parent must be {@link AppCompatActivity}
+     *
+     * @param fragment {@link Fragment}
+     * @param bar      {@link Toolbar}
+     * @param drawable home button drawable, {@link ActionBar#setHomeAsUpIndicator(int)}
+     */
+    public static void installToolbarCustomHomeButton(@NonNull final Fragment fragment,
+                                                      @NonNull final Toolbar bar,
+                                                      @DrawableRes int drawable) {
+        AppCompatActivity act = installAndGetToolbar(fragment, bar);
+        final ActionBar actionBar;
+        if (act == null || (actionBar = act.getSupportActionBar()) == null)
+            return;
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(drawable);
+    }
+
+    /**
+     * install bar to activity, the fragment parent must be {@link AppCompatActivity}
+     *
      * @param fragment        {@link Fragment}
      * @param bar             {@link Toolbar}
      * @param homeButtonColor button icon tint color
@@ -136,11 +173,39 @@ public final class FragmentUtils {
      *
      * @param fragment {@link Fragment}
      */
-    public void uninstallToolbar(@NonNull final Fragment fragment) {
+    public static void uninstallToolbar(@NonNull final Fragment fragment) {
         final Activity act = Objects.requireNonNull(fragment).getActivity();
         if (act instanceof AppCompatActivity) {
             ((AppCompatActivity) act).setSupportActionBar(null);
         }
+    }
+
+    /**
+     * set title
+     *
+     * @param fragment {@link Fragment}
+     * @param title    Title
+     */
+    public static void setToolbarTitle(@NonNull Fragment fragment, @StringRes int title) {
+        final Activity act = Objects.requireNonNull(fragment).getActivity();
+        if (!(act instanceof AppCompatActivity) || act.isFinishing())
+            return;
+        ActionBar bar = ((AppCompatActivity) act).getSupportActionBar();
+        if (bar != null) bar.setTitle(title);
+    }
+
+    /**
+     * set title
+     *
+     * @param fragment {@link Fragment}
+     * @param title    Title
+     */
+    public static void setToolbarTitle(@NonNull Fragment fragment, String title) {
+        final Activity act = Objects.requireNonNull(fragment).getActivity();
+        if (!(act instanceof AppCompatActivity) || act.isFinishing())
+            return;
+        ActionBar bar = ((AppCompatActivity) act).getSupportActionBar();
+        if (bar != null) bar.setTitle(title);
     }
 
     private static AppCompatActivity installAndGetToolbar(
