@@ -3,15 +3,18 @@ package me.limeice.common.function;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import androidx.annotation.NonNull;
 import me.limeice.common.base.EasyCommon;
 
 /**
@@ -99,16 +102,10 @@ public final class DensityUtils {
      */
     @SuppressLint("PrivateApi")
     public static int getStatusBarHeight() {
-        try {
-            Class c = Class.forName("com.android.internal.R$dimen");
-            Object obj = c.newInstance();
-            Field field = c.getField("status_bar_height");
-            int x = Integer.parseInt(field.get(obj).toString());
-            return EasyCommon.getApp().getResources().getDimensionPixelSize(x);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return 0;
+        Resources resources = Resources.getSystem();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId == 0) return 0;
+        return resources.getDimensionPixelSize(resourceId);
     }
 
     /**
@@ -174,8 +171,14 @@ public final class DensityUtils {
     }
 
     /**
-     * 获取虚拟功能键高度
+     * 获取虚拟功能键高度，此发放已经弃用。
+     * 如果你需要仅仅获取导航栏高度，请使用{@link #getNavBarHeight()}，
+     * 如果你需要判定是否存在导航栏，然后获取高度请使用{@link #getAutoNavBarHeight(Window)}
+     *
+     * @see #getNavBarHeight()
+     * @see #getAutoNavBarHeight(Window)
      */
+    @Deprecated
     public static int getVirtualBarHeight() {
         final WindowManager mgr = (WindowManager) EasyCommon.getApp()
                 .getSystemService(Context.WINDOW_SERVICE);
@@ -197,5 +200,47 @@ public final class DensityUtils {
         Point pointWH = new Point();
         display.getSize(pointWH);
         return dm.heightPixels - pointWH.y;
+    }
+
+    /**
+     * 自动判定获取虚拟栏（导航栏）高度
+     *
+     * @return 高度
+     */
+    public static int getAutoNavBarHeight(@NonNull final Window window) {
+        if (!isNavBarVisible(window))
+            return 0;
+        return getNavBarHeight();
+    }
+
+    /**
+     * 获取虚拟栏（导航栏）高度
+     *
+     * @return 高度
+     */
+    public static int getNavBarHeight() {
+        Resources res = Resources.getSystem();
+        int resourceId = res.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId == 0)
+            return 0;
+        return res.getDimensionPixelSize(resourceId);
+    }
+
+    /**
+     * 是否显示虚拟拦（导航栏）
+     *
+     * @param window {@link Window}
+     * @return 是否显示虚拟拦
+     */
+    public static boolean isNavBarVisible(@NonNull final Window window) {
+        Resources res = Resources.getSystem();
+        int id = res.getIdentifier("config_showNavigationBar", "bool", "android");
+        if (id == 0) return false;
+        boolean isVisible = res.getBoolean(id);
+        if (isVisible) {
+            isVisible = (window.getDecorView().getSystemUiVisibility() &
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
+        }
+        return isVisible;
     }
 }
