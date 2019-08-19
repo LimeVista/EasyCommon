@@ -128,12 +128,15 @@ class AppManager private constructor() {
      * @return Activity? 不存在时返回空
      */
     fun <T> findActivity(clazz: Class<T>): Activity? where T : Activity {
-        mRWLock.readLock().lock()
-        for (act in mActStack) {
-            if (act.javaClass == clazz)
-                return act
+        try {
+            mRWLock.readLock().lock()
+            for (act in mActStack) {
+                if (act.javaClass == clazz)
+                    return act
+            }
+        } finally {
+            mRWLock.readLock().unlock()
         }
-        mRWLock.readLock().unlock()
         return null
     }
 
@@ -143,15 +146,18 @@ class AppManager private constructor() {
      * @return
      */
     fun <T> isOpenActivity(clazz: Class<T>): Boolean where T : Activity {
-        mRWLock.readLock().lock()
         var isOpen = false
-        mActStack.forEach { act ->
-            if (act.javaClass == clazz) {
-                isOpen = true
-                return@forEach
+        try {
+            mRWLock.readLock().lock()
+            mActStack.forEach { act ->
+                if (act.javaClass == clazz) {
+                    isOpen = true
+                    return@forEach
+                }
             }
+        } finally {
+            mRWLock.readLock().unlock()
         }
-        mRWLock.readLock().unlock()
         return isOpen
     }
 

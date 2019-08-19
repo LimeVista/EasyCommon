@@ -19,7 +19,7 @@ allprojects {
 
 * Step 2. Add the dependency
 ```groovy
- implementation 'com.github.LimeVista.EasyCommon:common:1.0.1'
+ implementation 'com.github.LimeVista.EasyCommon:common:1.0.2'
 ```
 
 * Step 3.CompileOptions
