@@ -1,6 +1,7 @@
 package me.limeice.common.function;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -12,9 +13,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
+
 import java.lang.reflect.Method;
 
-import androidx.annotation.NonNull;
 import me.limeice.common.base.EasyCommon;
 
 /**
@@ -83,7 +85,12 @@ public final class DensityUtils {
      * @return (px像素)屏幕宽度
      */
     public static int getScreenWidth() {
-        return EasyCommon.getApp().getResources().getDisplayMetrics().widthPixels;
+        Application app = EasyCommon.getApp();
+        WindowManager wm = (WindowManager) app.getSystemService(Context.WINDOW_SERVICE);
+        if (wm == null) return app.getResources().getDisplayMetrics().widthPixels;
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        return dm.widthPixels;
     }
 
     /**
@@ -92,7 +99,40 @@ public final class DensityUtils {
      * @return (px像素)屏幕高度
      */
     public static int getScreenHeight() {
-        return EasyCommon.getApp().getResources().getDisplayMetrics().heightPixels;
+        Application app = EasyCommon.getApp();
+        WindowManager wm = (WindowManager) app.getSystemService(Context.WINDOW_SERVICE);
+        if (wm == null) return app.getResources().getDisplayMetrics().heightPixels;
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        return dm.heightPixels;
+    }
+
+    /**
+     * 获取应用宽度
+     *
+     * @return (px像素)宽度
+     */
+    public static int getAppScreenWidth() {
+        Application app = EasyCommon.getApp();
+        WindowManager wm = (WindowManager) app.getSystemService(Context.WINDOW_SERVICE);
+        if (wm == null) return app.getResources().getDisplayMetrics().widthPixels;
+        Point point = new Point();
+        wm.getDefaultDisplay().getSize(point);
+        return point.x;
+    }
+
+    /**
+     * 获取应用高度
+     *
+     * @return (px像素)高度
+     */
+    public static int getAppScreenHeight() {
+        Application app = EasyCommon.getApp();
+        WindowManager wm = (WindowManager) app.getSystemService(Context.WINDOW_SERVICE);
+        if (wm == null) return app.getResources().getDisplayMetrics().heightPixels;
+        Point point = new Point();
+        wm.getDefaultDisplay().getSize(point);
+        return point.y;
     }
 
     /**
