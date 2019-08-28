@@ -1,6 +1,7 @@
 package me.limeice.common.function;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -14,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import java.lang.reflect.Method;
 
@@ -112,13 +114,8 @@ public final class DensityUtils {
      *
      * @return (px像素)宽度
      */
-    public static int getAppScreenWidth() {
-        Application app = EasyCommon.getApp();
-        WindowManager wm = (WindowManager) app.getSystemService(Context.WINDOW_SERVICE);
-        if (wm == null) return app.getResources().getDisplayMetrics().widthPixels;
-        Point point = new Point();
-        wm.getDefaultDisplay().getSize(point);
-        return point.x;
+    public static int getAppScreenWidth(@NonNull Activity act) {
+        return act.getResources().getDisplayMetrics().widthPixels;
     }
 
     /**
@@ -126,13 +123,67 @@ public final class DensityUtils {
      *
      * @return (px像素)高度
      */
-    public static int getAppScreenHeight() {
-        Application app = EasyCommon.getApp();
-        WindowManager wm = (WindowManager) app.getSystemService(Context.WINDOW_SERVICE);
-        if (wm == null) return app.getResources().getDisplayMetrics().heightPixels;
-        Point point = new Point();
-        wm.getDefaultDisplay().getSize(point);
-        return point.y;
+    public static int getAppScreenHeight(@NonNull Activity act) {
+        return act.getResources().getDisplayMetrics().heightPixels;
+    }
+
+
+    /**
+     * 获取应用宽度
+     *
+     * @return (px像素)宽度
+     */
+    public static int getAppScreenWidth(@NonNull Window win) {
+        Point size = new Point();
+        win.getWindowManager().getDefaultDisplay().getSize(size);
+        return size.x;
+    }
+
+    /**
+     * 获取应用高度
+     *
+     * @return (px像素)高度
+     */
+    public static int getAppScreenHeight(@NonNull Window win) {
+        Point size = new Point();
+        win.getWindowManager().getDefaultDisplay().getSize(size);
+        return size.y;
+    }
+
+    /**
+     * 获取应用宽度
+     *
+     * @return (px像素)宽度
+     */
+    public static int getAppScreenWidth(@NonNull View v) {
+        return v.getResources().getDisplayMetrics().widthPixels;
+    }
+
+    /**
+     * 获取应用高度
+     *
+     * @return (px像素)高度
+     */
+    public static int getAppScreenHeight(@NonNull View v) {
+        return v.getResources().getDisplayMetrics().heightPixels;
+    }
+
+    /**
+     * 获取应用宽度
+     *
+     * @return (px像素)宽度
+     */
+    public static int getAppScreenWidth(@NonNull Fragment v) {
+        return v.getResources().getDisplayMetrics().widthPixels;
+    }
+
+    /**
+     * 获取应用高度
+     *
+     * @return (px像素)高度
+     */
+    public static int getAppScreenHeight(@NonNull Fragment v) {
+        return v.getResources().getDisplayMetrics().heightPixels;
     }
 
     /**

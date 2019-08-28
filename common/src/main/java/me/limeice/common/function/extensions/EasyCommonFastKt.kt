@@ -3,8 +3,14 @@
 
 package me.limeice.common.function.extensions
 
+import android.app.Activity
 import android.content.Context
-import androidx.annotation.*
+import android.view.View
+import android.view.Window
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -224,3 +230,52 @@ inline fun Fragment.setToolbarTitle(@StringRes title: Int) =
  */
 @JvmName("kt_031")
 inline fun Fragment.setToolbarTitle(title: String?) = FragmentUtils.setToolbarTitle(this, title)
+
+/**
+ * @see DensityUtils.getAppScreenHeight
+ */
+@JvmName("kt_032")
+inline fun View.getAppScreenHeight() = DensityUtils.getAppScreenHeight(this)
+
+/**
+ * @see DensityUtils.getAppScreenHeight
+ */
+@JvmName("kt_033")
+inline fun Window.getAppScreenHeight() = DensityUtils.getAppScreenHeight(this)
+
+/**
+ * @see DensityUtils.getAppScreenHeight
+ */
+@JvmName("kt_034")
+inline fun Activity.getAppScreenHeight() = DensityUtils.getAppScreenHeight(this)
+
+/**
+ * @see DensityUtils.getAppScreenWidth
+ */
+@JvmName("kt_035")
+inline fun View.getAppScreenWidth() = DensityUtils.getAppScreenWidth(this)
+
+/**
+ * @see DensityUtils.getAppScreenWidth
+ */
+@JvmName("kt_036")
+inline fun Window.getAppScreenWidth() = DensityUtils.getAppScreenWidth(this)
+
+/**
+ * @see DensityUtils.getAppScreenWidth
+ */
+@JvmName("kt_037")
+inline fun Activity.getAppScreenWidth() = DensityUtils.getAppScreenWidth(this)
+
+/**
+ * @see DensityUtils.getAppScreenHeight
+ */
+@JvmName("kt_038")
+inline fun Fragment.getAppScreenHeight() = DensityUtils.getAppScreenHeight(this)
+
+/**
+ * @see DensityUtils.getAppScreenWidth
+ */
+@JvmName("kt_039")
+inline fun Fragment.getAppScreenWidth() = DensityUtils.getAppScreenWidth(this)
+
