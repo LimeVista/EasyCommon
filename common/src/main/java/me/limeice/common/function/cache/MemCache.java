@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 /**
  * 内存缓存类
  *
- * @param <V>
+ * @param <V> V
  */
 public interface MemCache<V> extends CacheLite<V> {
 

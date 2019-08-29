@@ -4,7 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 
 /**
- * 根据作者（Blankj）开源项目修改，致敬作者<a href="https://github.com/Blankj/AndroidUtilCode">Github Page</>
+ * 根据作者（Blankj）开源项目修改，致敬作者<a href="https://github.com/Blankj/AndroidUtilCode">Github Page</a>
  * <pre>
  *     author: LimeVista(Lime)
  *     time  : 2018/03/12

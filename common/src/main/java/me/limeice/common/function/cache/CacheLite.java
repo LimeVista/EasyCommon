@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 /**
  * 内存缓存类
  *
- * @param <V>
+ * @param <V> V
  */
 public interface CacheLite<V> {
 

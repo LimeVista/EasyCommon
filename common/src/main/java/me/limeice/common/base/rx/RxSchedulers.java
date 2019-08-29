@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers;
  * RxJava线程调度
  * Created by LimeV on 2018/2/28.
  * 实例：<code>
- * <p> Observable.just(1).compose(RxSchedulers.io_main()).subscribe();
+ * Observable.just(1).compose(RxSchedulers.io_main()).subscribe();
  * </code>
  */
 public class RxSchedulers {
@@ -65,8 +65,8 @@ public class RxSchedulers {
      * @param <T> 泛型约束
      * @return RxJava流
      */
-    public static <T> ObservableTransformer<T,T> io_mainDelayError(){
+    public static <T> ObservableTransformer<T, T> io_mainDelayError() {
         return in -> in.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread(),true);
+                .observeOn(AndroidSchedulers.mainThread(), true);
     }
 }

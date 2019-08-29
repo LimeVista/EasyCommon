@@ -1,8 +1,9 @@
 package me.limeice.common.function.algorithm.security;
 
 
-import androidx.annotation.NonNull;
 import android.util.Base64;
+
+import androidx.annotation.NonNull;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -18,7 +19,7 @@ import javax.crypto.NoSuchPaddingException;
  * <p>警告：
  * <p>	1.AES-128-CBC-NoPadding需要的加密的字符串长度必须是16的整倍数
  * <p>	2.AES-128 decrypt函数解密的字符串或byte[]的长度必须满足16的倍数
- * <p>
+ *
  * <p>示例：
  * <pre>{@code
  *      AES128 aes=new AES128(AES128.ECB|AES128.PKCS5Padding);
@@ -43,7 +44,14 @@ public final class AES128 extends AES128Base {
      * @param msg      加密数据，如果NoPadding，加密数据长度必须为16的倍数！
      * @param keyBytes 解密密钥，必须位16位密码
      * @return 得到密文
+     * @throws NoSuchPaddingException             see {@link NoSuchPaddingException}
+     * @throws InvalidAlgorithmParameterException see {@link InvalidAlgorithmParameterException}
+     * @throws NoSuchAlgorithmException           see {@link NoSuchAlgorithmException}
+     * @throws IllegalBlockSizeException          see {@link IllegalBlockSizeException}
+     * @throws BadPaddingException                see {@link BadPaddingException}
+     * @throws InvalidKeyException                see {@link InvalidKeyException}
      */
+
     @NonNull
     public byte[] encrypt(@NonNull String msg, @NonNull byte[] keyBytes) throws NoSuchPaddingException,
             InvalidAlgorithmParameterException, NoSuchAlgorithmException,
@@ -63,6 +71,12 @@ public final class AES128 extends AES128Base {
      * @param msg      加密数据，如果NoPadding，加密数据长度必须为16的倍数！
      * @param keyBytes 解密密钥，必须位16位密码
      * @return 得到密文
+     * @throws NoSuchPaddingException             see {@link NoSuchPaddingException}
+     * @throws InvalidAlgorithmParameterException see {@link InvalidAlgorithmParameterException}
+     * @throws NoSuchAlgorithmException           see {@link NoSuchAlgorithmException}
+     * @throws IllegalBlockSizeException          see {@link IllegalBlockSizeException}
+     * @throws BadPaddingException                see {@link BadPaddingException}
+     * @throws InvalidKeyException                see {@link InvalidKeyException}
      */
     @NonNull
     public String encryptBase64(@NonNull String msg, @NonNull byte[] keyBytes) throws NoSuchPaddingException,
@@ -82,6 +96,12 @@ public final class AES128 extends AES128Base {
      * @param msg  加密数据，如果NoPadding，加密数据长度必须为16的倍数！
      * @param sKey 解密密钥，经过一次MD5
      * @return 得到密文
+     * @throws NoSuchPaddingException             see {@link NoSuchPaddingException}
+     * @throws InvalidAlgorithmParameterException see {@link InvalidAlgorithmParameterException}
+     * @throws NoSuchAlgorithmException           see {@link NoSuchAlgorithmException}
+     * @throws IllegalBlockSizeException          see {@link IllegalBlockSizeException}
+     * @throws BadPaddingException                see {@link BadPaddingException}
+     * @throws InvalidKeyException                see {@link InvalidKeyException}
      */
     @NonNull
     public String encryptBase64(@NonNull String msg, @NonNull String sKey) throws NoSuchPaddingException,
@@ -96,6 +116,12 @@ public final class AES128 extends AES128Base {
      * @param msg      需要解密的数据，数据长度必须为16的倍数！
      * @param keyBytes 解密密钥，必须位16位密码
      * @return 得到明文
+     * @throws NoSuchPaddingException             see {@link NoSuchPaddingException}
+     * @throws InvalidAlgorithmParameterException see {@link InvalidAlgorithmParameterException}
+     * @throws NoSuchAlgorithmException           see {@link NoSuchAlgorithmException}
+     * @throws IllegalBlockSizeException          see {@link IllegalBlockSizeException}
+     * @throws BadPaddingException                see {@link BadPaddingException}
+     * @throws InvalidKeyException                see {@link InvalidKeyException}
      */
     @NonNull
     public byte[] decrypt(@NonNull String msg, @NonNull byte[] keyBytes) throws NoSuchPaddingException,
@@ -116,6 +142,12 @@ public final class AES128 extends AES128Base {
      * @param msg      需要解密的数据，数据长度必须为16的倍数！
      * @param keyBytes 解密密钥，必须位16位密码
      * @return 得到明文
+     * @throws NoSuchPaddingException             see {@link NoSuchPaddingException}
+     * @throws InvalidAlgorithmParameterException see {@link InvalidAlgorithmParameterException}
+     * @throws NoSuchAlgorithmException           see {@link NoSuchAlgorithmException}
+     * @throws IllegalBlockSizeException          see {@link IllegalBlockSizeException}
+     * @throws BadPaddingException                see {@link BadPaddingException}
+     * @throws InvalidKeyException                see {@link InvalidKeyException}
      */
     @NonNull
     public String decryptBase64(@NonNull String msg, @NonNull byte[] keyBytes) throws NoSuchPaddingException,
@@ -135,6 +167,12 @@ public final class AES128 extends AES128Base {
      * @param msg  需要解密的数据，数据长度必须为16的倍数！
      * @param sKey 解密密钥，经过一次MD5
      * @return 得到明文
+     * @throws NoSuchPaddingException             see {@link NoSuchPaddingException}
+     * @throws InvalidAlgorithmParameterException see {@link InvalidAlgorithmParameterException}
+     * @throws NoSuchAlgorithmException           see {@link NoSuchAlgorithmException}
+     * @throws IllegalBlockSizeException          see {@link IllegalBlockSizeException}
+     * @throws BadPaddingException                see {@link BadPaddingException}
+     * @throws InvalidKeyException                see {@link InvalidKeyException}
      */
     @NonNull
     public String decryptBase64(@NonNull String msg, @NonNull String sKey) throws NoSuchPaddingException,

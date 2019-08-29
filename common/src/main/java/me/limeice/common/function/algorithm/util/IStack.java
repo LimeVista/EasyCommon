@@ -3,7 +3,7 @@ package me.limeice.common.function.algorithm.util;
 /**
  * 栈接口
  * <p>
- * <a href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)">Stack详细介绍</>
+ * <a href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)">Stack详细介绍</a>
  *
  * @param <E> TYPE
  */

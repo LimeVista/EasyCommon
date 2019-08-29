@@ -65,7 +65,7 @@ public final class ColorUtils {
      * 从ColorInt提取颜色值，色值0~255
      *
      * @param color 颜色值
-     * @return 数组长度为3, array[0] = R; array[1] = G; array[2] = B </code>
+     * @return 数组长度为3, array[0] = R; array[1] = G; array[2] = B
      */
     @NonNull
     public static byte[] getRGB(@ColorInt int color) {

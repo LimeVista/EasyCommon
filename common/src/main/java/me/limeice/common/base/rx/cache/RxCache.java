@@ -1,6 +1,7 @@
 package me.limeice.common.base.rx.cache;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -27,6 +28,7 @@ public class RxCache<V, BEAN> {
          * @param key    唯一标识，键
          * @param bean   数据 Bean
          * @param writer 写入工具
+         * @throws IOException IO 异常
          */
         void download(@NonNull String key, @Nullable BEAN bean, @NonNull WriterSource writer) throws IOException;
     }

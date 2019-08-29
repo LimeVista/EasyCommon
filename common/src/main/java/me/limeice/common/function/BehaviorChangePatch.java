@@ -30,7 +30,7 @@ public final class BehaviorChangePatch {
      *
      * @param context            {@link Context}
      * @param defaultProcessName default process name, Normally the same package name.
-     * @see <a href="https://crbug.com/558377">https://crbug.com/558377</>
+     * @see <a href="https://crbug.com/558377">https://crbug.com/558377</a>
      */
     public static void fixWebViewSameDirFromP(@NonNull Context context, String defaultProcessName) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

@@ -2,12 +2,13 @@ package me.limeice.common.function.cache;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import android.util.LruCache;
 
 /**
  * 内存缓存类
  *
- * @param <V>
+ * @param <V> V
  */
 public class AnyMemCache<V> implements MemCache<V> {
 
@@ -24,7 +25,7 @@ public class AnyMemCache<V> implements MemCache<V> {
     /**
      * 数据过滤器
      *
-     * @param <V>
+     * @param <V> V
      */
     public interface DataFilter<V> {
         /**

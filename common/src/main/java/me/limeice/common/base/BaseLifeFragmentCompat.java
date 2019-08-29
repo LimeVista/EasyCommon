@@ -2,10 +2,12 @@ package me.limeice.common.base;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +19,9 @@ public class BaseLifeFragmentCompat extends Fragment {
 
     /**
      * Temporary solution: Must call super {@link Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)} method.
-     * <p>
+     *
      * <p>Added to LifeFragmentCompat,{@link LifeFragmentCompat#addFragment(Fragment)}
-     * <p>
+     *
      * <p>If you return a View from here, you will later be called in
      * {@link #onDestroyView} when the view is being released.
      *
@@ -48,7 +50,7 @@ public class BaseLifeFragmentCompat extends Fragment {
      * <em>regardless</em> of whether {@link #onCreateView} returned a
      * non-null view.  Internally it is called after the view's state has
      * been saved but before it has been removed from its parent.
-     * <p>
+     *
      * <p>Remove this Fragment form LifeFragmentCompat
      */
     @Override

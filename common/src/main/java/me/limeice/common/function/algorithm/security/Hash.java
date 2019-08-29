@@ -12,15 +12,15 @@ import me.limeice.common.function.BytesUtils;
 /**
  * <p>这是一个调用信息摘要算法(Hash)的类。
  * <p>通过此类可以调用各种hash算法，并得到加密后的文本或值。
- * <p>
+ *
  * <p>示例：
- * <p>
+ *
  * <pre>{@code
  * String hashCode = Hash.sha256("123456");
  * }</pre>
  *
  * @author Lime
- *         <p>2016.04.22
+ * <p>2016.04.22
  */
 public final class Hash {
 

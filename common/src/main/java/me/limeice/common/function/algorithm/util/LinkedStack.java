@@ -13,8 +13,8 @@ import java.util.function.Consumer;
 /**
  * 通过链表方式实现Stack
  * <p>
- * <a href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)">Stack详细介绍</>
- * <a href="https://en.wikipedia.org/wiki/Linked_list">关于链表</>
+ * <a href="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)">Stack详细介绍</a>
+ * <a href="https://en.wikipedia.org/wiki/Linked_list">关于链表</a>
  *
  * @param <E> 泛型约束
  */
@@ -134,7 +134,6 @@ public class LinkedStack<E> implements IStack<E>, Serializable {
      *
      * @param action The action to be performed for each element
      * @throws NullPointerException if the specified action is null
-     * @implSpec <p>The default implementation behaves as if:
      * <pre>{@code
      *     for (T t : this)
      *         action.accept(t);

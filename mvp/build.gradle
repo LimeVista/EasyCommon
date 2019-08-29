@@ -52,6 +52,21 @@ task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.sourceFiles
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     classpath += configurations.compile
+    options {
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        links "https://developer.android.com/reference"
+        title "mvp"
+    }
+    exclude '**/BuildConfig.java'
+    exclude '**/R.java'
+    afterEvaluate {
+        android.libraryVariants.all { variant ->
+            variant.javaCompileProvider.configure {
+                javadoc.classpath += files(it.classpath.files)
+            }
+        }
+    }
 }
 
 // build a jar with javadoc

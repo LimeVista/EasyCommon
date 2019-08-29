@@ -81,6 +81,8 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
      *
      * @param context 上下文容器
      * @param helper  存储助手
+     * @param <VAL>   value type
+     * @return 链式调用
      */
     public static <VAL> StorageCacheLite<VAL> buildLite(
             @NonNull Context context,
@@ -94,6 +96,8 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
      * @param context  上下文容器
      * @param helper   存储助手
      * @param memCache 内存缓存助手
+     * @param <VAL>    value type
+     * @return 链式调用
      */
     public static <VAL> StorageCacheLite<VAL> buildLite(
             @NonNull Context context,
@@ -108,6 +112,8 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
      * @param cacheFolder 上下文容器
      * @param helper      存储助手
      * @param memCache    内存缓存助手
+     * @param <VAL>       value type
+     * @return 链式调用
      */
     public static <VAL> StorageCacheLite<VAL> buildLite(
             @NonNull String cacheFolder,
@@ -325,7 +331,7 @@ public class StorageCache<V, BEAN> implements Cache<V, BEAN> {
     /**
      * 精简版
      *
-     * @param <VAL>
+     * @param <VAL> value type
      */
     public static class StorageCacheLite<VAL> extends StorageCache<VAL, Object> {
 

@@ -20,6 +20,7 @@ public interface StorageReaderHelper<V, BEAN> {
      * @param bean   数据辅助处理 Bean，如果在初始化的时候，你没有传递或使用Bean，该数据则为空
      * @param reader 读取通道
      * @return 读取缓存
+     * @throws IOException IO 异常
      */
     @Nullable
     V read(@NonNull String key, @Nullable BEAN bean, @NonNull ReaderSource reader) throws IOException;

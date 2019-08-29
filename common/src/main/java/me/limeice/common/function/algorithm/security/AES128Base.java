@@ -19,7 +19,7 @@ import javax.crypto.spec.SecretKeySpec;
  * <p>警告：
  * <p>	1.AES-128-CBC-NoPadding需要的加密的字符串长度必须是16的整倍数
  * <p>	2.AES-128 decrypt函数解密的字符串或byte[]的长度必须满足16的倍数
- * <p>
+ *
  * <p>示例：
  * <pre>{@code
  * AES128Base aes=new AES128Base(AES128Base.ECB|AES128Base.PKCS5Padding);
@@ -30,7 +30,7 @@ import javax.crypto.spec.SecretKeySpec;
  * }</pre>
  *
  * @author Lime
- *         <p>2016.04.22 update 2018.03.16
+ * <p>2016.04.22 update 2018.03.16
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AES128Base {
@@ -133,6 +133,12 @@ public class AES128Base {
      * @param msg      加密数据，如果NoPadding，加密数据长度必须为16的倍数！
      * @param keyBytes 解密密钥，必须位16位密码
      * @return 得到密文
+     * @throws NoSuchPaddingException             see {@link NoSuchPaddingException}
+     * @throws InvalidAlgorithmParameterException see {@link InvalidAlgorithmParameterException}
+     * @throws NoSuchAlgorithmException           see {@link NoSuchAlgorithmException}
+     * @throws IllegalBlockSizeException          see {@link IllegalBlockSizeException}
+     * @throws BadPaddingException                see {@link BadPaddingException}
+     * @throws InvalidKeyException                see {@link InvalidKeyException}
      */
     public byte[] encrypt(@NonNull byte[] msg, @NonNull byte[] keyBytes)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException,
@@ -153,6 +159,12 @@ public class AES128Base {
      * @param msg      需要解密的数据，数据长度必须为16的倍数！
      * @param keyBytes 解密密钥，必须位16位密码
      * @return 得到明文
+     * @throws NoSuchPaddingException             see {@link NoSuchPaddingException}
+     * @throws InvalidAlgorithmParameterException see {@link InvalidAlgorithmParameterException}
+     * @throws NoSuchAlgorithmException           see {@link NoSuchAlgorithmException}
+     * @throws IllegalBlockSizeException          see {@link IllegalBlockSizeException}
+     * @throws BadPaddingException                see {@link BadPaddingException}
+     * @throws InvalidKeyException                see {@link InvalidKeyException}
      */
     public byte[] decrypt(@NonNull byte[] msg, @NonNull byte[] keyBytes)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException,

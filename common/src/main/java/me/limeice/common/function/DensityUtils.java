@@ -112,6 +112,7 @@ public final class DensityUtils {
     /**
      * 获取应用宽度
      *
+     * @param act Activity
      * @return (px像素)宽度
      */
     public static int getAppScreenWidth(@NonNull Activity act) {
@@ -121,6 +122,7 @@ public final class DensityUtils {
     /**
      * 获取应用高度
      *
+     * @param act Activity
      * @return (px像素)高度
      */
     public static int getAppScreenHeight(@NonNull Activity act) {
@@ -131,6 +133,7 @@ public final class DensityUtils {
     /**
      * 获取应用宽度
      *
+     * @param win Window
      * @return (px像素)宽度
      */
     public static int getAppScreenWidth(@NonNull Window win) {
@@ -142,6 +145,7 @@ public final class DensityUtils {
     /**
      * 获取应用高度
      *
+     * @param win Window
      * @return (px像素)高度
      */
     public static int getAppScreenHeight(@NonNull Window win) {
@@ -153,6 +157,7 @@ public final class DensityUtils {
     /**
      * 获取应用宽度
      *
+     * @param v View
      * @return (px像素)宽度
      */
     public static int getAppScreenWidth(@NonNull View v) {
@@ -162,6 +167,7 @@ public final class DensityUtils {
     /**
      * 获取应用高度
      *
+     * @param v View
      * @return (px像素)高度
      */
     public static int getAppScreenHeight(@NonNull View v) {
@@ -171,6 +177,7 @@ public final class DensityUtils {
     /**
      * 获取应用宽度
      *
+     * @param v Fragment
      * @return (px像素)宽度
      */
     public static int getAppScreenWidth(@NonNull Fragment v) {
@@ -180,6 +187,7 @@ public final class DensityUtils {
     /**
      * 获取应用高度
      *
+     * @param v Fragment
      * @return (px像素)高度
      */
     public static int getAppScreenHeight(@NonNull Fragment v) {
@@ -266,6 +274,7 @@ public final class DensityUtils {
      * 如果你需要仅仅获取导航栏高度，请使用{@link #getNavBarHeight()}，
      * 如果你需要判定是否存在导航栏，然后获取高度请使用{@link #getAutoNavBarHeight(Window)}
      *
+     * @return 高度
      * @see #getNavBarHeight()
      * @see #getAutoNavBarHeight(Window)
      */
@@ -296,6 +305,7 @@ public final class DensityUtils {
     /**
      * 自动判定获取虚拟栏（导航栏）高度
      *
+     * @param window Window
      * @return 高度
      */
     public static int getAutoNavBarHeight(@NonNull final Window window) {

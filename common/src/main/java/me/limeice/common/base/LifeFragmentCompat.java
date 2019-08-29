@@ -3,6 +3,7 @@ package me.limeice.common.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
+
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +17,7 @@ import me.limeice.common.function.algorithm.util.ArrayStack;
 
 /**
  * 用于管理 Fragment 生命周期，本类不建议用于管理树状 Fragment, 仅建议用于代替早期的多个 Activity 改为多 Fragment
- *
+ * <p>
  * 使用方法：
  * <p>1. 复写{@link Activity#attachBaseContext(Context)},使用{@link #install(Context, AppCompatActivity)}
  * <pre>
@@ -80,6 +81,8 @@ public final class LifeFragmentCompat {
 
     /**
      * 添加当前 Fragment
+     *
+     * @param fragment Fragment
      */
     public void addFragment(@NonNull final Fragment fragment) {
         removeFragment(fragment);

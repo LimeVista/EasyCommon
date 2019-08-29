@@ -3,9 +3,11 @@ package me.limeice.common.function;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.provider.Settings;
+
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
+
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -105,6 +107,7 @@ public final class BrightnessUtils {
      * 设置屏幕亮度
      *
      * @param brightness 亮度值 [0, 255]
+     * @return 是否设置成功
      */
     @RequiresPermission(Manifest.permission.WRITE_SETTINGS)
     public static boolean setBrightness(@IntRange(from = 0, to = 255) final int brightness) {

@@ -97,7 +97,6 @@ public final class Objects {
      * @param obj a reference to be checked against {@code null}
      * @return {@code true} if the provided reference is {@code null} otherwise
      * {@code false}
-     * @apiNote This method exists to be used as a
      * {@link java.util.function.Predicate}, {@code filter(Objects::isNull)}
      * @see java.util.function.Predicate
      */
@@ -112,7 +111,6 @@ public final class Objects {
      * @param obj a reference to be checked against {@code null}
      * @return {@code true} if the provided reference is non-{@code null}
      * otherwise {@code false}
-     * @apiNote This method exists to be used as a
      * {@link java.util.function.Predicate}, {@code filter(Objects::nonNull)}
      * @see java.util.function.Predicate
      */
