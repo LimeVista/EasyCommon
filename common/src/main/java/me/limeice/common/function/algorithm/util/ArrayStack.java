@@ -319,7 +319,7 @@ public class ArrayStack<E> implements IStack<E>, Serializable {
 
         @Override
         public void remove() {
-            fastRemove(index--);
+            fastRemove(--index);
         }
     }
 }
