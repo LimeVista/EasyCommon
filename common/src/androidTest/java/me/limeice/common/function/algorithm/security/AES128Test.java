@@ -4,6 +4,8 @@ import android.util.Log;
 
 import org.junit.Test;
 
+import java.nio.charset.StandardCharsets;
+
 import me.limeice.common.function.BytesUtils;
 
 import static org.junit.Assert.assertEquals;
@@ -64,11 +66,11 @@ public class AES128Test {
     @Test
     public void decrypt() throws Exception {
         byte[] bs = aesEcb.decrypt(BytesUtils.hexStringToBytes(SMSG_ECB), KEY_BYTES);
-        String sMsg = new String(bs, "UTF-8");
+        String sMsg = new String(bs, StandardCharsets.UTF_8);
         assertEquals(MSG, sMsg);
         byte[] bytes = BytesUtils.hexStringToBytes(SMSG_CBC);
         byte[] aesBs = aesCbc.decrypt(bytes, KEY_BYTES);
-        String sMsg2 = new String(aesBs, "UTF-8");
+        String sMsg2 = new String(aesBs, StandardCharsets.UTF_8);
         assertEquals(MSG, sMsg2);
         log("sMsg1->" + sMsg + ";sMsg2->" + sMsg2);
     }

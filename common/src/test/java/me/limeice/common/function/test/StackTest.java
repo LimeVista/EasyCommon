@@ -15,6 +15,17 @@ public class StackTest {
         as.push("1").push("2").push("3");
         IStack<String> asCopy = as.deepClone();
         assertEquals(asCopy.size(), as.size());
-        assertEquals(as.first(),asCopy.first());
+        assertEquals(as.first(), asCopy.first());
+    }
+
+    @Test
+    public void arrayForEach() {
+        ArrayStack<String> as = new ArrayStack<>();
+        as.push("1").push("2").push("3");
+        int i = 0;
+        for (String element : as) {
+            String value = String.valueOf(++i);
+            assertEquals(element, value);
+        }
     }
 }
