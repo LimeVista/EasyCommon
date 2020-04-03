@@ -1,8 +1,15 @@
 package me.limeice.common.function;
 
 import android.os.Build;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import android.text.Html;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 /**
  * 用于处理文本
@@ -13,7 +20,10 @@ import android.text.Html;
  *     desc  : 用于处理文本
  *     github: https://github.com/LimeVista/EasyCommon
  * </pre>
+ *
+ * @deprecated use {@link TextConvertUtils}
  */
+@Deprecated
 public final class TextEncodeUtils {
 
     private TextEncodeUtils() {
@@ -26,14 +36,8 @@ public final class TextEncodeUtils {
      * @param input The input.
      * @return the string of decode html-encode string
      */
-    @SuppressWarnings("deprecation")
     @NonNull
     public static CharSequence string2Html(@NonNull final String input) {
-        Objects.requireNonNull(input);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(input, Html.FROM_HTML_MODE_LEGACY);
-        } else {
-            return Html.fromHtml(input);
-        }
+        return TextConvertUtils.string2Html(input);
     }
 }
