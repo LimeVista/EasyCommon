@@ -1,15 +1,6 @@
 package me.limeice.common.function;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import android.text.Html;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 /**
  * 用于处理文本

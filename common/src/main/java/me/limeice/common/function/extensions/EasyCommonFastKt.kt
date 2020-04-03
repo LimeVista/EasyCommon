@@ -166,10 +166,10 @@ inline fun <reified T : Serializable> T.serialize(file: File) = DeepClone.serial
 inline fun <reified T : Serializable> File.deepClone(): T? = DeepClone.deserialize(this)
 
 /**
- * @see TextEncodeUtils.string2Html
+ * @see TextConvertUtils.string2Html
  */
 @JvmName("kt_024")
-inline fun String.string2Html() = TextEncodeUtils.string2Html(this)
+inline fun String.string2Html() = TextConvertUtils.string2Html(this)
 
 /**
  * @see FragmentUtils.installToolbar
