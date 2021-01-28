@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 import me.limeice.common.function.IOUtils;
 import me.limeice.common.function.helper.WriterSource;
 
@@ -43,7 +43,6 @@ public class RxDispatcherCache<V, BEAN> {
          *
          * @return 策略
          */
-        @SuppressWarnings("unused")
         public static Dispatcher rearward() {
             throw new UnsupportedOperationException();
             // return new Dispatcher(REARWARD, new SafeLocker());
@@ -59,8 +58,8 @@ public class RxDispatcherCache<V, BEAN> {
         }
     }
 
-    private RxCache<V, BEAN> mRxCache;   // RxCache
-    private Dispatcher mDispatcher;      // 策略
+    private final RxCache<V, BEAN> mRxCache;   // RxCache
+    private final Dispatcher mDispatcher;      // 策略
 
     /**
      * 请使用 {@link RxCache#buildRxDispatcherCache(Dispatcher)} 初始化

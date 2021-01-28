@@ -8,7 +8,8 @@ import androidx.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 
-import io.reactivex.Observable;
+
+import io.reactivex.rxjava3.core.Observable;
 import me.limeice.common.function.IOUtils;
 import me.limeice.common.function.Objects;
 import me.limeice.common.function.cache.MemCache;
@@ -20,6 +21,12 @@ import me.limeice.common.function.helper.WriterSource;
 
 public class RxCache<V, BEAN> {
 
+    /**
+     * 缓存助手
+     *
+     * @param <V>    数据类型
+     * @param <BEAN> 数据 Bean
+     */
     public interface RxCacheHelper<V, BEAN> extends StorageReaderHelper<V, BEAN> {
 
         /**
@@ -44,8 +51,8 @@ public class RxCache<V, BEAN> {
 
     public static class Builder<V, BEAN> {
 
-        private Context context;
-        private RxCache<V, BEAN> rxCache;
+        private final Context context;
+        private final RxCache<V, BEAN> rxCache;
         private String cachePath;
         private MemCache<V> memCache;
 

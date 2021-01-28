@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
  * 线程安全锁
@@ -18,7 +18,7 @@ final class HotSafeLocker implements ISafeLocker {
      */
     static class AutoDestroySemaphore extends ISafeLocker.AutoDestroySemaphore {
 
-        final Observable observable;
+        final Observable<?> observable;
 
         <T> AutoDestroySemaphore(Observable<T> observable) {
             this.observable = observable;
@@ -26,7 +26,7 @@ final class HotSafeLocker implements ISafeLocker {
 
         public <T> Observable<T> getObservable() {
             //noinspection unchecked
-            return observable;
+            return (Observable<T>) observable;
         }
     }
 

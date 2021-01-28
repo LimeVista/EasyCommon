@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
  * 线程安全锁

@@ -2,13 +2,13 @@ package me.limeice.common.base.mvp;
 
 import android.content.Context;
 
-import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+
 
 /**
  * Base Presenter
  * Created by LimeVista(Lime) on 2018/2/28.
  */
-@SuppressWarnings("WeakerAccess")
 public abstract class BasePresenter<VIEW, MODEL> {
 
     protected Context mContext;
