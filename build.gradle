@@ -12,9 +12,9 @@ buildscript {
     }
 
     ext.versions = [
-            'ver_name'  : "2.0.0",
-            'ver_code'  : 20210128,
-            'minSdk'    : 21,
+            'ver_name'  : "2.0.1",
+            'ver_code'  : 20210204,
+            'minSdk'    : 19,
             'compileSdk': 28,
             'targetSdk' : 29,
             'androidx'  : '1.2.0',
