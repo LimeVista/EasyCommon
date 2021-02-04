@@ -7,7 +7,7 @@ An Android Common Component（一个用于Android快速开发小工具集合）
 
 # New
 * RxJava3
-* Android API 21+
+* Android API 19+
 
 ## How to
 * To get a Git project into your build:
